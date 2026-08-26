@@ -1,0 +1,40 @@
+/*****************************************************************
+ *   file:   main.cc
+ *   desc:   storage application entry point
+ *
+ *****************************************************************
+ *
+ *   Copyright(C) 2022-2026 Twin Oaks Computing, Inc
+ *   All rights reserved.   Castle Rock, CO 80108
+ *
+ *****************************************************************
+ *  This software has been provided pursuant to a License Agreement
+ *  containing restrictions on its use.  This software contains
+ *  valuable trade secrets and proprietary information of
+ *  Twin Oaks Computing, Inc and is protected by law.  It may not be
+ *  copied or distributed in any form or medium, disclosed to third
+ *  parties, reverse engineered or used in any manner not provided
+ *  for in said License Agreement except with the prior written
+ *  authorization from Twin Oaks Computing, Inc.
+ *****************************************************************/
+
+#include "app.hpp"
+
+// ---------------------------------------
+int
+main(int argc, char* argv[])
+{
+  std::clog << "APP::init()..." << std::endl;
+  tms::init(argc, argv);
+
+  std::clog << "APP::startup()..." << std::endl;
+  tms::startup();
+
+  std::clog << "APP::main_loop()..." << std::endl;
+  tms::main_loop();
+
+  std::clog << "APP::cleanup()..." << std::endl;
+  tms::cleanup();
+
+  return 0;
+}
