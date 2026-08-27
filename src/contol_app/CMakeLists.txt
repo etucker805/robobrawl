@@ -1,13 +1,13 @@
 #######################################################################
 #
 cmake_minimum_required(VERSION 3.28)
-project (intracom_tms_storage)
+project (robobrawl_control)
 
 # get the CoreDX DDS config:
 include( ../cmake/coredx.cmake )
 
 # build the TMS core libraries:
-add_subdirectory( ../tms ./tms )
+add_subdirectory( ../robobrawl ./robobrawl )
 
 
 #######################################################################
@@ -15,26 +15,26 @@ add_subdirectory( ../tms ./tms )
 # Here is an example application that implements a STORAGE device
 # and utilizes the tms_interface library for the TMS implementation.
 #
-add_executable(storage_app
+add_executable(control_app
   )
 
-target_sources(storage_app PUBLIC 
+target_sources(control_app PUBLIC 
   main.cc
   init.cpp
   cleanup.cpp
   main_loop.cpp
   startup.cpp
-  roles/intracom_storage.cpp
+  roles/robobrawl_control.cpp
   )
 
-target_include_directories(storage_app
+target_include_directories(control_app
   PUBLIC
   ${CMAKE_CURRENT_LIST_DIR}
-  ${CMAKE_CURRENT_LIST_DIR}/../tms
+  ${CMAKE_CURRENT_LIST_DIR}/../robobrawl
   )
 
-target_link_libraries(storage_app
-  PUBLIC  tms_interface
+target_link_libraries(control_app
+  PUBLIC  robobrawl_interface
   )
 
 # make a copy of the QoS XML file in the current output directory
