@@ -5,7 +5,7 @@ namespace robobrawl {
   {
     Robobrawl_BaseDevice::init(context, dev_id);
     //client and message inits 
-
+    sc_writer_.init(context, dev_id);
   }
 
   
@@ -13,6 +13,8 @@ namespace robobrawl {
   {
     // client and message clears
     Robobrawl_BaseDevice::clear();
+
+    sc_writer_.clear();
   }
 
   // // -------------------------------------------------------
@@ -27,6 +29,9 @@ namespace robobrawl {
     device_.publish(device_info_);
     heartbeat_.publish();            // write every time
     // startup messages
+
+    
+    
 
     
     publish_controller_state();

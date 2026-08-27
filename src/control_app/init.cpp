@@ -1,22 +1,4 @@
-/*****************************************************************
- *   file:   init.cpp
- *   desc:   storage application initialization routines
- *
- *****************************************************************
- *
- *   Copyright(C) 2022-2026 Twin Oaks Computing, Inc
- *   All rights reserved.   Castle Rock, CO 80108
- *
- *****************************************************************
- *  This software has been provided pursuant to a License Agreement
- *  containing restrictions on its use.  This software contains
- *  valuable trade secrets and proprietary information of
- *  Twin Oaks Computing, Inc and is protected by law.  It may not be
- *  copied or distributed in any form or medium, disclosed to third
- *  parties, reverse engineered or used in any manner not provided
- *  for in said License Agreement except with the prior written
- *  authorization from Twin Oaks Computing, Inc.
- *****************************************************************/
+
 
 #include "app.hpp"
 
@@ -29,17 +11,16 @@
 
 static std::string qos_file = "file:///mil-std-3071_qos_library.xml";
 static std::string baseDeviceId;
-static std::string serialNum;
-static bool        ac_active;
+// static std::string serialNum;
 static uint32_t    domain_id = 0;
 
-static tms::Storage storage;
+static robobrawl::Control control;
 
 // ---------------------------------------------------------------
 void handle_sig(int sig)
 {
   if (sig == SIGINT)
-    tms::done = true;
+    robobrawl::done = true;
 }
 
 // ---------------------------------------------------------------
@@ -79,9 +60,6 @@ static int parse_args(int argc, char* argv[])
       return -1;
       break;
       
-    case 'p':
-      ac_active = strcasecmp(toc_optarg, "ac") == 0;  
-      break;
           
     case 'd':
       domain_id = static_cast<uint32_t>(atoi(toc_optarg));
@@ -92,7 +70,7 @@ static int parse_args(int argc, char* argv[])
       break;
 
     case 's':
-      serialNum = toc_optarg;
+      // serialNum = toc_optarg;
       break;
 
     case 'h':
@@ -106,7 +84,7 @@ static int parse_args(int argc, char* argv[])
 }
 
 // ---------------------------------------------------------------
-void tms::init(int argc, char* argv[])
+void robobrawl::init(int argc, char* argv[])
 {
 
   try {
@@ -124,21 +102,21 @@ void tms::init(int argc, char* argv[])
     }
 
     baseDeviceId = "INTRACOM";     // todo: select a good value here
-    if (serialNum.empty())
-      serialNum = "SN-0001";       // todo: provide a good fallback, if not provided on command-line
+    // if (serialNum.empty())
+    std::string serialNum = "SN-0001";       // todo: provide a good fallback, if not provided on command-line
 
-    tms_context.init(domain_id, qos_file, baseDeviceId, serialNum);
+    robobrawl_context.init(domain_id, qos_file, baseDeviceId, serialNum);
 
-    active_mc.init(tms_context);
-    known_devices.init(tms_context);
+    active_mc.init(robobrawl_context);
+    known_devices.init(robobrawl_context);
 
-    storage.init(tms_context, baseDeviceId + "-STOR-1" + "-" + serialNum, ac_active);
+    control.init(robobrawl_context, baseDeviceId + "-CONT-1" + "-" + serialNum);
 
-    tms_devices.push_back(&storage);
+    robobrawl_devices.push_back(&control);
   
     // init all DDS entities:
-    tms_context.subscriber().enable();
-    tms_context.publisher().enable();
+    robobrawl_context.subscriber().enable();
+    robobrawl_context.publisher().enable();
 
   }
   catch (const std::exception& e) {

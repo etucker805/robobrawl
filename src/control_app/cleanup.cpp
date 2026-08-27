@@ -1,6 +1,6 @@
 /*****************************************************************
- *   file:   main.cc
- *   desc:   storage application entry point
+ *   file:   cleanup.cpp
+ *   desc:   storage application cleanup routines
  *
  *****************************************************************
  *
@@ -20,21 +20,14 @@
 
 #include "app.hpp"
 
-// ---------------------------------------
-int
-main(int argc, char* argv[])
+void
+robobrawl::cleanup()
 {
-  std::clog << "APP::init()..." << std::endl;
-  tms::init(argc, argv);
+  active_mc.clear();
+  known_devices.clear();
 
-  std::clog << "APP::startup()..." << std::endl;
-  tms::startup();
+  for (auto device: robobrawl_devices)
+    device->clear();
 
-  std::clog << "APP::main_loop()..." << std::endl;
-  tms::main_loop();
-
-  std::clog << "APP::cleanup()..." << std::endl;
-  tms::cleanup();
-
-  return 0;
+  robobrawl_context.clear();
 }

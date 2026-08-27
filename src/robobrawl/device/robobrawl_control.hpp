@@ -7,6 +7,7 @@
 #include "robobrawl/device/robobrawl_device.hpp"
 
 //include other messages here
+#include "robobrawl/msg/state_change.hpp"
 
 namespace robobrawl {
 
@@ -34,6 +35,7 @@ namespace robobrawl {
 
     protected:
       //write / listener / clients here... 
+      StateChangeWriter sc_writer_;
       // state chege writer
       // overide state writers
       // claim system writer
@@ -41,6 +43,7 @@ namespace robobrawl {
       // sync time writer
       // 
 
+      
 
   };
 

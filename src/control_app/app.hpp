@@ -1,6 +1,6 @@
 /*****************************************************************
- *   file:   cleanup.cpp
- *   desc:   storage application cleanup routines
+ *   file:   app.hpp
+ *   desc:   storage application declarations
  *
  *****************************************************************
  *
@@ -18,16 +18,33 @@
  *  authorization from Twin Oaks Computing, Inc.
  *****************************************************************/
 
-#include "app.hpp"
+#pragma once
 
-void
-tms::cleanup()
-{
-  active_mc.clear();
-  known_devices.clear();
+#include "robobrawl.hh"
+#include "components/timer.hpp"
+#include "components/robobrawl_context.hpp"
+#include "components/active_mc.hpp"
+#include "device/known_devices.hpp"
 
-  for (auto device: tms_devices)
-    device->clear();
+#include "roles/robobrawl_control.hpp"
 
-  tms_context.clear();
-}
+namespace robobrawl {
+
+  void init(int argc, char* argv[]);
+
+  void startup();
+
+  void main_loop();
+
+  void cleanup();
+
+  extern bool done;
+
+  extern RobobrawlContext   robobrawl_context;
+  extern ActiveMC           active_mc;
+  extern KnownDevices       known_devices;
+
+  // components:
+  extern std::vector<Robobrawl_BaseDevice*> robobrawl_devices;
+
+};
