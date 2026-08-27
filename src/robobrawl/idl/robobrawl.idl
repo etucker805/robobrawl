@@ -1,3 +1,77 @@
+namespace robobrawl{
+
+module topic {
+
+      /**
+       * Liveliness heartbeat for all devices.
+       * Version: 1.0.0
+       * Section: DISCOVERY
+       * QoS Profile: Medium
+       * Data Trigger: Periodic 1 s
+       * Data Type: tms::Heartbeat
+       */
+      const string TOPIC_HEARTBEAT = "Heartbeat";
+
+      /**
+       * Product information for the device. Used to discover TMS compliant devices.
+       * Version: 1.0.0
+       * Section: DISCOVERY
+       * QoS Profile: PublishLast
+       * Data Trigger: At Start
+       * Data Type: tms::DeviceInfo
+       */
+      const string TOPIC_DEVICE_INFO = "DeviceInfo";
+
+
+      /**
+       * Device and Platform Identity Nickname.
+       * Version: 1.0.0
+       * Section: DISCOVERY
+       * QoS Profile: PublishLast
+       * Data Trigger: At Start, On Change
+       * Data Type: tms::IdentityNicknameState
+       */
+      const string TOPIC_IDENTITY_NICKNAME_STATE = "IdentityNicknameState";
+
+      /**
+       * Request to change a Device or Platform Identity Nickname.
+       * Version: 1.0.0
+       * Section: DISCOVERY
+       * QoS Profile: Command
+       * Data Trigger: As Needed
+       * Data Type: tms::IdentityNicknameRequest
+       * Reply Topic: Reply
+       * Reply Topic: IdentityNicknameState
+       */
+      const string TOPIC_IDENTITY_NICKNAME_REQUEST = "IdentityNicknameRequest";
+
+
+      /**
+       * The selected master Microgrid Controller for a specific power device.
+       * Version: 1.0.0
+       * Section: STATUS
+       * QoS Profile: PublishLast
+       * Data Trigger: At Start, On Change
+       * Data Type: tms::ActiveMicrogridControllerState
+       */
+      const string TOPIC_ACTIVE_MICROGRID_CONTROLLER_STATE = "ActiveMicrogridControllerState";
+
+ 
+      /**
+       * The reply to a request.
+       * Version: 1.0.0
+       * Section: RESPONSE
+       * QoS Profile: Reply
+       * Data Trigger: Within 0.1 s
+       * Data Type: tms::Reply
+       */
+      const string TOPIC_REPLY = "Reply";
+
+    // add robobrawl messages as needed.... 
+
+   };  //end module topic
+
+
 
 
 enum DeviceRole {
@@ -119,3 +193,15 @@ struct DeviceInfo{
 
 
 };
+
+
+
+
+
+
+
+
+
+
+
+}
