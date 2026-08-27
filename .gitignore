@@ -1,0 +1,85 @@
+
+### Universal ###
+# Common files that should be ignored in all projects
+
+# Logs
+*.log
+# Temporary files
+*.tmp
+*~
+
+*.bak
+# Environment files (containing secrets, API keys, credentials)
+.env
+*.env
+.env.*
+
+# Local configuration that shouldn't be shared
+*.local
+
+### Cmake ###
+# CMake build system files and cache
+
+# CMake
+CMakeCache.txt
+CMakeFiles/
+CMakeScripts/
+CMakeTmp/
+
+Testing/
+Makefile
+cmake_install.cmake
+install_manifest.txt
+compile_commands.json
+
+CTestTestfile.cmake
+_deps/
+build/
+bin/
+lib/
+
+*.cmake
+CMakeUserPresets.json
+CMakeSettings.json
+CMakePresets.json
+CMakeLists.txt.user
+
+CMakeDoxyfile.in
+CMakeDoxygenDefaults.cmake
+_CPack_Packages/
+DartConfiguration.tcl
+CMakeDoxygen.in
+
+CMakeCache.txt.prev
+CMakeLists.txt.user.*
+cmake-build-*/
+_build/
+-prefix/
+
+CMakeUserPresets.json
+
+### Vscode ###
+# Visual Studio Code editor settings and workspace files
+
+# Visual Studio Code
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+
+!.vscode/extensions.json
+!.vscode/*.code-snippets
+.history/
+*.vsix
+.ionide
+
+.vs/
+*.code-workspace
+.vscode-test
+.vscodeignore
+.vscode/chrome
+
+.vscode-server/
+.vscode/sftp.json
+.vscode/tags
+.devcontainer/
