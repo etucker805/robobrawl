@@ -39,4 +39,4 @@ target_link_libraries(control_app
 
 # make a copy of the QoS XML file in the current output directory
 # [the app looks in current directory by default at runtime]
-TMS_COPY_QOS_XML_FILE( ${CMAKE_CURRENT_BINARY_DIR} APP_QOS_XML_FILE )
+# TMS_COPY_QOS_XML_FILE( ${CMAKE_CURRENT_BINARY_DIR} APP_QOS_XML_FILE )

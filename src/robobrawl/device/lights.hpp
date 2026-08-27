@@ -4,13 +4,13 @@
 
 #include "robobrawl.hh"
 #include "robobrawl/components/robobrawl_context.hpp"
-#include "robobrawl/device/robobrawl_device.hpp"
+#include "robobrawl/device/device.hpp"
 
 //include other messages here
 
 namespace robobrawl {
 
-  class Robobrawl_Button : public Robobrawl_Device /* add any client classes to extend here */ {
+  class Robobrawl_Lights : public Robobrawl_Device /* add any client classes to extend here */ {
     public:
       void init(RobobrawlContext& context, const robobrawl::Identity& dev_id) override;
 
@@ -34,10 +34,7 @@ namespace robobrawl {
 
     protected:
       //write / listener / clients here... 
-      // claim reader
-      // state change reader
-      // data writer
-      // button override reader 
+     
 
 
 

@@ -1,5 +1,5 @@
 
-#include "robobrawl_device.hpp"
+#include "device.hpp"
 
 namespace robobrawl {
 

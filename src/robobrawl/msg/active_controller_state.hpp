@@ -2,7 +2,6 @@
 
 #include "robobrawl.hh"
 #include "robobrawl/components/robobrawl_context.hpp"
-#include "robobrawl/components/qos_source.hpp"
 
 namespace robobrawl {
   class ActiveControllerStateWriter final {
@@ -26,13 +25,11 @@ namespace robobrawl {
             dds::topic::Topic<robobrawl::ActiveMicrogridControllerState>(context.participant(),
               robobrawl::topic::TOPIC_ACTIVE_MICROGRID_CONTROLLER_STATE);
         dw_ =
-            dds::pub::DataWriter<robobrawl::ActiveMicrogridControllerState>(context.publisher(),
-              topic_,
-              context.qos_source().publish_last.writer_qos);
+            dds::pub::DataWriter<robobrawl::ActiveMicrogridControllerState>(context.publisher(), topic_);
         state_.deviceId(deviceId);
 
         dds::pub::qos::DataWriterQos dw_qos = dw_.qos();
-        dw_qos << dds::core::policy::UserData(dds::core::ByteSeq(deviceId.begin(), deviceId.end()));
+        dw_qos << dds::core::policy::Reliability(dds::core::policy::ReliabilityKind::RELIABLE);
         dw_.qos(dw_qos);
       }
 
@@ -78,10 +75,13 @@ namespace robobrawl {
             dds::topic::Topic<robobrawl::ActiveMicrogridControllerState>(context.participant(),
               robobrawl::topic::TOPIC_ACTIVE_MICROGRID_CONTROLLER_STATE);
         dr_ =
-            dds::sub::DataReader<robobrawl::ActiveMicrogridControllerState>(context.subscriber(),
-              topic,
-              context.qos_source().publish_last.reader_qos);
+            dds::sub::DataReader<robobrawl::ActiveMicrogridControllerState>(context.subscriber(), topic);
         
+        dds::sub::qos::DataReaderQos dr_qos = dr_.qos();
+        dr_qos << dds::core::policy::Reliability(dds::core::policy::ReliabilityKind::RELIABLE);
+        dr_.qos(dr_qos);
+    
+          
       }
 
       // -------------------------------------------------------

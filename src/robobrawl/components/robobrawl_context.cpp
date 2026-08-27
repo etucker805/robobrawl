@@ -20,7 +20,6 @@ namespace robobrawl {
     base_id_ = base_device_id;
     serial_num_ = serial_number;
 
-    qos_source_ = QosSource(qos_xml_uri.c_str());
 
     participant_ = dds::domain::DomainParticipant(domain_id);
     // configure CoreDX DDS's udp transport:
@@ -56,8 +55,6 @@ namespace robobrawl {
   dds::pub::Publisher RobobrawlContext::publisher() { return publisher_; }
 
   dds::sub::Subscriber RobobrawlContext::subscriber() { return subscriber_; }
-
-  QosSource& RobobrawlContext::qos_source() { return qos_source_; }
 
   robobrawl::Identity RobobrawlContext::base_id() { return base_id_; }
 

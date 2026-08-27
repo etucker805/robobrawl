@@ -3,7 +3,6 @@
 #include <dds/dds.hpp>
 
 #include "robobrawl.hh" //idl generated 
-#include "qos_source.hpp"
 
 #include <mutex>
 
@@ -28,8 +27,6 @@ namespace robobrawl {
 
       dds::sub::Subscriber subscriber();
 
-      QosSource& qos_source();
-
       robobrawl::Identity base_id();
 
       robobrawl::Identity serial_num();
@@ -40,7 +37,6 @@ namespace robobrawl {
       dds::domain::DomainParticipant participant_ = dds::core::null;
       dds::pub::Publisher publisher_ = dds::core::null;
       dds::sub::Subscriber subscriber_ = dds::core::null;
-      QosSource qos_source_;
 
       std::string base_id_;
       std::string serial_num_;

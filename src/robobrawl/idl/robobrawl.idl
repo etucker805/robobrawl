@@ -1,4 +1,4 @@
-namespace robobrawl{
+module robobrawl{
 
 module topic {
 
@@ -303,13 +303,16 @@ struct ActiveMicrogridControllerState {
 
 
 @topic
+@extensibility(APPENDABLE)
 struct DeviceInfo{
-    @key string deviceId;
+    @key 
+    Identity deviceId;
 
     DeviceRole role;
 
     SystemId system;
 
+    @optional
     string displayName; // ill keep, may replace with the nickname thing 
 };
 
@@ -406,4 +409,4 @@ struct ButtonData{
 
 
 
-}
+};

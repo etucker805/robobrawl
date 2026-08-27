@@ -1,20 +1,18 @@
-#include "robobrawl_control.hpp"
+#include "clock.hpp"
 
 namespace robobrawl {
-  void Robobrawl_Control::init(RobobrawlContext& context, const robobrawl::Identity& dev_id)
+  void Robobrawl_Clock::init(RobobrawlContext& context, const robobrawl::Identity& dev_id)
   {
-    Robobrawl_BaseDevice::init(context, dev_id);
+    Robobrawl_Device::init(context, dev_id);
     //client and message inits 
-    sc_writer_.init(context, dev_id);
+
   }
 
   
-  void Robobrawl_Control::clear() 
+  void Robobrawl_Clock::clear() 
   {
     // client and message clears
-    Robobrawl_BaseDevice::clear();
-
-    sc_writer_.clear();
+    Robobrawl_Device::clear();
   }
 
   // // -------------------------------------------------------
@@ -24,33 +22,30 @@ namespace robobrawl {
 
   // }
 
-  void Robobrawl_Control::do_startup()
+  void Robobrawl_Clock::do_startup()
   {
     device_.publish(device_info_);
     heartbeat_.publish();            // write every time
     // startup messages
 
     
-    
-
-    
     publish_controller_state();
   }
 
-  void Robobrawl_Control::do_continuous()
+  void Robobrawl_Clock::do_continuous()
   {
     
     // continuous messages (100hz?)
 
   }
 
-  void Robobrawl_Control::do_medium()
+  void Robobrawl_Clock::do_medium()
   {
     heartbeat_.publish();            // write every time
     // medium messages (1 hz?)
   }
 
-  void Robobrawl_Control::do_slow()
+  void Robobrawl_Clock::do_slow()
   {
     //slow messages (0.1hz?)
   }

@@ -4,7 +4,6 @@
 
 #include "robobrawl.hh"
 #include "robobrawl/components/robobrawl_context.hpp"
-#include "robobrawl/components/qos_source.hpp"
 
 namespace robobrawl {
 
@@ -25,10 +24,10 @@ namespace robobrawl {
       void init(RobobrawlContext& context, const robobrawl::Identity& deviceId)
       {
         auto topic = dds::topic::Topic<robobrawl::StateChange>(context.participant(), robobrawl::topic::TOPIC_STATE_CHANGE);
-        dw_ = dds::pub::DataWriter<robobrawl::StateChange>(context.publisher(), topic, context.qos_source().command.writer_qos);
+        dw_ = dds::pub::DataWriter<robobrawl::StateChange>(context.publisher(), topic);
 
         dds::pub::qos::DataWriterQos dw_qos = dw_.qos();
-        dw_qos << dds::core::policy::UserData(dds::core::ByteSeq(deviceId.begin(), deviceId.end()));
+        dw_qos << dds::core::policy::Reliability(dds::core::policy::ReliabilityKind::RELIABLE);
         dw_.qos(dw_qos);
       }
 
@@ -83,8 +82,14 @@ namespace robobrawl {
       {
         const auto topic = dds::topic::Topic<robobrawl::StateChange>(context.participant(),
           robobrawl::topic::TOPIC_STATE_CHANGE);
-        dr_ = dds::sub::DataReader<robobrawl::StateChange>(context.subscriber(), topic,
-          context.qos_source().command.reader_qos);
+        dr_ = dds::sub::DataReader<robobrawl::StateChange>(context.subscriber(), topic);
+
+        dds::sub::qos::DataReaderQos dr_qos = dr_.qos();
+        dr_qos << dds::core::policy::Reliability(dds::core::policy::ReliabilityKind::RELIABLE);
+        dr_.qos(dr_qos);
+    
+
+
         dr_.listener(this, dds::core::status::StatusMask::all());
       }
 

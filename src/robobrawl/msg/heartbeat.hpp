@@ -3,7 +3,6 @@
 
 #include "robobrawl.hh"
 #include "robobrawl/components/robobrawl_context.hpp"
-#include "robobrawl/components/qos_source.hpp"
 
 namespace robobrawl {
   class HeartbeatWriter {
@@ -18,11 +17,11 @@ namespace robobrawl {
       void init(RobobrawlContext& context, const robobrawl::Identity& deviceId)
       {
         const auto topic = dds::topic::Topic<robobrawl::Heartbeat>(context.participant(), robobrawl::topic::TOPIC_HEARTBEAT);
-        dw_ = dds::pub::DataWriter<robobrawl::Heartbeat>(context.publisher(), topic, context.qos_source().medium.writer_qos);
+        dw_ = dds::pub::DataWriter<robobrawl::Heartbeat>(context.publisher(), topic);
         hb_.deviceId(deviceId);
 
         dds::pub::qos::DataWriterQos dw_qos = dw_.qos();
-        dw_qos << dds::core::policy::UserData(dds::core::ByteSeq(deviceId.begin(), deviceId.end()));
+        dw_qos << dds::core::policy::Reliability(dds::core::policy::ReliabilityKind::RELIABLE);
         dw_.qos(dw_qos);
       }
 
@@ -61,13 +60,15 @@ namespace robobrawl {
       void
       init(RobobrawlContext& context)
       {
-        auto topic =
-            dds::topic::Topic<robobrawl::Heartbeat>(context.participant(),
-              robobrawl::topic::TOPIC_DEVICE_INFO);
-        dr_ =
-            dds::sub::DataReader<robobrawl::Heartbeat>(context.subscriber(),
-              topic,
-              context.qos_source().publish_last.reader_qos);
+        auto topic = dds::topic::Topic<robobrawl::Heartbeat>(context.participant(),
+                      robobrawl::topic::TOPIC_HEARTBEAT);
+        dr_ = dds::sub::DataReader<robobrawl::Heartbeat>(context.subscriber(), topic);
+
+        dds::sub::qos::DataReaderQos dr_qos = dr_.qos();
+        dr_qos << dds::core::policy::Reliability(dds::core::policy::ReliabilityKind::RELIABLE);
+        dr_.qos(dr_qos);
+    
+
         
       }
 

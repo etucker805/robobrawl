@@ -24,16 +24,16 @@ set( ROBOBRAWL_IDL ${ROBOBRAWL_SRC}/idl/robobrawl.idl )
 add_custom_command( 
   OUTPUT  ${ROBOBRAWL_GENERATED_SRCS}
   COMMAND cmake -E make_directory ${CMAKE_CURRENT_BINARY_DIR}/generated
-  COMMAND ${COREDX_TOP}/host/${COREDX_HOST}/bin/coredx_ddl -l cpp11 -d generated/ -f ${TMS_IDL}
-  MAIN_DEPENDENCY ${TMS_IDL}
+  COMMAND ${COREDX_TOP}/host/${COREDX_HOST}/bin/coredx_ddl -l cpp11 -d generated/ -f ${ROBOBRAWL_IDL}
+  MAIN_DEPENDENCY ${ROBOBRAWL_IDL}
   )
 
 set_source_files_properties(
-  ${TMS_GENERATED_SRCS}
+  ${ROBOBRAWL_GENERATED_SRCS}
   PROPERTIES GENERATED TRUE)
 
 add_library(robobrawl_core STATIC
-  ${TMS_GENERATED_SRCS}
+  ${ROBOBRAWL_GENERATED_SRCS}
   )
 
 target_include_directories(robobrawl_core
@@ -70,9 +70,9 @@ add_library(robobrawl_interface STATIC
   components/robobrawl_context.cpp
 
   device/known_devices.cpp
-  device/robobrawl_base.cpp
-  device/robobrawl_device.cpp
-  device/robobrawl_storage.cpp
+  device/base.cpp
+  device/device.cpp
+  device/control.cpp
 
   )
 
@@ -97,25 +97,25 @@ target_link_libraries( robobrawl_interface
 
 # input:  target_dir
 # output: installed_qos_file (full path to newly copied qos file)
-macro( TMS_COPY_QOS_XML_FILE target_dir installed_qos_file )
+# macro( TMS_COPY_QOS_XML_FILE target_dir installed_qos_file )
   
-  set( qos_src_path ${ROBOBRAWL_SRC}/qos/v2.0.2 )
-  set( qos_file     mil-std-3071_qos_library.xml )
+#   set( qos_src_path ${ROBOBRAWL_SRC}/qos/v2.0.2 )
+#   set( qos_file     mil-std-3071_qos_library.xml )
   
-  add_custom_command(
-    OUTPUT ${target_dir}/${qos_file}
-    # make sure dest path exists:
-    COMMAND ${CMAKE_COMMAND} -E copy ${qos_src_path}/${qos_file} ${target_dir}/${qos_file}
-    DEPENDS ${qos_src_path}/${qos_file}
-    COMMENT "Prepare ${target_dir}/${qos_file}"
-    VERBATIM )
+#   add_custom_command(
+#     OUTPUT ${target_dir}/${qos_file}
+#     # make sure dest path exists:
+#     COMMAND ${CMAKE_COMMAND} -E copy ${qos_src_path}/${qos_file} ${target_dir}/${qos_file}
+#     DEPENDS ${qos_src_path}/${qos_file}
+#     COMMENT "Prepare ${target_dir}/${qos_file}"
+#     VERBATIM )
   
 
-  set_source_files_properties(${target_dir}/${qos_file} PROPERTIES GENERATED true)
-  add_custom_target( ${qos_file}_gen
-    ALL
-    DEPENDS  ${target_dir}/${qos_file} )
+#   set_source_files_properties(${target_dir}/${qos_file} PROPERTIES GENERATED true)
+#   add_custom_target( ${qos_file}_gen
+#     ALL
+#     DEPENDS  ${target_dir}/${qos_file} )
   
-  set( ${installed_qos_file} ${target_dir}/${qos_file} )
+#   set( ${installed_qos_file} ${target_dir}/${qos_file} )
     
-endmacro()
+# endmacro()

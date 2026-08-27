@@ -20,8 +20,12 @@ namespace robobrawl {
     auto topic = dds::topic::Topic<robobrawl::Heartbeat>(context.participant(),
         robobrawl::topic::TOPIC_HEARTBEAT);
     dr_ = dds::sub::DataReader<robobrawl::Heartbeat>(context.subscriber(),
-        topic,
-        context.qos_source().medium.reader_qos);
+        topic);
+
+    dds::sub::qos::DataReaderQos dr_qos = dr_.qos();
+    dr_qos << dds::core::policy::Reliability(dds::core::policy::ReliabilityKind::RELIABLE);
+    dr_.qos(dr_qos);  
+
     dr_.listener(this, dds::core::status::StatusMask::all());
   }
 

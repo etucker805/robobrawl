@@ -6,8 +6,12 @@ namespace robobrawl {
   void KnownDevices::init(RobobrawlContext& context)
   {
     auto topic = dds::topic::Topic<robobrawl::DeviceInfo>(context.participant(), robobrawl::topic::TOPIC_DEVICE_INFO);
-    dr_ = dds::sub::DataReader<robobrawl::DeviceInfo>(context.subscriber(), topic,
-        context.qos_source().publish_last.reader_qos);
+    dr_ = dds::sub::DataReader<robobrawl::DeviceInfo>(context.subscriber(), topic);
+    
+    dds::sub::qos::DataReaderQos dr_qos = dr_.qos();
+    dr_qos << dds::core::policy::Reliability(dds::core::policy::ReliabilityKind::RELIABLE);
+    dr_.qos(dr_qos);
+    
     dr_.listener(this, dds::core::status::StatusMask::all());
   }
 

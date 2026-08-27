@@ -2,7 +2,7 @@
 
 #include "robobrawl.hh"
 #include "robobrawl/components/robobrawl_context.hpp"
-#include "robobrawl/device/robobrawl_control.hpp"
+#include "robobrawl/device/control.hpp"
 
 namespace robobrawl {
 

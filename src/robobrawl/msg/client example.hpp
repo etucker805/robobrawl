@@ -1,6 +1,6 @@
 
 #pragma once
-
+/*
 #include "robobrawl.hh"
 #include "robobrawl/components/robobrawl_context.hpp"
 #include "robobrawl/components/qos_source.hpp"
@@ -124,3 +124,6 @@ namespace robobrawl {
       std::map<RequestKey, robobrawl::PowerSwitchRequest, RequestKeyLess> pending_requests_;
   };
 }
+
+
+*/
