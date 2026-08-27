@@ -13,7 +13,7 @@ namespace robobrawl {
     public:
 
       // -------------------------------------------------------
-      void init(TmsContext& context);
+      void init(RobobrawlContext& context);
 
       // -------------------------------------------------------
       void clear();

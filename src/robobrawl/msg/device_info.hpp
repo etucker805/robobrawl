@@ -25,7 +25,7 @@ namespace robobrawl {
 
       // -------------------------------------------------------
       void
-      init(TmsContext& context,
+      init(RobobrawlContext& context,
         const robobrawl::Identity& deviceId)
       {
         topic_ = dds::topic::Topic<robobrawl::DeviceInfo>(context.participant(), robobrawl::topic::TOPIC_DEVICE_INFO);
@@ -53,5 +53,69 @@ namespace robobrawl {
     protected:
       dds::topic::Topic<robobrawl::DeviceInfo> topic_;
       dds::pub::DataWriter<robobrawl::DeviceInfo> dw_;
+  };
+
+
+
+  // -------------------------------------------------------
+  
+  class DeviceInfoReader : public dds::sub::NoOpDataReaderListener<robobrawl::DeviceInfo> 
+  {
+    public:
+      // -------------------------------------------------------
+      DeviceInfoReader() : dr_(dds::core::null) {}
+    
+      // -------------------------------------------------------
+      virtual ~DeviceInfoReader() = default;
+    
+      // -------------------------------------------------------
+      void
+      init(RobobrawlContext& context)
+      {
+        auto topic =
+            dds::topic::Topic<robobrawl::DeviceInfo>(context.participant(),
+              robobrawl::topic::TOPIC_DEVICE_INFO);
+        dr_ =
+            dds::sub::DataReader<robobrawl::DeviceInfo>(context.subscriber(),
+              topic,
+              context.qos_source().publish_last.reader_qos);
+        
+      }
+
+      // -------------------------------------------------------
+      void clear()
+      {
+        dr_ = dds::core::null;
+      }
+
+      // -------------------------------------------------------
+      bool get_state( robobrawl::Identity devId, robobrawl::DeviceInfo & state )
+      {
+        bool found = false;
+        const std::lock_guard<std::mutex> lock(mtx_);
+        auto it = states_.find( devId );
+        if ( it != states_.end() ) {
+          state = it->second;
+          found = true;
+        }
+        return found;
+      }
+    
+      // -------------------------------------------------------
+      void on_data_available(dds::sub::DataReader<robobrawl::DeviceInfo>& reader) override
+      {
+        const dds::sub::LoanedSamples<robobrawl::DeviceInfo> samples = reader.take();
+        const std::lock_guard<std::mutex> lock(mtx_);
+        for (const auto& sample: samples) {
+          if (sample.info().valid()) {
+            states_[ sample.data().deviceId() ] = sample.data();
+          }
+        }
+      }
+    
+    protected:
+      std::mutex mtx_{};
+      dds::sub::DataReader<robobrawl::DeviceInfo> dr_;
+      std::map< robobrawl::Identity, robobrawl::DeviceInfo>  states_;
   };
 }

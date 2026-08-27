@@ -1,0 +1,28 @@
+okay so mesages..... 
+
+I have in msg/
+    - active mc state
+    - devinfo
+    - heartbeat
+    - reply 
+
+in idl : 
+    - clock command
+        - may want to rework these into 'request' structure, so I get replys and stuff... do I wan to deal with from statae? no. I dont. 
+    - button command
+        - same request change 
+    - buttno Data
+        - ack on rec data? I think its sworth, but I might just do reliable qos.... 
+    - arena command
+        -request
+
+should add
+    - some kind of status message, for printout on controller
+
+
+
+data: 
+    - better way to so like button state command I think... jsut global state vars that I thin deal with? cause I have compute now... les overhead on gui... I think htat whould work... 
+    - still so parsing on control, get data from things, then send out New State! to everything... then I think I need affiliation keys... call it system name? whatever, in Idenity struct. 
+    - what do about timing then, I have compute so trust the pi and have it send a done sig, med speed sync cast from control to everything else... 
+    - 

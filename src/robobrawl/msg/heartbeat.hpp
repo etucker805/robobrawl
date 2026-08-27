@@ -15,7 +15,7 @@ namespace robobrawl {
       }
 
       // -------------------------------------------------------
-      void init(TmsContext& context, const robobrawl::Identity& deviceId)
+      void init(RobobrawlContext& context, const robobrawl::Identity& deviceId)
       {
         const auto topic = dds::topic::Topic<robobrawl::Heartbeat>(context.participant(), robobrawl::topic::TOPIC_HEARTBEAT);
         dw_ = dds::pub::DataWriter<robobrawl::Heartbeat>(context.publisher(), topic, context.qos_source().medium.writer_qos);
@@ -42,5 +42,70 @@ namespace robobrawl {
     protected:
       dds::pub::DataWriter<robobrawl::Heartbeat> dw_;
       robobrawl::Heartbeat hb_;
+  };
+
+
+
+    // -------------------------------------------------------
+  
+  class HeartbeatReader : public dds::sub::NoOpDataReaderListener<robobrawl::Heartbeat> 
+  {
+    public:
+      // -------------------------------------------------------
+      HeartbeatReader() : dr_(dds::core::null) {}
+    
+      // -------------------------------------------------------
+      virtual ~HeartbeatReader() = default;
+    
+      // -------------------------------------------------------
+      void
+      init(RobobrawlContext& context)
+      {
+        auto topic =
+            dds::topic::Topic<robobrawl::Heartbeat>(context.participant(),
+              robobrawl::topic::TOPIC_DEVICE_INFO);
+        dr_ =
+            dds::sub::DataReader<robobrawl::Heartbeat>(context.subscriber(),
+              topic,
+              context.qos_source().publish_last.reader_qos);
+        
+      }
+
+      // -------------------------------------------------------
+      void clear()
+      {
+        dr_ = dds::core::null;
+      }
+
+      // -------------------------------------------------------
+      bool get_state( robobrawl::Identity devId, robobrawl::Heartbeat & state )
+      {
+        bool found = false;
+        const std::lock_guard<std::mutex> lock(mtx_);
+        auto it = states_.find( devId );
+        if ( it != states_.end() ) {
+          state = it->second;
+          found = true;
+        }
+        return found;
+      }
+    
+      // -------------------------------------------------------
+      void on_data_available(dds::sub::DataReader<robobrawl::Heartbeat>& reader) override
+      {
+        const dds::sub::LoanedSamples<robobrawl::Heartbeat> samples = reader.take();
+        const std::lock_guard<std::mutex> lock(mtx_);
+        for (const auto& sample: samples) {
+          if (sample.info().valid()) {
+            states_[ sample.data().deviceId() ] = sample.data();
+            // may need to odo some known devices proc... idk 
+          }
+        }
+      }
+    
+    protected:
+      std::mutex mtx_{};
+      dds::sub::DataReader<robobrawl::Heartbeat> dr_;
+      std::map< robobrawl::Identity, robobrawl::Heartbeat>  states_;
   };
 }

@@ -15,7 +15,7 @@ namespace robobrawl {
 
   // ---------------------------------------------------------------
   void
-  ActiveMC::init(TmsContext& context)
+  ActiveMC::init(RobobrawlContext& context)
   {
     auto topic = dds::topic::Topic<robobrawl::Heartbeat>(context.participant(),
         robobrawl::topic::TOPIC_HEARTBEAT);
@@ -32,7 +32,7 @@ namespace robobrawl {
   {
     //  check if this 'hb' is from a device with 'controller' role
     robobrawl::DeviceRole role = known_devices_.get_device_role(hb.deviceId());
-    if (role == robobrawl::DeviceRole::ROLE_MICROGRID_CONTROLLER) {
+    if (role == robobrawl::DeviceRole::ROLE_CONTROL) {
       mtx_.lock();
 
       if (available_mcs_.count(hb.deviceId()) == 0)

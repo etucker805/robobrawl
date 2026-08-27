@@ -8,15 +8,15 @@
 #include "robobrawl/msg/heartbeat.hpp"
 #include "robobrawl/msg/reply.hpp"
 #include "robobrawl/msg/active_controller_state.hpp"
-#include "robobrawl/msg/active_diagnostic_state.hpp"
+// #include "robobrawl/msg/active_diagnostic_state.hpp"
 
 namespace robobrawl {
 
-  class TMS_BaseDevice {
+  class Robobrawl_BaseDevice {
     public:
-      virtual ~TMS_BaseDevice() = default;
+      virtual ~Robobrawl_BaseDevice() = default;
 
-      virtual void init(TmsContext& context, const robobrawl::Identity& dev_id);
+      virtual void init(RobobrawlContext& context, const robobrawl::Identity& dev_id);
 
       virtual void clear();
 
@@ -44,7 +44,7 @@ namespace robobrawl {
       HeartbeatWriter heartbeat_;
       ReplyWriter reply_;
 
-      ActiveDiagnosticStateWriter diagnostics_;
+      // ActiveDiagnosticStateWriter diagnostics_;
   };
 
 };

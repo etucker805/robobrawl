@@ -11,18 +11,18 @@
 #include "robobrawl/msg/heartbeat.hpp"
 #include "robobrawl/msg/reply.hpp"
 #include "robobrawl/msg/active_controller_state.hpp"
-#include "robobrawl/msg/active_diagnostic_state.hpp"
+// #include "robobrawl/msg/active_diagnostic_state.hpp"
 
 namespace robobrawl {
 
   // adds in the ActiveControllerStateWriter (needed by all 'device' types except CONTROLLER)
   
-  class TMS_Device : public TMS_BaseDevice {
+  class Robobrawl_Device : public Robobrawl_BaseDevice {
     public:
-      TMS_Device() = default;
-      virtual ~TMS_Device() = default;
+      Robobrawl_Device() = default;
+      virtual ~Robobrawl_Device() = default;
     
-      virtual void init(TmsContext& context, const robobrawl::Identity& dev_id);
+      virtual void init(RobobrawlContext& context, const robobrawl::Identity& dev_id);
       virtual void clear();
     
       void set_active_controller(robobrawl::Identity active_controller) override;

@@ -69,9 +69,62 @@ module topic {
 
     // add robobrawl messages as needed.... 
 
+    /*
+        notice of state change
+        Qos: command
+        published by controller, target to a system, only change on active mc for that system. ( claim system. )
+    */
+    const string TOPIC_STATE_CHANGE = "StateChange";
+
+
+    /*
+    * attempt to claim system
+        qos: command
+        need auth of something I havent decided yet to take controll 
+        when not on state = IDLE_OFF, probably . 
+    *
+    */
+    const string TOPIC_CLAIM_SYSTEM = "ClaimSystem";
+
+
+    /* button data readback to netwok
+        qos: publishlast?
+        for button to send data to net, triggered on button press or whatever
+    */
+    const string TOPIC_BUTTON_DATA = "ButtonData";
+    
+
    };  //end module topic
 
 
+const uint32 Identity_MINLEN = 1;
+const uint32 Identity_MAXLEN = 32;
+/**
+* Universally unique identifier for a device, person, platform, or other entity. 
+* Minimum length: 1
+* Maximum length: 32
+*/
+typedef string <Identity_MAXLEN> Identity;
+
+
+const uint32 String32_MINLEN = 0;
+const uint32 String32_MAXLEN = 32;
+/**
+* A variable length string.
+* Minimum length: 0
+* Maximum length: 32
+*/
+typedef string <String32_MAXLEN> String32;
+   
+
+/**
+* Allows Request / Reply topics to be paired together. Value is requester assigned sequence number sent in a request and returned in a reply.
+*/
+typedef uint64 RequestSequence;
+
+
+
+typedef uint64 SystemId;
 
 
 enum DeviceRole {
@@ -80,9 +133,31 @@ enum DeviceRole {
        ROLE_BUTTON_ORANGE,
        ROLE_BUTTON_BLUE,
        ROLE_CLOCK, 
-       ROLE_ARENA,
+       ROLE_ARENA, //lights 
        
    }; // enum DeviceRole
+
+   enum ReplyCode {
+       REPLY_UNKNOWN, // Unknown value. This is a generic placeholder representing the case in which an appropriate value could not be determined.
+       REPLY_OK, // The request has succeeded.
+       REPLY_BAD_REQUEST, // Some value in the request was invalid.
+       REPLY_METHOD_NOT_ALLOWED, // A request method is not supported for the requested resource.
+       REPLY_CONFLICT, // Indicates that the request could not be processed because of conflict in the current state of the resource.
+       REPLY_GONE, // Indicates that the resource requested is no longer available and will not be available again. This should be used when a resource has been intentionally removed and the resource should be purged.
+       REPLY_PRECONDITION_FAILED, // The request does not meet one of the preconditions.
+       REPLY_INTERNAL_SERVER_ERROR, // A generic error message, given when an unexpected condition was encountered and no more specific message is suitable.
+       REPLY_NOT_IMPLEMENTED, // The request either does not recognize the request method, or it lacks the ability to fulfil the request.
+       REPLY_SERVICE_UNAVAILABLE, // The device cannot handle the request (because it is overloaded or down for maintenance). Generally, this is a temporary state
+       REPLY_PENDING_AUTHORIZATION, // Request is valid, and authorization is required before processing.
+       REPLY_NOT_MASTER, // The requestingDeviceId is not the selected master MC.
+       /**
+        * Change History:
+        *  1) Version: 2.0.1, Change: add, Interoperability: No-xtypes
+        *     Allow device to provide more specified reason a request
+        *     is denied.
+        */
+       REPLY_PERMISSION_DENIED // Remote control is disabled for this request.
+   }; // enum ReplyCode
 
 
 enum Colors{
@@ -95,69 +170,223 @@ enum Colors{
     COLOR_WHITE,
 };
 
-enum ArenaState{ // im gona use these as state numbers,,, so just like fade blue on, fade orange on, fadeorangeandblue on or somehting..... 
-// ahhhh have the pi run some cored subroutines for each of these things that changes the map of vaalues (4 x 4), and ense state out ever so ocy6j7ften .
-    ARENA_STATIC,
-    ARENA_OFF,
-    ARENA_WHITE,
-    ARENA_ORANGE_READYS,
-    ARENA_BLUE_READYS,
-    ARENA_ORANGE_WIN,
-    ARENA_BLUE_WIN,
-    ARENA_321,
-    ARENA_IN_MATCH,
-    ARENA_TIME_EXPIRE,
-    ARENA_EMERGENCY,
-    ARENA_UNSTICK, 
+enum States{ 
+    STATE_IDLE_ON,
+    STATE_IDLE_OFF,
+    // STATE_IDLE_ANIMS,
+    STATE_READY_WAIT,
+    // STATE_BLUE_READY_QUESTION, // valid thing to expand to I think
+    STATE_BLUE_READY,
+    STATE_ORANGE_READY,
+    STATE_BOTH_READY,
+    STATE_COUNTDOWN_3_2_1,
+    STATE_RUNNING_MATCH,
+    STATE_PAUSED_MATCH,
+    STATE_UNSTICK_BLUE,
+    STATE_UNSTICK_ORANGE,
+    STATE_TAPOUT_ORANGE,
+    STATE_TAPOUT_BLUE,
+    STATE_WIN_ORANGE,
+    STATE_WIN_BLUE,
+    STATE_MATCH_TIME_EXPIRE,
+    STATE_MATCH_EMERGENCY_STOP,
+    STATE_BLUE_VICTOR,
+    STATE_ORANGE_VICTOR,
+    STATE_INDIVIDUAL_OVERRIDE, // only state where individual color commands are accepted. 
 
 
 };
 
-struct Heartbeat{
-    string deviceId;
+/** 
+* Indicate the type of success or failure of a request.
+*/
+@nested
+@extensibility(APPENDABLE)
+struct ReplyStatus {
+
+    /**
+    * Indicate whether the request was accepted or rejected.
+    */
+    ReplyCode code;
+
+    /**
+    * Short textual description of the reply code intended for human operators.
+    */
+    String32 reason;
+}; // end struct ReplyStatus
+
+
+/** 
+* Periodic indication of device availability.
+* Topic Usage: 
+* - TOPIC_HEARTBEAT
+*/
+@topic
+@extensibility(APPENDABLE)
+struct Heartbeat {
+
+    /**
+    * The device described by this structure.
+    */
+    @key
+    Identity deviceId;
+
+    /**
+    * A counter that starts at 0 and increments by 1 for each new heartbeat.
+    */
     uint32 sequenceNumber;
+}; // end struct Heartbeat
+
+
+
+/** 
+* Respond whether a request was accepted for execution or rejected.  Supported requestId types include 
+* Topic Usage: 
+* - TOPIC_REPLY
+*/
+@topic
+@extensibility(APPENDABLE)
+struct Reply {
+
+    /**
+    * Copy of requestingDeviceId from the requestId.
+    */
+    @key
+    Identity requestingDeviceId;
+
+    /**
+    * Identity of the device that sent this Reply.
+    */
+    @key
+    Identity targetDeviceId;
+
+    // /**
+    // * Copy of configId from a requestId of type DeviceConfigRequest or PowerPortConfigRequest, otherwise ConfigId.CONFIG_UNKNOWN.
+    // */
+    // ConfigId config;
+
+    // /**
+    // * Copy of portNumber from a requestId of type PowerPortConfigRequest, otherwise PowerPortNumber.INVALID_PORT_NUMBER.
+    // */
+    // PowerPortNumber portNumber;
+    // keeping these around in case I want to do something like that for a thing... 
+
+
+    /**
+    * Copy of sequenceId from the requestId.  The requestingDeviceId and requestSequenceId uniquely match the reply code to the original request.
+    */
+    RequestSequence requestSequenceId;
+
+    /**
+    * Decision to accept or reason to reject the request.
+    */
+    ReplyStatus status;
+}; // end struct Reply
+
+
+@topic
+@extensibility(APPENDABLE)
+struct ActiveMicrogridControllerState {
+
+    /**
+    * The device described by this structure.
+    */
+    @key
+    Identity deviceId;
+
+    /**
+    * The MC that currently controls this device. Present if a MC is selected, absent otherwise.
+    */
+    @optional
+    Identity masterId;
+}; // end struct ActiveMicrogridControllerState
+
+
+@topic
+struct DeviceInfo{
+    @key string deviceId;
+
+    DeviceRole role;
+
+    SystemId system;
+
+    string displayName; // ill keep, may replace with the nickname thing 
 };
 
-struct SysName{
-    string deviceId;
 
-    string sysName;
+
+/** 
+* Local oscillator timestamp, not affected by clock jumps. 
+*/
+@nested
+@extensibility(APPENDABLE)
+struct ClockMonotonic {
+
+    /**
+    * integer portion of the timestamp.
+    */
+    uint32 seconds;
+
+    /**
+    * fractional portion of the timestamp.
+    */
+    uint32 nanoseconds;
+}; // end struct ClockMonotonic
+
+
+
+/** 
+* Clock synchronized to a global time base.
+*/
+@nested
+@extensibility(APPENDABLE)
+struct ClockRealtime {
+
+    /**
+    * Epoch.
+    */
+    uint16 epoch;
+
+    /**
+    * integer portion of the timestamp.
+    */
+    uint32 seconds;
+
+    /**
+    * fractional portion of the timestamp.
+    */
+    uint32 nanoseconds;
+}; // end struct ClockRealtime
+
+
+@topic 
+struct StateChange{
+    Identity source;
+
+    @key
+    SystemId target;
+
+    States newState;
+
+    // @optional?
+    ClockRealtime timerTime;
+
 };
 
 
-struct timeValue{
-    float seconds;
-    long minutes;
+@topic
+struct ClaimSystem{
+    Identity source;
+
+    @key 
+    SystemId target;
+
+    uint16 authority; // yup.
 };
 
-struct ClockCommand{
-
-    string sysName;
-
-    long isOff;
-
-    long doDisplayTime;
-
-    timeValue time;
-
-    Colors mainColor;
-
-    Colors blueGearColor;
-
-    Colors orangeGearColor;
-
-};
-
-struct ButtonCommand{
-
-    string deviceId;
-
-    Colors buttonState;
-
-
-};
-
+@topic
 struct ButtonData{
+    @key
     string deviceId;
 
     string sysName;
@@ -165,42 +394,15 @@ struct ButtonData{
     long mainPressed;
 
     long tapoutPressed;
+    // may want to change this on new buttons, 
+    // add unstick press, or others, whatever I come up with.
 };
 
 
-
-
-
-struct ArenaCommand{
-    string deviceId;
-
-    string sysName;
-
-    Colors  color;
-
-};
-
-
-
-struct DeviceInfo{
-    @key string deviceId;
-
-    DeviceRole role;
-
-    string sysName;
-
-    string displayName;
-
-
-};
-
-
-
-
-
-
-
-
+//overide write for arenalights, clock, buttons(?)
+// status messages for devices... 
+// synctime
+// clock writer for doneness. 
 
 
 

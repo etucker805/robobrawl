@@ -22,7 +22,7 @@ namespace robobrawl {
       virtual ~ReplyWriter() = default;
 
       // -------------------------------------------------------
-      void init(TmsContext& context, const robobrawl::Identity& deviceId)
+      void init(RobobrawlContext& context, const robobrawl::Identity& deviceId)
       {
         auto topic = dds::topic::Topic<robobrawl::Reply>(context.participant(), robobrawl::topic::TOPIC_REPLY);
         dw_ = dds::pub::DataWriter<robobrawl::Reply>(context.publisher(), topic, context.qos_source().reply.writer_qos);
@@ -41,8 +41,7 @@ namespace robobrawl {
       // -------------------------------------------------------
       void send(const robobrawl::Identity& reqDevId,
         const robobrawl::Identity& tgtId,
-        const robobrawl::ConfigId config,
-        const robobrawl::PowerPortNumber portNum,
+
         const robobrawl::RequestSequence reqSeqId,
         const robobrawl::ReplyCode code,
         const robobrawl::String32& reason = "")
@@ -50,8 +49,7 @@ namespace robobrawl {
         robobrawl::Reply reply;
         reply.requestingDeviceId(reqDevId);
         reply.targetDeviceId(tgtId);
-        reply.config(config);
-        reply.portNumber(portNum);
+     
         reply.requestSequenceId(reqSeqId);
         reply.status(robobrawl::ReplyStatus(code, reason));
         this->dw_.write(reply);
@@ -82,7 +80,7 @@ namespace robobrawl {
       virtual ~ReplyListener() = default;
     
       // -------------------------------------------------------
-      void init(TmsContext& context, const robobrawl::Identity& device_id)
+      void init(RobobrawlContext& context, const robobrawl::Identity& device_id)
       {
         const auto topic = dds::topic::Topic<robobrawl::Reply>(context.participant(),
           robobrawl::topic::TOPIC_REPLY);

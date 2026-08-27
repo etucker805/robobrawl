@@ -3,7 +3,7 @@
 
 namespace robobrawl {
 
-  void KnownDevices::init(TmsContext& context)
+  void KnownDevices::init(RobobrawlContext& context)
   {
     auto topic = dds::topic::Topic<robobrawl::DeviceInfo>(context.participant(), robobrawl::topic::TOPIC_DEVICE_INFO);
     dr_ = dds::sub::DataReader<robobrawl::DeviceInfo>(context.subscriber(), topic,

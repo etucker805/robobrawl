@@ -22,7 +22,7 @@ namespace robobrawl {
     public:
       explicit ActiveMC(const KnownDevices& known_devices);
 
-      void init(TmsContext& context);
+      void init(RobobrawlContext& context);
 
       void clear();
 

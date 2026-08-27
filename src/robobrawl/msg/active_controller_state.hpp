@@ -1,4 +1,3 @@
-
 #pragma once
 
 #include "robobrawl.hh"
@@ -20,7 +19,7 @@ namespace robobrawl {
 
       // -------------------------------------------------------
       void
-      init(TmsContext& context,
+      init(RobobrawlContext& context,
         const robobrawl::Identity& deviceId)
       {
         topic_ =
@@ -73,7 +72,7 @@ namespace robobrawl {
     
       // -------------------------------------------------------
       void
-      init(TmsContext& context)
+      init(RobobrawlContext& context)
       {
         auto topic =
             dds::topic::Topic<robobrawl::ActiveMicrogridControllerState>(context.participant(),

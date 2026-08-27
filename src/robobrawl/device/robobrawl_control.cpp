@@ -1,0 +1,53 @@
+#include "robobrawl_control.hpp"
+
+namespace robobrawl {
+  void Robobrawl_Control::init(RobobrawlContext& context, const robobrawl::Identity& dev_id)
+  {
+    Robobrawl_BaseDevice::init(context, dev_id);
+    //client and message inits 
+
+  }
+
+  
+  void Robobrawl_Control::clear() 
+  {
+    // client and message clears
+    Robobrawl_BaseDevice::clear();
+  }
+
+  // // -------------------------------------------------------
+  // void Robobrawl_Control::handle_ate_reply(const robobrawl::AuthorizationToEnergizeReply& reply)
+  // {
+
+
+  // }
+
+  void Robobrawl_Control::do_startup()
+  {
+    device_.publish(device_info_);
+    heartbeat_.publish();            // write every time
+    // startup messages
+
+    
+    publish_controller_state();
+  }
+
+  void Robobrawl_Control::do_continuous()
+  {
+    
+    // continuous messages (100hz?)
+
+  }
+
+  void Robobrawl_Control::do_medium()
+  {
+    heartbeat_.publish();            // write every time
+    // medium messages (1 hz?)
+  }
+
+  void Robobrawl_Control::do_slow()
+  {
+    //slow messages (0.1hz?)
+  }
+
+};
