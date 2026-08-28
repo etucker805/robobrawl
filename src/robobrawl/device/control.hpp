@@ -8,10 +8,13 @@
 
 //include other messages here
 #include "robobrawl/msg/state_change.hpp"
+#include "robobrawl/msg/button_data.hpp"
+#include "robobrawl/msg/claim_system.hpp"
+
 
 namespace robobrawl {
 
-  class Robobrawl_Control : public Robobrawl_BaseDevice /* add any client classes to extend here */ {
+  class Robobrawl_Control : public Robobrawl_BaseDevice, public ButtonData_Client /* add any client classes to extend here */ {
     public:
       void init(RobobrawlContext& context, const robobrawl::Identity& dev_id) override;
 
@@ -30,15 +33,15 @@ namespace robobrawl {
 
 
       // -------------------------------------------------------
-      // void handle_ate_reply(const robobrawl::AuthorizationToEnergizeReply& reply) override; // template 
+      void handle_button_data(const robobrawl::ButtonData& data) override; // template 
 
 
     protected:
       //write / listener / clients here... 
-      // StateChangeWriter sc_writer_;
-      // state chege writer
+      StateChangeWriter sc_writer_;
       // overide state writers
-      // claim system writer
+      ClaimSystemWriter cs_writer_;
+      ButtonDataListener bd_listener_;
       // clock / button  data readers 
       // sync time writer
       // 

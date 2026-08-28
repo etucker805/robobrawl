@@ -7,6 +7,10 @@
 #include "robobrawl/device/device.hpp"
 
 //include other messages here
+#include "robobrawl/msg/state_change.hpp"
+#include "robobrawl/msg/claim_system.hpp"
+#include "robobrawl/msg/button_data.hpp"
+
 
 namespace robobrawl {
 
