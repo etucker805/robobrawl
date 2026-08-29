@@ -9,4 +9,5 @@ void robobrawl::gui_cleanup()
 
     glfwDestroyWindow(window);
     glfwTerminate();
+
 }

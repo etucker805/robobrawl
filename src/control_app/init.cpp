@@ -118,6 +118,8 @@ void robobrawl::init(int argc, char* argv[])
     robobrawl_context.subscriber().enable();
     robobrawl_context.publisher().enable();
 
+    gui_setup();
+
   }
   catch (const std::exception& e) {
     std::cerr << e.what() << std::endl;

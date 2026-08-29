@@ -116,6 +116,7 @@ namespace robobrawl {
         const dds::sub::LoanedSamples<robobrawl::ButtonData> samples = reader.take();
         for (const auto& sample: samples) {
           if (sample.info().valid()) {
+
             const std::lock_guard<std::mutex> lock(mtx_);
             std::for_each( clients_.begin(), clients_.end(),
                            [sample](ButtonData_Client * client)

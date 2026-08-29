@@ -38,12 +38,12 @@ namespace robobrawl {
   Control::update_state()
   {
     // as in like for the port sttaus, might just not be used, cause listeners.... or this is gui in a wierd way
-
+    // I think this just isnt used ( and can be deleted but I have attachment issues)
   } 
 
   // -------------------------------------------------------
   void Control::handle_button_data(const robobrawl::ButtonData& data){
-
+    // do a check for it being at this system name... 
   }
   
   //--------------------------------------------------------

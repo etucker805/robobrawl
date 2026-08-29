@@ -23,6 +23,9 @@
 void
 robobrawl::cleanup()
 {
+  gui_cleanup();
+
+  
   active_mc.clear();
   known_devices.clear();
 
@@ -30,4 +33,6 @@ robobrawl::cleanup()
     device->clear();
 
   robobrawl_context.clear();
+
+
 }

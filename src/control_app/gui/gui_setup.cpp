@@ -6,11 +6,10 @@ GLFWwindow*  robobrawl::window;
 float        robobrawl::main_scale;
 ImGuiIO      robobrawl::io;
 ImGuiStyle   robobrawl::style;
-const char*  robobrawl::glsl_version = nullptr;
 ImFont*      robobrawl::font;
 
 //colors
-ImVec4 robobrawl::clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
+// ImVec4 robobrawl::clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 
 
 
@@ -22,6 +21,8 @@ int robobrawl::gui_setup()
         return 1;
 
     // Select GL version + let the backend select a GLSL version
+    const char* glsl_version = nullptr;
+
 #if defined(IMGUI_IMPL_OPENGL_ES2)
     // GL ES 2.0 + GLSL 100 (WebGL 1.0)
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 2);
@@ -72,6 +73,8 @@ int robobrawl::gui_setup()
     style.ScaleAllSizes(main_scale);        // Bake a fixed style scale. (until we have a solution for dynamic style scaling, changing this requires resetting Style + calling this again)
     style.FontScaleDpi = main_scale;        // Set initial font scale. (in docking branch: using io.ConfigDpiScaleFonts=true automatically overrides this for every window depending on the current monitor)
 
+
+
     // Setup Platform/Renderer backends
     ImGui_ImplGlfw_InitForOpenGL(window, true);
 #ifdef __EMSCRIPTEN__
@@ -96,9 +99,9 @@ int robobrawl::gui_setup()
     //io.Fonts->AddFontFromFileTTF("../../misc/fonts/DroidSans.ttf");
     //io.Fonts->AddFontFromFileTTF("../../misc/fonts/Roboto-Medium.ttf");
     //io.Fonts->AddFontFromFileTTF("../../misc/fonts/Cousine-Regular.ttf");
-    font = io.Fonts->AddFontFromFileTTF("./font.ttf");
+    font = io.Fonts->AddFontFromFileTTF("font.ttf");
     //IM_ASSERT(font != nullptr);
 
-
+    return 0;
 
 }

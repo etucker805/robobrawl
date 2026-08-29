@@ -67,6 +67,8 @@ robobrawl::main_loop()
         device->do_slow();
     }
 
+    gui_main_loop();
+
     std::this_thread::sleep_for(std::chrono::milliseconds(10));
   }
 }

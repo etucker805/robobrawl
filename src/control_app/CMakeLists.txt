@@ -10,6 +10,11 @@ include( ../cmake/coredx.cmake )
 add_subdirectory( ../robobrawl ./robobrawl )
 
 
+#copy font to build
+file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/gui/font.ttf
+        DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/ )
+
+
 ########################################################################
 # Imgui setup 
 
@@ -42,6 +47,11 @@ target_sources(control_app PUBLIC
   main_loop.cpp
   startup.cpp
   roles/control.cpp
+
+  gui/gui_setup.cpp
+  gui/gui_main_loop.cpp
+  gui/gui_cleanup.cpp
+
   )
 
 target_include_directories(control_app
@@ -53,6 +63,7 @@ target_include_directories(control_app
 target_link_libraries(control_app
   PUBLIC  robobrawl_interface
   PRIVATE imgui
+  PRIVATE glfw
   )
 
 # make a copy of the QoS XML file in the current output directory
