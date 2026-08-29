@@ -5,7 +5,10 @@ namespace robobrawl {
   {
     Robobrawl_BaseDevice::init(context, dev_id);
     //client and message inits 
-    // sc_writer_.init(context, dev_id);
+    sc_writer_.init(context, dev_id);
+    cs_writer_.init(context, dev_id);
+
+    bd_listener_.init(context, dev_id);
   }
 
   
@@ -17,12 +20,13 @@ namespace robobrawl {
     // sc_writer_.clear();
   }
 
-  // // -------------------------------------------------------
-  // void Robobrawl_Control::handle_ate_reply(const robobrawl::AuthorizationToEnergizeReply& reply)
-  // {
+  void Robobrawl_Control::handle_button_data(const robobrawl::ButtonData& data)
+  {
+    // update things.. or not... 
+    // I may try to virtual this up to the specific control mpl. 
+  }
 
 
-  // }
 
   void Robobrawl_Control::do_startup()
   {

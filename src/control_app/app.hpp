@@ -28,6 +28,8 @@
 
 #include "roles/robobrawl_control.hpp"
 
+#include "gui/gui.hpp"
+
 namespace robobrawl {
 
   void init(int argc, char* argv[]);

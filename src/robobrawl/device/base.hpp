@@ -40,7 +40,7 @@ namespace robobrawl {
 
       robobrawl::Identity controller_id_;
 
-      // DeviceInfoWriter device_;
+      DeviceInfoWriter device_;
       HeartbeatWriter heartbeat_;
       ReplyWriter reply_;
 

@@ -44,17 +44,14 @@ namespace robobrawl {
         const robobrawl::States state, 
         const robobrawl::ClockRealtime time)
       {
-        robobrawl::StateChange msg;
-        msg.source(reqDevId);
-        msg.target(tgtId);
-     
-        msg.newState(state);
-        msg.timerTime(time);
+        robobrawl::ButtonData msg;
+        msg.deviceId(reqDevId);
+
         this->dw_.write(msg);
       }
 
     protected:
-      dds::pub::DataWriter<robobrawl::StateChange> dw_;
+      dds::pub::DataWriter<robobrawl::ButtonData> dw_;
   };
 
   // -------------------------------------------------------

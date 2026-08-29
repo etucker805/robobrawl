@@ -20,7 +20,11 @@ namespace robobrawl {
 
     // void initiate_energy_start_stop(const robobrawl::EnergyStartStopRequest& ess) override;
 
+    // may override the data luisteners. 
+
     void do_continuous() override;
+
+    void do_medium() override; // for when we are running clock skey control... at 1hz, or I could do more theoreticalu, but then the point would be to have the mytime - theirTime < small, so latancyu becomes a ig condidreation, at leat ao 100hz... 
   protected:
     robobrawl::String32 serial_num_{};
 

@@ -10,7 +10,7 @@ namespace robobrawl {
     init_device_info();
 
     try {
-      // device_.init(context, device_id_);
+      device_.init(context, device_id_);
     }
     catch (const std::exception& error) {
       throw std::runtime_error("DeviceInfo writer initialization failed: " + std::string(error.what()));
@@ -33,14 +33,14 @@ namespace robobrawl {
 
   void Robobrawl_BaseDevice::clear()
   {
-    // device_.clear();
+    device_.clear();
     heartbeat_.clear();
     reply_.clear();
   }
 
   void Robobrawl_BaseDevice::publish_device_info()
   {
-    // device_.publish(device_info_);
+    device_.publish(device_info_);
   }
 
 }
