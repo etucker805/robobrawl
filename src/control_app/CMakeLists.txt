@@ -41,7 +41,7 @@ target_sources(control_app PUBLIC
   cleanup.cpp
   main_loop.cpp
   startup.cpp
-  roles/robobrawl_control.cpp
+  roles/control.cpp
   )
 
 target_include_directories(control_app

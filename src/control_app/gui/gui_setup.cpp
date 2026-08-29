@@ -1,6 +1,18 @@
 #include "gui.hpp"
 
 
+//gui vars
+GLFWwindow*  robobrawl::window;
+float        robobrawl::main_scale;
+ImGuiIO      robobrawl::io;
+ImGuiStyle   robobrawl::style;
+const char*  robobrawl::glsl_version = nullptr;
+ImFont*      robobrawl::font;
+
+//colors
+ImVec4 robobrawl::clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
+
+
 
 int robobrawl::gui_setup()
 {
@@ -46,7 +58,8 @@ int robobrawl::gui_setup()
     // Setup Dear ImGui context
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
-    io = ImGui::GetIO(); (void)io;
+    io = ImGui::GetIO(); 
+    (void)io;
     io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
     io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
 

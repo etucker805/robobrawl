@@ -5,7 +5,7 @@
 #include "robobrawl.hh"
 #include "robobrawl/components/robobrawl_context.hpp"
 
-#include "robobrawl/device/base.hpp"
+#include "robobrawl/device/robobrawl_base.hpp"
 
 #include "robobrawl/msg/device_info.hpp"
 #include "robobrawl/msg/heartbeat.hpp"

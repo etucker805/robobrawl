@@ -2,11 +2,11 @@
 
 #include "robobrawl.hh"
 #include "robobrawl/components/robobrawl_context.hpp"
-#include "robobrawl/device/control.hpp"
+#include "robobrawl/device/robobrawl_control.hpp"
 
 namespace robobrawl {
 
-  
+  extern KnownDevices known_devices;
 
   class Control : public Robobrawl_Control {
   public:
@@ -16,11 +16,9 @@ namespace robobrawl {
 
     void update_state() override;
 
-    // bool authorization_required(const robobrawl::EnergyStartStopRequest& ess) override;
+    void handle_button_data(const robobrawl::ButtonData& data) override; // template 
 
-    // void initiate_energy_start_stop(const robobrawl::EnergyStartStopRequest& ess) override;
-
-    // may override the data luisteners. 
+    void handle_new_device(const robobrawl::DeviceInfo& dev_info) override;
 
     void do_continuous() override;
 

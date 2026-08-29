@@ -4,7 +4,8 @@
 
 #include "robobrawl.hh"
 #include "robobrawl/components/robobrawl_context.hpp"
-#include "robobrawl/device/device.hpp"
+#include "robobrawl/device/robobrawl_device.hpp"
+#include "robobrawl/device/known_devices.hpp"
 
 //include other messages here
 #include "robobrawl/msg/state_change.hpp"
@@ -14,7 +15,7 @@
 
 namespace robobrawl {
 
-  class Robobrawl_Control : public Robobrawl_BaseDevice, public ButtonData_Client /* add any client classes to extend here */ {
+  class Robobrawl_Control : public Robobrawl_BaseDevice, public KnownDevices_Client, public ButtonData_Client /* add any client classes to extend here */ {
     public:
       void init(RobobrawlContext& context, const robobrawl::Identity& dev_id) override;
 
@@ -35,6 +36,8 @@ namespace robobrawl {
       // -------------------------------------------------------
       void handle_button_data(const robobrawl::ButtonData& data) override; // template 
 
+      void handle_new_device(const robobrawl::DeviceInfo& dev_info) override;
+
 
     protected:
       //write / listener / clients here... 
@@ -46,6 +49,9 @@ namespace robobrawl {
       // sync time writer
       // 
 
+
+      //data
+      robobrawl::States state_;
       
 
   };

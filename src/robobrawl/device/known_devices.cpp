@@ -54,7 +54,15 @@ namespace robobrawl {
     }
     else {
       std::clog << "NEW  DEVICE: '" << dev_info.deviceId() << "'" << std::endl;
+      std::for_each(clients_.begin(), clients_.end(), 
+                      [dev_info](KnownDevices_Client * client)
+                      { client->handle_new_device( dev_info ); } );
     }
+  }
+
+  void KnownDevices::handle_new_device(const robobrawl::DeviceInfo& dev_info)
+  {
+    std::clog << "NEW DEVICE HANDLE NOT OVERRITEN IN DEVICE CLASS...";
   }
 
   void KnownDevices::remove_device_info(const robobrawl::DeviceInfo& dev_info)

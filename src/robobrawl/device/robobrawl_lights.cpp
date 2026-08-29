@@ -1,7 +1,7 @@
-#include "clock.hpp"
+#include "robobrawl_lights.hpp"
 
 namespace robobrawl {
-  void Robobrawl_Clock::init(RobobrawlContext& context, const robobrawl::Identity& dev_id)
+  void Robobrawl_Lights::init(RobobrawlContext& context, const robobrawl::Identity& dev_id)
   {
     Robobrawl_Device::init(context, dev_id);
     //client and message inits 
@@ -9,7 +9,7 @@ namespace robobrawl {
   }
 
   
-  void Robobrawl_Clock::clear() 
+  void Robobrawl_Lights::clear() 
   {
     // client and message clears
     Robobrawl_Device::clear();
@@ -22,7 +22,7 @@ namespace robobrawl {
 
   // }
 
-  void Robobrawl_Clock::do_startup()
+  void Robobrawl_Lights::do_startup()
   {
     device_.publish(device_info_);
     heartbeat_.publish();            // write every time
@@ -32,20 +32,20 @@ namespace robobrawl {
     publish_controller_state();
   }
 
-  void Robobrawl_Clock::do_continuous()
+  void Robobrawl_Lights::do_continuous()
   {
     
     // continuous messages (100hz?)
 
   }
 
-  void Robobrawl_Clock::do_medium()
+  void Robobrawl_Lights::do_medium()
   {
     heartbeat_.publish();            // write every time
     // medium messages (1 hz?)
   }
 
-  void Robobrawl_Clock::do_slow()
+  void Robobrawl_Lights::do_slow()
   {
     //slow messages (0.1hz?)
   }

@@ -6,6 +6,10 @@ void robobrawl::gui_main_loop()
         gui_cleanup();
         done = 1; 
     }
+
+    gui_draw_selection_menu();
+
+
 }
 
 

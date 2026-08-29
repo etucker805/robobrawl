@@ -26,7 +26,7 @@
 #include "components/active_mc.hpp"
 #include "device/known_devices.hpp"
 
-#include "roles/robobrawl_control.hpp"
+#include "roles/control.hpp"
 
 #include "gui/gui.hpp"
 

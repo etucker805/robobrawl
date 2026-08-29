@@ -1,5 +1,5 @@
 
-#include "robobrawl_control.hpp"
+#include "control.hpp"
 
 namespace robobrawl {
 
@@ -14,7 +14,7 @@ namespace robobrawl {
 
     // initialize some messages things 
     
-    
+    known_devices.add_client(this);
     update_timer_.start();
   }
 
@@ -41,11 +41,19 @@ namespace robobrawl {
 
   } 
 
-  // ------------------------------------------------------- ( not a thing for control prob )
-  // bool
-  // Control::authorization_required( const tms::EnergyStartStopRequest& ess_request )
-  // {
-  // }
+  // -------------------------------------------------------
+  void Control::handle_button_data(const robobrawl::ButtonData& data){
+
+  }
+  
+  //--------------------------------------------------------
+  void Control::handle_new_device(const robobrawl::DeviceInfo& dev_info)
+  {
+    // update things.. or not... 
+    // I may try to virtual this up to the specific control mpl. 
+    printf("new device callback in control template, override in app pls \n ");
+  }
+
 
 
   // -------------------------------------------------------
@@ -60,4 +68,12 @@ namespace robobrawl {
     }
   }
   
+  // -------------------------------------------------------
+  void Control::do_medium()
+  {
+    Robobrawl_Control::do_medium();
+    
+    
+  }
+
 };

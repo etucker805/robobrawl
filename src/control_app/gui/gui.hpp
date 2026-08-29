@@ -12,22 +12,20 @@
 #endif
 #include <GLFW/glfw3.h> // Will drag system OpenGL headers
 
-#include "robobrawl/device/base.hpp"
+#include "robobrawl/device/robobrawl_base.hpp"
 //ah I might need the known devices or something included... or just init pass though... 
 
 
 namespace robobrawl{
     //vars and shi 
     //gui vars
-    GLFWwindow* window;
-    float main_scale;
-    ImGuiIO& io;
-    ImGuiStyle& style;
-    const char* glsl_version = nullptr;
-    ImFont* font;
+    extern GLFWwindow* window;
+    extern float main_scale;
+    extern ImGuiIO io;
+    extern ImGuiStyle style;
+    extern ImFont* font;
 
     //colors
-    ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 
 
 

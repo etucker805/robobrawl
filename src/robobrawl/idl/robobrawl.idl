@@ -362,6 +362,9 @@ struct ClockRealtime {
 }; // end struct ClockRealtime
 
 
+// getrs sent on: 
+// startup, claim system, device join, or leave, state change, 
+
 @topic 
 struct StateChange{
     Identity source;

@@ -4,7 +4,7 @@
 
 #include "robobrawl.hh"
 #include "robobrawl/components/robobrawl_context.hpp"
-#include "robobrawl/device/device.hpp"
+#include "robobrawl/device/robobrawl_device.hpp"
 
 //include other messages here
 #include "robobrawl/msg/state_change.hpp"

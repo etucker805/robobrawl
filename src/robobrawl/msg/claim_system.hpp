@@ -38,17 +38,17 @@ namespace robobrawl {
       }
 
       // ------------------------------------------------------- (update)
-      void send(const robobrawl::Identity& reqDevId,
+      void send(
+        const robobrawl::Identity& reqDevId,
         const robobrawl::SystemId& tgtId,
-
-        const robobrawl::States state, 
-        const robobrawl::ClockRealtime time)
+        const int                  auth=0
+      )
       {
         robobrawl::ClaimSystem msg;
         msg.source(reqDevId);
         msg.target(tgtId);
      
-        msg.authority(0);
+        msg.authority(auth);
         this->dw_.write(msg);
       }
 

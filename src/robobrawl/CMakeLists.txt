@@ -59,8 +59,7 @@ set_target_properties(robobrawl_core
 #
 # Produce the library 'robobrawl_interface'
 #
-#  This library uses tms_core, and adds some basic
-#  TMS related functionality
+#  This library uses tms_core, and adds some basic functionality
 #
 # -- much of this layer is implemented in header (.hpp) files
 #
@@ -70,9 +69,12 @@ add_library(robobrawl_interface STATIC
   components/robobrawl_context.cpp
 
   device/known_devices.cpp
-  device/base.cpp
-  device/device.cpp
-  device/control.cpp
+  device/robobrawl_base.cpp
+  device/robobrawl_device.cpp
+  device/robobrawl_control.cpp
+  device/robobrawl_lights.cpp
+  device/robobrawl_button.cpp
+  device/robobrawl_clock.cpp
 
   )
 
