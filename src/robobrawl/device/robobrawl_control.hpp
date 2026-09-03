@@ -2,6 +2,8 @@
 
 #pragma once
 
+
+
 #include "robobrawl.hh"
 #include "robobrawl/components/robobrawl_context.hpp"
 #include "robobrawl/device/robobrawl_device.hpp"
@@ -39,6 +41,9 @@ namespace robobrawl {
       void handle_new_device(const robobrawl::DeviceInfo& dev_info) override;
 
 
+      std::vector<robobrawl::SystemId> claimed_systems_;
+
+
     protected:
       //write / listener / clients here... 
       StateChangeWriter sc_writer_;
@@ -51,7 +56,8 @@ namespace robobrawl {
 
 
       //data
-      robobrawl::States state_;
+      std::map<robobrawl::SystemId, robobrawl::States>        states_{};
+      std::map<robobrawl::SystemId, robobrawl::TimeData> state_times_{};
       
 
   };

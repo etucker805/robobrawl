@@ -84,6 +84,7 @@ CMakeUserPresets.json
 .vscode/tags
 .devcontainer/
 
+settings.json
 
 #imgui 
 imgui/

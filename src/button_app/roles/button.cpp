@@ -1,5 +1,5 @@
 
-#include "robobrawl_button.hpp"
+#include "button.hpp"
 
 namespace robobrawl {
 
@@ -41,11 +41,13 @@ namespace robobrawl {
 
   } 
 
-  // ------------------------------------------------------- ( not a thing for control prob )
-  // bool
-  // Control::authorization_required( const tms::EnergyStartStopRequest& ess_request )
-  // {
-  // }
+  void handle_claim_system(const robobrawl::ClaimSystem& claim){
+
+  }
+
+  void handle_change_state(const robobrawl::StateChange& req){
+    
+  }
 
 
   // -------------------------------------------------------

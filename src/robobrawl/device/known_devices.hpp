@@ -28,6 +28,9 @@ namespace robobrawl {
       // -------------------------------------------------------
       std::vector<std::string> known_device_ids();
 
+      std::vector<robobrawl::SystemId> known_systems_;
+
+
       // -------------------------------------------------------
       const robobrawl::DeviceInfo& get_device_info(const std::string& dev_id);
 
@@ -63,6 +66,8 @@ namespace robobrawl {
     protected:
       dds::sub::DataReader<robobrawl::DeviceInfo> dr_ = dds::core::null;
       std::map<robobrawl::Identity, robobrawl::DeviceInfo> known_devices_{};
+      std::map<robobrawl::Identity, robobrawl::SystemId>   device_to_system_{};
+
 
       std::mutex mtx_{};
 

@@ -5,7 +5,6 @@ namespace robobrawl {
   {
     Robobrawl_BaseDevice::init(context, dev_id);
     //client and message inits 
-    state_ = robobrawl::States::STATE_IDLE_OFF;
 
     sc_writer_.init(context, dev_id);
     cs_writer_.init(context, dev_id);

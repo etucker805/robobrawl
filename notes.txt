@@ -26,3 +26,11 @@ data:
     - still so parsing on control, get data from things, then send out New State! to everything... then I think I need affiliation keys... call it system name? whatever, in Idenity struct. 
     - what do about timing then, I have compute so trust the pi and have it send a done sig, med speed sync cast from control to everything else... 
     - 
+
+
+
+
+Just in case: 
+ // tapouts and unsticks ... I may need a return from unstick.. or we send time with pause state, save that then continue.
+            // id have to save it here to, migth as well just make it less on teh pi side and just send whatever resume time on the run match state change, or I could do it from 3-2-1 too...
+            // I guess the clock would have to store max time to get the green - yellow - red times to work correctly... or I coukld have a clcok command msg that will update that...

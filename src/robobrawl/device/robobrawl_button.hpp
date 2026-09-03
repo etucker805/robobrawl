@@ -14,7 +14,7 @@
 
 namespace robobrawl {
 
-  class Robobrawl_Button : public Robobrawl_Device /* add any client classes to extend here */ {
+  class Robobrawl_Button : public Robobrawl_Device, public ClaimSystem_Client {
     public:
       void init(RobobrawlContext& context, const robobrawl::Identity& dev_id) override;
 
@@ -30,6 +30,10 @@ namespace robobrawl {
 
       // -------------------------------------------------------
       // virtual bool authorization_required(const robobrawl::EnergyStartStopRequest& ess) = 0; // left as tempolate 
+      virtual void handle_change_state(const robobrawl::StateChange& req)=0;
+
+      virtual void handle_claim_system(const robobrawl::ClaimSystem& claim)=0;
+
 
 
       // -------------------------------------------------------
@@ -39,8 +43,11 @@ namespace robobrawl {
     protected:
       //write / listener / clients here... 
       // claim reader
+      ClaimSystemListener cs_reader_;
       // state change reader
+      StateChangeListener sc_reader_;
       // data writer
+      ButtonDataWriter    bd_writer_;
       // button override reader 
 
 

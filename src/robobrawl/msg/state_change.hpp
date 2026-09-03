@@ -42,7 +42,7 @@ namespace robobrawl {
         const robobrawl::SystemId& tgtId,
 
         const robobrawl::States state, 
-        const robobrawl::ClockRealtime time)
+        const robobrawl::TimeData time)
       {
         robobrawl::StateChange msg;
         msg.source(reqDevId);
@@ -50,6 +50,20 @@ namespace robobrawl {
      
         msg.newState(state);
         msg.timerTime(time);
+        this->dw_.write(msg);
+      }
+
+      void send(const robobrawl::Identity& reqDevId,
+        const robobrawl::SystemId& tgtId,
+
+        const robobrawl::States state)
+      {
+        robobrawl::StateChange msg;
+        msg.source(reqDevId);
+        msg.target(tgtId);
+     
+        msg.newState(state);
+        msg.timerTime();
         this->dw_.write(msg);
       }
 

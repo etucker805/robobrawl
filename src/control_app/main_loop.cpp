@@ -10,11 +10,13 @@ robobrawl::RobobrawlContext robobrawl::robobrawl_context;
 robobrawl::KnownDevices     robobrawl::known_devices;
 robobrawl::ActiveMC         robobrawl::active_mc(robobrawl::known_devices);
 
-std::vector<robobrawl::Robobrawl_BaseDevice*>   robobrawl::robobrawl_devices;
+std::vector<robobrawl::Robobrawl_Control*>   robobrawl::robobrawl_devices;
 
 static Timer timer_01hz; //  0.1 Hz
 static Timer timer_1hz;  //  1   Hz
 static Timer timer_10hz; // 10   Hz
+static Timer timer_100hz;// 100  Hz
+
 
 // ---------------------------------------------------------------
 void
@@ -23,6 +25,7 @@ robobrawl::main_loop()
   timer_01hz.start();
   timer_1hz.start();
   timer_10hz.start();
+  timer_100hz.start();
 
   while (!done) {
     // read status from hardware, and update apropriate values:
@@ -31,6 +34,13 @@ robobrawl::main_loop()
 
     // ------------------------------------------
     // publish to TMS infrastructure:
+
+    //every 0.01 sec ( gui speed )
+    if(timer_100hz.elapsed().count() >= 10) {
+      timer_100hz.start();
+      gui_main_loop();
+
+    }
 
     // every 0.1 sec:
     if (timer_01hz.elapsed().count() >= 100) {

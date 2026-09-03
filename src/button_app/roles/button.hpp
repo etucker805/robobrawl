@@ -2,7 +2,7 @@
 
 #include "robobrawl.hh"
 #include "robobrawl/components/robobrawl_context.hpp"
-#include "robobrawl/device/button.hpp"
+#include "robobrawl/device/robobrawl_button.hpp"
 
 namespace robobrawl {
 
@@ -16,9 +16,9 @@ namespace robobrawl {
 
     void update_state() override;
 
-    // bool authorization_required(const robobrawl::EnergyStartStopRequest& ess) override;
+    void handle_claim_system(const robobrawl::ClaimSystem& claim);
 
-    // void initiate_energy_start_stop(const robobrawl::EnergyStartStopRequest& ess) override;
+    void handle_change_state(const robobrawl::StateChange& req);
 
     void do_continuous() override;
   protected:

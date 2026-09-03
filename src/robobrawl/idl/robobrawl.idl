@@ -92,6 +92,14 @@ module topic {
         for button to send data to net, triggered on button press or whatever
     */
     const string TOPIC_BUTTON_DATA = "ButtonData";
+
+    const string TOPIC_CLOCK_DATA = "ClockData";
+
+    const string TOPIC_BUTTON_COMMAND = "ButtonCommand";
+
+    const string TOPIC_CLOCK_COMMAND = "ClockCommand";
+
+
     
 
    };  //end module topic
@@ -124,40 +132,46 @@ typedef uint64 RequestSequence;
 
 
 
-typedef uint64 SystemId;
+typedef String32 SystemId;
+
+enum ButtonColor{
+    BUTTON_BLUE,
+    BUTTON_ORANGE,
+    BUTTON_UNKNOWN
+};
 
 
 enum DeviceRole {
-       ROLE_UNKNOWN, // Unknown value. This is a generic placeholder representing the case in which an appropriate value could not be determined.  Never transmitted in this version of the standard.
-       ROLE_CONTROL, 
-       ROLE_BUTTON_ORANGE,
-       ROLE_BUTTON_BLUE,
-       ROLE_CLOCK, 
-       ROLE_ARENA, //lights 
-       
-   }; // enum DeviceRole
+    ROLE_UNKNOWN, // Unknown value. This is a generic placeholder representing the case in which an appropriate value could not be determined.  Never transmitted in this version of the standard.
+    ROLE_CONTROL, 
+    ROLE_BUTTON_ORANGE,
+    ROLE_BUTTON_BLUE,
+    ROLE_CLOCK, 
+    ROLE_ARENA, //lights 
+    
+}; // enum DeviceRole
 
-   enum ReplyCode {
-       REPLY_UNKNOWN, // Unknown value. This is a generic placeholder representing the case in which an appropriate value could not be determined.
-       REPLY_OK, // The request has succeeded.
-       REPLY_BAD_REQUEST, // Some value in the request was invalid.
-       REPLY_METHOD_NOT_ALLOWED, // A request method is not supported for the requested resource.
-       REPLY_CONFLICT, // Indicates that the request could not be processed because of conflict in the current state of the resource.
-       REPLY_GONE, // Indicates that the resource requested is no longer available and will not be available again. This should be used when a resource has been intentionally removed and the resource should be purged.
-       REPLY_PRECONDITION_FAILED, // The request does not meet one of the preconditions.
-       REPLY_INTERNAL_SERVER_ERROR, // A generic error message, given when an unexpected condition was encountered and no more specific message is suitable.
-       REPLY_NOT_IMPLEMENTED, // The request either does not recognize the request method, or it lacks the ability to fulfil the request.
-       REPLY_SERVICE_UNAVAILABLE, // The device cannot handle the request (because it is overloaded or down for maintenance). Generally, this is a temporary state
-       REPLY_PENDING_AUTHORIZATION, // Request is valid, and authorization is required before processing.
-       REPLY_NOT_MASTER, // The requestingDeviceId is not the selected master MC.
-       /**
-        * Change History:
-        *  1) Version: 2.0.1, Change: add, Interoperability: No-xtypes
-        *     Allow device to provide more specified reason a request
-        *     is denied.
-        */
-       REPLY_PERMISSION_DENIED // Remote control is disabled for this request.
-   }; // enum ReplyCode
+enum ReplyCode {
+    REPLY_UNKNOWN, // Unknown value. This is a generic placeholder representing the case in which an appropriate value could not be determined.
+    REPLY_OK, // The request has succeeded.
+    REPLY_BAD_REQUEST, // Some value in the request was invalid.
+    REPLY_METHOD_NOT_ALLOWED, // A request method is not supported for the requested resource.
+    REPLY_CONFLICT, // Indicates that the request could not be processed because of conflict in the current state of the resource.
+    REPLY_GONE, // Indicates that the resource requested is no longer available and will not be available again. This should be used when a resource has been intentionally removed and the resource should be purged.
+    REPLY_PRECONDITION_FAILED, // The request does not meet one of the preconditions.
+    REPLY_INTERNAL_SERVER_ERROR, // A generic error message, given when an unexpected condition was encountered and no more specific message is suitable.
+    REPLY_NOT_IMPLEMENTED, // The request either does not recognize the request method, or it lacks the ability to fulfil the request.
+    REPLY_SERVICE_UNAVAILABLE, // The device cannot handle the request (because it is overloaded or down for maintenance). Generally, this is a temporary state
+    REPLY_PENDING_AUTHORIZATION, // Request is valid, and authorization is required before processing.
+    REPLY_NOT_MASTER, // The requestingDeviceId is not the selected master MC.
+    /**
+    * Change History:
+    *  1) Version: 2.0.1, Change: add, Interoperability: No-xtypes
+    *     Allow device to provide more specified reason a request
+    *     is denied.
+    */
+    REPLY_PERMISSION_DENIED // Remote control is disabled for this request.
+}; // enum ReplyCode
 
 
 enum Colors{
@@ -362,6 +376,14 @@ struct ClockRealtime {
 }; // end struct ClockRealtime
 
 
+@nested
+@extensibility(APPENDABLE)
+struct TimeData{
+    uint32 minuets;
+    uint32 seconds;
+};
+
+
 // getrs sent on: 
 // startup, claim system, device join, or leave, state change, 
 
@@ -374,8 +396,8 @@ struct StateChange{
 
     States newState;
 
-    // @optional?
-    ClockRealtime timerTime;
+    @optional
+    TimeData timerTime;
 
 };
 
@@ -393,16 +415,66 @@ struct ClaimSystem{
 @topic
 struct ButtonData{
     @key
-    string deviceId;
+    Identity deviceId;
 
-    string sysName;
+    SystemId sysName;
+
+    ButtonColor color;
 
     long mainPressed;
 
     long tapoutPressed;
+
+    long unstickPressed;
     // may want to change this on new buttons, 
     // add unstick press, or others, whatever I come up with.
 };
+
+
+@topic
+struct ClockData{
+    @key
+    Identity deviceId;
+
+    SystemId sysName;
+
+    long done;
+};
+
+
+@topic 
+struct ButtonCommand{
+    @key
+    Identity target;
+
+    Identity source;
+
+    @optional
+    ButtonColor newColor;
+
+    @optional
+    SystemId newSystem;
+};
+
+@topic 
+struct ClockCommand{
+    @key 
+    Identity target;
+
+    Identity source;
+
+    @optional
+    SystemId newSystem;
+
+    @optional
+    Colors displayColor;
+
+    @optional
+    TimeData displayTIme;
+
+
+};
+
 
 
 //overide write for arenalights, clock, buttons(?)

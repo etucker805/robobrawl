@@ -57,7 +57,17 @@ namespace robobrawl {
       std::for_each(clients_.begin(), clients_.end(), 
                       [dev_info](KnownDevices_Client * client)
                       { client->handle_new_device( dev_info ); } );
+
+      // internal data additions, I guess
+      device_to_system_[dev_info.deviceId()] = dev_info.system();
+
+      if(std::find(known_systems_.begin(), known_systems_.end(), dev_info.system()) == known_systems_.end()){
+        known_systems_.push_back(dev_info.system());
+      }
+
     }
+
+    
   }
 
   void KnownDevices::handle_new_device(const robobrawl::DeviceInfo& dev_info)
