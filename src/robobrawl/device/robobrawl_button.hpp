@@ -10,11 +10,12 @@
 #include "robobrawl/msg/state_change.hpp"
 #include "robobrawl/msg/claim_system.hpp"
 #include "robobrawl/msg/button_data.hpp"
+#include "robobrawl/msg/button_command.hpp"
 
 
 namespace robobrawl {
 
-  class Robobrawl_Button : public Robobrawl_Device, public ClaimSystem_Client {
+  class Robobrawl_Button : public Robobrawl_Device, public ButtonCommand_Client {
     public:
       void init(RobobrawlContext& context, const robobrawl::Identity& dev_id) override;
 
@@ -34,22 +35,19 @@ namespace robobrawl {
 
       virtual void handle_claim_system(const robobrawl::ClaimSystem& claim)=0;
 
+      virtual void handle_button_command(const robobrawl::ButtonCommand& comm)=0;
 
-
-      // -------------------------------------------------------
-      // void handle_ate_reply(const robobrawl::AuthorizationToEnergizeReply& reply) override; // template 
 
 
     protected:
       //write / listener / clients here... 
       // claim reader
-      ClaimSystemListener cs_reader_;
       // state change reader
-      StateChangeListener sc_reader_;
+      StateChangeListener   sc_listener_;
       // data writer
-      ButtonDataWriter    bd_writer_;
+      ButtonDataWriter      bd_writer_;
       // button override reader 
-
+      ButtonCommandListener bc_listener_;
 
 
   };

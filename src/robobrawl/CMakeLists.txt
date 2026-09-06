@@ -13,6 +13,11 @@ set( ROBOBRAWL_SRC ${CMAKE_CURRENT_LIST_DIR} CACHE INTERNAL "" )
 #
 # Generate code from the 'tms.idl' file, and produce library 'tms_core'
 #
+if( NOT DEFINED ROBOBRAWL_INTERFACE_BUILD )
+set(ROBOBRAWL_INTERFACE_BUILD "yep")
+
+
+
 set( ROBOBRAWL_GENERATED_SRCS
   generated/robobrawl.cc
   generated/robobrawl.hh
@@ -89,6 +94,8 @@ target_include_directories(robobrawl_interface
 target_link_libraries( robobrawl_interface
   PUBLIC robobrawl_core
   )
+
+endif()
 
 #######################################################################
 #

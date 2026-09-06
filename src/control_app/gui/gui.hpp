@@ -22,20 +22,21 @@
 namespace robobrawl{
     //vars and shi 
     //gui vars
-    extern GLFWwindow* window;
+    extern GLFWwindow*        window;
     extern float main_scale;
     extern ImGuiIO io;
     extern ImGuiStyle style;
     extern ImFont* font;
 
     //colors
-    extern ImVec4 purple ; 
-    extern ImVec4 yellow ;
-    extern ImVec4 orange ;
-    extern ImVec4 white  ;
-    extern ImVec4 black  ;
-    extern ImVec4 cyan   ;
-    extern ImVec4 grey   ;
+    extern ImVec4 purple;
+    extern ImVec4 yellow;
+    extern ImVec4 orange;
+    extern ImVec4 white;
+    extern ImVec4 black;
+    extern ImVec4 cyan;
+    extern ImVec4 grey;
+    extern ImVec4 clear_color;
 
     //button vars
     extern std::map<robobrawl::SystemId, bool> open_control_window_;
@@ -50,7 +51,7 @@ namespace robobrawl{
 
     // figure out how to setup... pu into gui_setup.cpp 
 
-    int gui_setup(/*? nothing ? */);
+    int gui_setup();
     
     static void glfw_error_callback(int error, const char* description)
     {

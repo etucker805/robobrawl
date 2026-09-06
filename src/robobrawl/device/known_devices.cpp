@@ -49,8 +49,11 @@ namespace robobrawl {
   void KnownDevices::handle_device_info(const robobrawl::DeviceInfo& dev_info)
   {
     const auto [it, added] = known_devices_.insert(std::make_pair(dev_info.deviceId(), dev_info));
+
     if (!added) {
+      // std::cout << "this thinfg skipers and stuff" << std::endl;
       it->second = dev_info;
+
     }
     else {
       std::clog << "NEW  DEVICE: '" << dev_info.deviceId() << "'" << std::endl;
@@ -83,6 +86,8 @@ namespace robobrawl {
 
   void KnownDevices::on_data_available(dds::sub::DataReader<robobrawl::DeviceInfo>& reader)
   {
+
+    // std::cout << "Got a DevInfo from known devices." << std::endl;
     dds::sub::LoanedSamples<robobrawl::DeviceInfo> samples = reader.take();
     for (const auto& sample: samples) {
       if (sample.info().valid()) {

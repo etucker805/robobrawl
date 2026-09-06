@@ -16,9 +16,11 @@ ImFont*      robobrawl::font;
 int robobrawl::gui_setup()
 {
     glfwSetErrorCallback(glfw_error_callback);
-
-    if (!glfwInit())
+    std::cout << "setup start is a thing... " << std::endl;
+    if (!glfwInit()) {
+        std::cout << "Failed to initialize GLFW." << std::endl;
         return 1;
+    }
 
     // Select GL version + let the backend select a GLSL version
     const char* glsl_version = nullptr;
@@ -50,10 +52,13 @@ int robobrawl::gui_setup()
 
      // Create window with graphics context
     main_scale = ImGui_ImplGlfw_GetContentScaleForMonitor(glfwGetPrimaryMonitor()); // Valid on GLFW 3.3+ only
-    window = glfwCreateWindow((int)(1280 * main_scale), (int)(800 * main_scale), "Robobrawl App", nullptr, nullptr);
-    if (window == nullptr)
+    robobrawl::window = glfwCreateWindow((int)(1280 * main_scale), (int)(800 * main_scale), "Robobrawl App", nullptr, nullptr);
+    if (robobrawl::window == nullptr) {
+        std::cout << "Failed to create the GLFW window." << std::endl;
+        glfwTerminate();
         return 1;
-    glfwMakeContextCurrent(window);
+    }
+    glfwMakeContextCurrent(robobrawl::window);
     glfwSwapInterval(1); // Enable vsync
 
     // Setup Dear ImGui context
@@ -76,9 +81,9 @@ int robobrawl::gui_setup()
 
 
     // Setup Platform/Renderer backends
-    ImGui_ImplGlfw_InitForOpenGL(window, true);
+    ImGui_ImplGlfw_InitForOpenGL(robobrawl::window, true);
 #ifdef __EMSCRIPTEN__
-    ImGui_ImplGlfw_InstallEmscriptenCallbacks(window, "#canvas");
+    ImGui_ImplGlfw_InstallEmscriptenCallbacks(robobrawl::window, "#canvas");
 #endif
     ImGui_ImplOpenGL3_Init(glsl_version);
 
@@ -100,8 +105,8 @@ int robobrawl::gui_setup()
     //io.Fonts->AddFontFromFileTTF("../../misc/fonts/Roboto-Medium.ttf");
     //io.Fonts->AddFontFromFileTTF("../../misc/fonts/Cousine-Regular.ttf");
     font = io.Fonts->AddFontFromFileTTF("font.ttf");
-    //IM_ASSERT(font != nullptr);
-
+    IM_ASSERT(font != nullptr);
+    std::cout << "WINDOW: " << (void*)window << std::endl;
     return 0;
 
 }

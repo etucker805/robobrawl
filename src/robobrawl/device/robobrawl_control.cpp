@@ -6,11 +6,16 @@ namespace robobrawl {
     Robobrawl_BaseDevice::init(context, dev_id);
     //client and message inits 
 
+    
+
     sc_writer_.init(context, dev_id);
     cs_writer_.init(context, dev_id);
 
-    bd_listener_.init(context, dev_id);
+    bc_writer_.init(context, dev_id);
+    cc_writer_.init(context, dev_id);
 
+    bd_listener_.init(context, dev_id);
+    cd_listener_.init(context, dev_id);
   }
 
   
@@ -22,26 +27,19 @@ namespace robobrawl {
     sc_writer_.clear();
     cs_writer_.clear();
 
+    bc_writer_.clear();
+    cc_writer_.clear();
+
     bd_listener_.clear();
+    cd_listener_.clear();
   }
 
-  void Robobrawl_Control::handle_button_data(const robobrawl::ButtonData& data)
-  {
-    // update things.. or not... 
-    // I may try to virtual this up to the specific control mpl. 
-    printf("Button data callback in control template, override in app pls \n ");
-  }
 
-  void Robobrawl_Control::handle_new_device(const robobrawl::DeviceInfo& dev_info)
-  {
-    // update things.. or not... 
-    // I may try to virtual this up to the specific control mpl. 
-    printf("new device callback in control template, override in app pls \n ");
-  }
 
 
   void Robobrawl_Control::do_startup()
   {
+    publish_device_info();
     // device_.publish(device_info_);
     heartbeat_.publish();            // write every time
     // startup messages
@@ -69,6 +67,8 @@ namespace robobrawl {
   void Robobrawl_Control::do_slow()
   {
     //slow messages (0.1hz?)
+    publish_device_info();
+
   }
 
 };

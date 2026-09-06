@@ -1,5 +1,5 @@
 
-#include "robobrawl_clock.hpp"
+#include "clock.hpp"
 
 namespace robobrawl {
 
@@ -8,6 +8,9 @@ namespace robobrawl {
 
     robobrawl::Identity active_dev_id = dev_id;
     
+    
+
+
     
     Robobrawl_Clock::init(context, dev_id);
 
@@ -25,9 +28,9 @@ namespace robobrawl {
     // -----------------------------------------------------------
     // Initialize the DeviceInfo with appropriate info
 
-    device_info_.deviceId(this->device_id_);
-    device_info_.role(robobrawl::DeviceRole::ROLE_CONTROL);
-    // I think thats all I got... 
+    device_info_.deviceId(device_id_);
+    device_info_.system("Test System");
+    device_info_.role(robobrawl::DeviceRole::ROLE_CLOCK);
 
   
   }
@@ -40,6 +43,28 @@ namespace robobrawl {
     // as in like for the port sttaus, might just not be used, cause listeners.... or this is gui in a wierd way
 
   } 
+
+  void Clock::handle_new_device(const robobrawl::DeviceInfo& info){
+    publish_device_info();
+  }
+
+
+
+  void Clock::handle_clock_command(const robobrawl::ClockCommand& comm){
+
+  }
+
+
+  void Clock::handle_claim_system(const robobrawl::ClaimSystem& claim){
+
+  }
+
+
+  void Clock::handle_state_change(const robobrawl::StateChange& state){
+
+  }
+
+
 
   // ------------------------------------------------------- ( not a thing for control prob )
   // bool
@@ -60,4 +85,11 @@ namespace robobrawl {
     }
   }
   
+
+  void Clock::do_medium()
+  {
+    Robobrawl_Clock::do_medium();   
+  }
 };
+
+

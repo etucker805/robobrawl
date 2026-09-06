@@ -20,9 +20,19 @@ namespace robobrawl {
 
     void handle_change_state(const robobrawl::StateChange& req);
 
+    void handle_button_command(const robobrawl::ButtonCommand& comm);
+
+    void send_data_message( SystemId system, 
+                            ButtonColor color,
+                            bool readyPress, 
+                            bool tapoutPress, 
+                            bool unstickPress); // called in gui or wherever polling happens... idealy. 
+
     void do_continuous() override;
   protected:
     robobrawl::String32 serial_num_{};
+
+    
 
     Timer   update_timer_;
     Timer   transition_timer_;

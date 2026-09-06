@@ -77,7 +77,7 @@ namespace robobrawl {
     public:
       virtual ~StateChange_Client() = default;
 
-      virtual void handle_state_change(const robobrawl::StateChange& req) = 0;
+      virtual void handle_state_change(const robobrawl::StateChange& state) = 0;
   };
 
   // -------------------------------------------------------

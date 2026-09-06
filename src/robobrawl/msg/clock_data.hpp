@@ -62,7 +62,7 @@ namespace robobrawl {
     public:
       virtual ~ClockData_Client() = default;
 
-      virtual void handle_clock_data(const robobrawl::ClockData& req) = 0;
+      virtual void handle_clock_data(const robobrawl::ClockData& data) = 0;
   };
 
   // -------------------------------------------------------

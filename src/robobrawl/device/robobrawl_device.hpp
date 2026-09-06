@@ -34,7 +34,6 @@ namespace robobrawl {
 
       ActiveControllerStateWriter ac_state_writer_;
       ClaimSystemListener         cs_reader_;
-      String32                    system_name_;
       Identity                    system_controller_;
   };
 

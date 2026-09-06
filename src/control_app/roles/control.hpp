@@ -18,7 +18,15 @@ namespace robobrawl {
 
     void handle_button_data(const robobrawl::ButtonData& data) override; // template 
 
+    void handle_clock_data(const robobrawl::ClockData& data) override;
+
     void handle_new_device(const robobrawl::DeviceInfo& dev_info) override;
+
+    int need_override_authority(SystemId target_system);
+
+    void send_override_button(Identity target, ButtonColor new_color, SystemId new_system); 
+    
+    void send_override_clock(Identity target, Colors display_color, TimeData display_time, SystemId new_system); 
     
     void do_continuous() override;
 

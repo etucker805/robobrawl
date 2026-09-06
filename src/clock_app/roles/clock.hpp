@@ -2,7 +2,7 @@
 
 #include "robobrawl.hh"
 #include "robobrawl/components/robobrawl_context.hpp"
-#include "robobrawl/device/clock.hpp"
+#include "robobrawl/device/robobrawl_clock.hpp"
 
 namespace robobrawl {
 
@@ -18,11 +18,19 @@ namespace robobrawl {
 
     // bool authorization_required(const robobrawl::EnergyStartStopRequest& ess) override;
 
-    // void initiate_energy_start_stop(const robobrawl::EnergyStartStopRequest& ess) override;
+    void handle_new_device(const robobrawl::DeviceInfo& info) override; 
+
+    void handle_clock_command(const robobrawl::ClockCommand& comm);
+    void handle_claim_system(const robobrawl::ClaimSystem& claim);
+    void handle_state_change(const robobrawl::StateChange& state);
+
 
     void do_continuous() override;
+    void do_medium() override;
+
   protected:
     robobrawl::String32 serial_num_{};
+    
 
     Timer   update_timer_;
     Timer   transition_timer_;

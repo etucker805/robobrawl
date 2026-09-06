@@ -14,7 +14,7 @@ static std::string baseDeviceId;
 // static std::string serialNum;
 static uint32_t    domain_id = 0;
 
-static robobrawl::Clock clock;
+static robobrawl::Clock clock_device;
 
 // ---------------------------------------------------------------
 void handle_sig(int sig)
@@ -101,7 +101,7 @@ void robobrawl::init(int argc, char* argv[])
       exit(1);
     }
 
-    baseDeviceId = "INTRACOM";     // todo: select a good value here
+    baseDeviceId = "robobrawl";     // todo: select a good value here
     // if (serialNum.empty())
     std::string serialNum = "SN-0001";       // todo: provide a good fallback, if not provided on command-line
 
@@ -110,9 +110,9 @@ void robobrawl::init(int argc, char* argv[])
     active_mc.init(robobrawl_context);
     known_devices.init(robobrawl_context);
 
-    clock.init(robobrawl_context, baseDeviceId + "-CONT-1" + "-" + serialNum);
+    clock_device.init(robobrawl_context, baseDeviceId + "-CLOCK-1" );
 
-    robobrawl_devices.push_back(&clock);
+    robobrawl_devices.push_back(&clock_device);
   
     // init all DDS entities:
     robobrawl_context.subscriber().enable();

@@ -6,6 +6,11 @@ namespace robobrawl {
     Robobrawl_Device::init(context, dev_id);
     //client and message inits 
 
+    bd_writer_.init(context, dev_id);
+
+    sc_listener_.init(context, dev_id);
+    bc_listener_.init(context, dev_id);
+
   }
 
   
@@ -13,6 +18,11 @@ namespace robobrawl {
   {
     // client and message clears
     Robobrawl_Device::clear();
+
+    bd_writer_.clear();
+
+    sc_listener_.clear();
+    bc_listener_.clear();
   }
 
   // // -------------------------------------------------------
@@ -35,7 +45,7 @@ namespace robobrawl {
   void Robobrawl_Button::do_continuous()
   {
     
-    // continuous messages (100hz?)
+    // continuous messages (10hz)
 
   }
 

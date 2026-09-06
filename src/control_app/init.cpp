@@ -95,22 +95,28 @@ void robobrawl::init(int argc, char* argv[])
       exit(-1);
     }
 
+
+
     /* check that license is available */
     if (DDS_DomainParticipantFactory_get_instance() == nullptr) {
       fprintf(stderr, "Failed to initialize CoreDX DDS: missing license?\n");
       exit(1);
     }
 
-    baseDeviceId = "INTRACOM";     // todo: select a good value here
+    baseDeviceId = "bobobrawl";     // todo: select a good value here
     // if (serialNum.empty())
     std::string serialNum = "SN-0001";       // todo: provide a good fallback, if not provided on command-line
 
     robobrawl_context.init(domain_id, qos_file, baseDeviceId, serialNum);
 
+
+
     active_mc.init(robobrawl_context);
     known_devices.init(robobrawl_context);
 
-    control.init(robobrawl_context, baseDeviceId + "-CONT-1" + "-" + serialNum);
+    control.init(robobrawl_context, baseDeviceId + "-CONT-1");
+
+
 
     robobrawl_devices.push_back(&control);
   
@@ -118,11 +124,16 @@ void robobrawl::init(int argc, char* argv[])
     robobrawl_context.subscriber().enable();
     robobrawl_context.publisher().enable();
 
-    gui_setup();
+
+
+    if (gui_setup() != 0) {
+      std::cerr << "GUI initialization failed; stopping the application.\n";
+      done = true;
+    }
 
   }
   catch (const std::exception& e) {
-    std::cerr << e.what() << std::endl;
+    std::cerr << "err: " << e.what() << std::endl;
   }
 }
 

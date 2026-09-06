@@ -60,7 +60,7 @@ namespace robobrawl {
     public:
       virtual ~ButtonData_Client() = default;
 
-      virtual void handle_button_data(const robobrawl::ButtonData& req) = 0;
+      virtual void handle_button_data(const robobrawl::ButtonData& data) = 0;
   };
 
   // -------------------------------------------------------

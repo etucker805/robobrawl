@@ -29,6 +29,8 @@ namespace robobrawl {
     catch (const std::exception& error) {
       throw std::runtime_error("Reply writer initialization failed: " + std::string(error.what()));
     }
+
+    
   }
 
   void Robobrawl_BaseDevice::clear()

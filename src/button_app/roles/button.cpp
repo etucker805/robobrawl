@@ -41,14 +41,19 @@ namespace robobrawl {
 
   } 
 
-  void handle_claim_system(const robobrawl::ClaimSystem& claim){
+  void Button::handle_claim_system(const robobrawl::ClaimSystem& claim){
 
   }
 
-  void handle_change_state(const robobrawl::StateChange& req){
+  void Button::handle_change_state(const robobrawl::StateChange& req){
     
   }
 
+  void Button::handle_button_command(const robobrawl::ButtonCommand& comm){
+    
+  }
+
+  
 
   // -------------------------------------------------------
   void Button::do_continuous()

@@ -4,21 +4,23 @@ cmake_minimum_required(VERSION 3.28)
 project (robobrawl_control)
 
 # get the CoreDX DDS config:
-include( ../cmake/coredx.cmake )
+include( ${CMAKE_CURRENT_LIST_DIR}/../cmake/coredx.cmake )
 
 # build the TMS core libraries:
-add_subdirectory( ../robobrawl ./robobrawl )
+# add_subdirectory( ${CMAKE_CURRENT_LIST_DIR}/../robobrawl ./robobrawl )
 
 
 #copy font to build
-file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/gui/font.ttf
+file(COPY ${CMAKE_CURRENT_LIST_DIR}/gui/font.ttf
         DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/ )
+file(COPY ${CMAKE_CURRENT_LIST_DIR}/gui/font.ttf
+        DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/.. )
 
 
 ########################################################################
 # Imgui setup 
 
-set(IMGUI_DIR "${CMAKE_CURRENT_SOURCE_DIR}/external/imgui")
+set(IMGUI_DIR "${CMAKE_CURRENT_LIST_DIR}/external/imgui")
 
 add_library(imgui STATIC
     ${IMGUI_DIR}/imgui.cpp
@@ -41,16 +43,16 @@ add_executable(control_app
   )
 
 target_sources(control_app PUBLIC 
-  main.cc
-  init.cpp
-  cleanup.cpp
-  main_loop.cpp
-  startup.cpp
-  roles/control.cpp
+  ${CMAKE_CURRENT_LIST_DIR}/main.cc
+  ${CMAKE_CURRENT_LIST_DIR}/init.cpp
+  ${CMAKE_CURRENT_LIST_DIR}/cleanup.cpp
+  ${CMAKE_CURRENT_LIST_DIR}/main_loop.cpp
+  ${CMAKE_CURRENT_LIST_DIR}/startup.cpp
+  ${CMAKE_CURRENT_LIST_DIR}/roles/control.cpp
 
-  gui/gui_setup.cpp
-  gui/gui_main_loop.cpp
-  gui/gui_cleanup.cpp
+  ${CMAKE_CURRENT_LIST_DIR}/gui/gui_setup.cpp
+  ${CMAKE_CURRENT_LIST_DIR}/gui/gui_main_loop.cpp
+  ${CMAKE_CURRENT_LIST_DIR}/gui/gui_cleanup.cpp
 
   )
 
@@ -59,11 +61,13 @@ target_include_directories(control_app
   ${CMAKE_CURRENT_LIST_DIR}
   ${CMAKE_CURRENT_LIST_DIR}/../robobrawl
   )
+find_package(OpenGL REQUIRED)
 
 target_link_libraries(control_app
   PUBLIC  robobrawl_interface
   PRIVATE imgui
-  PRIVATE glfw
+  PRIVATE glfw ${OPENGL_LIBRARIES}
+  
   )
 
 # make a copy of the QoS XML file in the current output directory

@@ -99,6 +99,8 @@ module topic {
 
     const string TOPIC_CLOCK_COMMAND = "ClockCommand";
 
+    const string TOPIC_LIGHTS_COMMAND = "LightsCommand";
+
 
     
 
@@ -471,8 +473,17 @@ struct ClockCommand{
 
     @optional
     TimeData displayTIme;
+};
 
+@topic
+struct LightsCommand{
+    @key
+    Identity target;
 
+    Identity source;
+
+    @optional 
+    SystemId newSystem;
 };
 
 

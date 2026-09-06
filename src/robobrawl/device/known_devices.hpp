@@ -13,7 +13,7 @@ namespace robobrawl {
     public:
       virtual ~KnownDevices_Client() = default;
 
-      virtual void handle_new_device(const robobrawl::DeviceInfo& req) = 0;
+      virtual void handle_new_device(const robobrawl::DeviceInfo& info) = 0;
   };
 
   class KnownDevices : public dds::sub::NoOpDataReaderListener<robobrawl::DeviceInfo> {

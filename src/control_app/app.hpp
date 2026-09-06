@@ -28,6 +28,7 @@ namespace robobrawl {
   extern ActiveMC           active_mc;
   extern KnownDevices       known_devices;
 
+
   // components:
   extern std::vector<Robobrawl_Control*> robobrawl_devices; // loss fo gernerality but idc 
 

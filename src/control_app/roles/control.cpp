@@ -10,11 +10,13 @@ namespace robobrawl {
     
     
     Robobrawl_Control::init(context, dev_id);
+    known_devices.add_client(this);
+    
+
 
 
     // initialize some messages things 
     
-    known_devices.add_client(this);
     update_timer_.start();
   }
 
@@ -25,12 +27,19 @@ namespace robobrawl {
     // -----------------------------------------------------------
     // Initialize the DeviceInfo with appropriate info
 
-    device_info_.deviceId(this->device_id_);
+    device_info_.deviceId(device_id_);
+    device_info_.system("");
     device_info_.role(robobrawl::DeviceRole::ROLE_CONTROL);
-    // I think thats all I got... 
+
 
   
   }
+
+
+
+
+
+
 
   // -------------------------------------------------------
   // invoked ~100Hz
@@ -117,17 +126,72 @@ namespace robobrawl {
 
   }
   
+
+
+  // -------------------------------------------------------
+  void Control::handle_clock_data(const robobrawl::ClockData& data){
+    // should just be the done flag...
+    do{  
+    if(std::find(claimed_systems_.begin(), claimed_systems_.end(), data.sysName()) != claimed_systems_.end()){
+      if(data.done() != 1) { break; } // nothing happended?
+      switch (states_[data.sysName()])
+      {
+      case States::STATE_RUNNING_MATCH:
+        states_[data.sysName()] = States::STATE_MATCH_TIME_EXPIRE;
+        sc_writer_.send(device_id_, data.sysName(), states_[data.sysName()]); // time is 0 be def... but
+        break;
+      
+      default:
+        break;
+      }
+
+
+
+    }
+    } while(0);
+  }
+
+
   //--------------------------------------------------------
   void Control::handle_new_device(const robobrawl::DeviceInfo& dev_info)
   {
     // update things.. or not... 
     //bump state message.. 
     //if I have the system of this device
+    publish_device_info();
+    
+
+
+
     if(std::find(claimed_systems_.begin(), claimed_systems_.end(), dev_info.system()) != claimed_systems_.end()){
       sc_writer_.send(device_id_, dev_info.system(), states_[dev_info.system()], state_times_[dev_info.system()] );
     }
 
     
+  }
+
+  // ret 0 = no, ret 1 = yes, ret 2 = uh system not a part of me... so idk
+  int Control::need_override_authority(SystemId target_system){
+    if(std::find(claimed_systems_.begin(), claimed_systems_.end(), target_system) == claimed_systems_.end()){
+      return 2;
+    }
+    States curr_state = states_[target_system];
+    if( curr_state == States::STATE_IDLE_OFF || 
+        curr_state == States::STATE_IDLE_ON || 
+        curr_state == States::STATE_INDIVIDUAL_OVERRIDE)
+        return 0;
+
+      return 1;
+
+  }
+
+
+  void Control::send_override_button(Identity target, ButtonColor new_color, SystemId new_system){
+    // yeah do this.
+  }
+
+  void Control::send_override_clock(Identity target, Colors display_color, TimeData display_time, SystemId new_system){
+    // this too... 
   }
 
 

@@ -6,6 +6,11 @@ namespace robobrawl {
     Robobrawl_Device::init(context, dev_id);
     //client and message inits 
 
+    cd_writer_.init(context, dev_id);
+
+    cc_listener_.init(context, dev_id);
+    sc_listener_.init(context, dev_id);
+
   }
 
   
@@ -13,6 +18,10 @@ namespace robobrawl {
   {
     // client and message clears
     Robobrawl_Device::clear();
+
+    cd_writer_.clear();
+    cc_listener_.clear();
+    sc_listener_.clear();
   }
 
   // // -------------------------------------------------------
@@ -24,7 +33,8 @@ namespace robobrawl {
 
   void Robobrawl_Clock::do_startup()
   {
-    device_.publish(device_info_);
+
+    publish_device_info();
     heartbeat_.publish();            // write every time
     // startup messages
 
@@ -48,6 +58,8 @@ namespace robobrawl {
   void Robobrawl_Clock::do_slow()
   {
     //slow messages (0.1hz?)
+    publish_device_info();
+
   }
 
 };
