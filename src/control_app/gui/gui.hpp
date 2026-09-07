@@ -36,6 +36,7 @@ namespace robobrawl{
     extern ImVec4 black;
     extern ImVec4 cyan;
     extern ImVec4 grey;
+    extern ImVec4 green;
     extern ImVec4 clear_color;
 
     //button vars
@@ -45,6 +46,7 @@ namespace robobrawl{
 
     //data vars? 
     extern std::vector<Robobrawl_Control*> robobrawl_devices;
+    extern std::map<States, std::string> state_to_string_map; 
     extern bool done;
     extern KnownDevices known_devices;
 
@@ -66,7 +68,7 @@ namespace robobrawl{
     int gui_draw_selection_menu(Robobrawl_Control* device);
 
     //popups done in the thing
-    int gui_draw_contol_menu();
+    int gui_draw_contol_menu(Robobrawl_Control* device);
 
     int gui_draw_timer();
 

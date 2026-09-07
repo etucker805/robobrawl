@@ -43,6 +43,8 @@ robobrawl::main_loop()
     if (timer_1hz.elapsed().count() >= 1000) {
       timer_1hz.start();
 
+      
+
       for (auto device: robobrawl_devices)
         device->do_medium();
 

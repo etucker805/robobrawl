@@ -22,6 +22,8 @@ namespace robobrawl {
 
     void handle_new_device(const robobrawl::DeviceInfo& dev_info) override;
 
+    void handle_timer_expired(const CountdownTimer::Id& id) override;
+
     int need_override_authority(SystemId target_system);
 
     void send_override_button(Identity target, ButtonColor new_color, SystemId new_system); 

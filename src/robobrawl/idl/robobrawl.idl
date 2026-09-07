@@ -186,7 +186,9 @@ enum Colors{
     COLOR_WHITE,
 };
 
-enum States{ 
+
+
+enum States{ // may need to add transition sttas, but I dotn think so atm
     STATE_IDLE_ON,
     STATE_IDLE_OFF,
     // STATE_IDLE_ANIMS,
@@ -209,9 +211,12 @@ enum States{
     STATE_BLUE_VICTOR,
     STATE_ORANGE_VICTOR,
     STATE_INDIVIDUAL_OVERRIDE, // only state where individual color commands are accepted. 
-
-
+    CONTROL_FLAG_LAST
 };
+
+struct StateToStringMapEntry{
+
+}; 
 
 /** 
 * Indicate the type of success or failure of a request.

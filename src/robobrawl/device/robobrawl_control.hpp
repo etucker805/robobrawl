@@ -6,6 +6,7 @@
 
 #include "robobrawl.hh"
 #include "robobrawl/components/robobrawl_context.hpp"
+#include "robobrawl/components/countdown_timer.hpp"
 #include "robobrawl/device/robobrawl_device.hpp"
 #include "robobrawl/device/known_devices.hpp"
 
@@ -36,7 +37,7 @@ namespace robobrawl {
       void do_slow() override;
 
       // -------------------------------------------------------
-      // virtual bool authorization_required(const robobrawl::EnergyStartStopRequest& ess) = 0; // left as tempolate 
+      void send_state_change(SystemId target, States state, int time_in_sec);
 
 
       // -------------------------------------------------------
@@ -46,10 +47,17 @@ namespace robobrawl {
 
       virtual void handle_new_device(const robobrawl::DeviceInfo& dev_info)=0;
 
-      
+      virtual void handle_timer_expired(const  CountdownTimer::Id& id)=0;
 
+      
+    
 
       std::vector<robobrawl::SystemId> claimed_systems_;
+
+      std::map<robobrawl::SystemId, robobrawl::States>        states_{};
+      std::map<robobrawl::SystemId, int>                      system_match_times_{};
+
+      CountdownTimerManager timer_manager_;
 
 
     protected:
@@ -68,8 +76,6 @@ namespace robobrawl {
 
 
       //data
-      std::map<robobrawl::SystemId, robobrawl::States>        states_{};
-      std::map<robobrawl::SystemId, robobrawl::TimeData> state_times_{};
       
 
   };

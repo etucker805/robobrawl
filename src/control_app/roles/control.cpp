@@ -46,9 +46,10 @@ namespace robobrawl {
   void
   Control::update_state()
   {
-    // as in like for the port sttaus, might just not be used, cause listeners.... or this is gui in a wierd way
-    // I think this just isnt used ( and can be deleted but I have attachment issues)
 
+
+    // update all of out timers, will call handler if needed 
+    timer_manager_.update();
     
 
   } 
@@ -159,15 +160,19 @@ namespace robobrawl {
     //bump state message.. 
     //if I have the system of this device
     publish_device_info();
-    
-
 
 
     if(std::find(claimed_systems_.begin(), claimed_systems_.end(), dev_info.system()) != claimed_systems_.end()){
-      sc_writer_.send(device_id_, dev_info.system(), states_[dev_info.system()], state_times_[dev_info.system()] );
+      send_state_change(dev_info.system(), states_[dev_info.system()], system_match_times_[dev_info.system()] );
     }
 
     
+  }
+
+  void Control::handle_timer_expired(const CountdownTimer::Id& id){
+    // check system stuff, transition state, update system.   
+    std::cout << "TIMER EXPIRED! YOU SHOULD PROBABLY IMPLEMENT THIS BIT" << std::endl;
+
   }
 
   // ret 0 = no, ret 1 = yes, ret 2 = uh system not a part of me... so idk
