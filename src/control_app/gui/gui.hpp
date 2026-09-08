@@ -37,6 +37,8 @@ namespace robobrawl{
     extern ImVec4 cyan;
     extern ImVec4 grey;
     extern ImVec4 green;
+    extern ImVec4 red;
+    extern ImVec4 blue;
     extern ImVec4 clear_color;
 
     //button vars

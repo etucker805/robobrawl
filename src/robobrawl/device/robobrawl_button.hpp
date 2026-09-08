@@ -15,7 +15,7 @@
 
 namespace robobrawl {
 
-  class Robobrawl_Button : public Robobrawl_Device, public ButtonCommand_Client {
+  class Robobrawl_Button : public Robobrawl_Device, public ButtonCommand_Client, public StateChange_Client {
     public:
       void init(RobobrawlContext& context, const robobrawl::Identity& dev_id) override;
 
@@ -44,10 +44,10 @@ namespace robobrawl {
       // claim reader
       // state change reader
       StateChangeListener   sc_listener_;
-      // data writer
-      ButtonDataWriter      bd_writer_;
       // button override reader 
       ButtonCommandListener bc_listener_;
+      // data writer
+      ButtonDataWriter      bd_writer_;
 
 
   };

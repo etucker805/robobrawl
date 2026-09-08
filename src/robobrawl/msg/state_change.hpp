@@ -61,7 +61,6 @@ namespace robobrawl {
         robobrawl::StateChange msg;
         msg.source(reqDevId);
         msg.target(tgtId);
-     
         msg.newState(state);
         msg.timerTime();
         this->dw_.write(msg);

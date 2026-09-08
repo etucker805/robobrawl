@@ -386,8 +386,9 @@ struct ClockRealtime {
 @nested
 @extensibility(APPENDABLE)
 struct TimeData{
-    uint32 minuets;
     uint32 seconds;
+    @optional // cause I dont feel like implemetjing thins eithf neo
+    uint32 nanoseconds;
 };
 
 
@@ -446,6 +447,9 @@ struct ClockData{
     SystemId sysName;
 
     long done;
+
+    @optional 
+    TimeData time;
 };
 
 

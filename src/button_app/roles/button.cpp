@@ -13,7 +13,10 @@ namespace robobrawl {
 
 
     // initialize some messages things 
-    
+
+    cs_reader_.add_client(this);
+    sc_listener_.add_client(this);
+    bc_listener_.add_client(this);
     
     update_timer_.start();
   }

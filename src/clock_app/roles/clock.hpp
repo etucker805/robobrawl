@@ -20,9 +20,11 @@ namespace robobrawl {
 
     void handle_new_device(const robobrawl::DeviceInfo& info) override; 
 
-    void handle_clock_command(const robobrawl::ClockCommand& comm);
-    void handle_claim_system(const robobrawl::ClaimSystem& claim);
-    void handle_state_change(const robobrawl::StateChange& state);
+    void handle_clock_command(const robobrawl::ClockCommand& comm) override;
+    void handle_claim_system(const robobrawl::ClaimSystem& claim) override;
+    void handle_state_change(const robobrawl::StateChange& state) override;
+    void handle_timer_expired(const CountdownTimer::Id& id) override;
+
 
 
     void do_continuous() override;

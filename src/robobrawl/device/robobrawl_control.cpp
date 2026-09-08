@@ -81,15 +81,18 @@ namespace robobrawl {
 
   void Robobrawl_Control::send_state_change(SystemId target, States state, int time_in_sec=0){
     if(time_in_sec!=0){
-      TimeData time_ = TimeData(time_in_sec / 60, time_in_sec%60);
+      TimeData time_ ;
+      time_.seconds(time_in_sec);
       sc_writer_.send(device_id_, target, state, time_);
       return;
     }
 
     sc_writer_.send(device_id_, target, state);
+  }
 
-
-
+  // shoudl Add auth capability to this... 
+  void Robobrawl_Control::send_claim_system(SystemId target){
+    cs_writer_.send(device_id_, target);
   }
 
 };

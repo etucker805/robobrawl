@@ -1,5 +1,5 @@
 
-#include "robobrawl_lights.hpp"
+#include "lights.hpp"
 
 namespace robobrawl {
 
@@ -11,6 +11,8 @@ namespace robobrawl {
     
     Robobrawl_Lights::init(context, dev_id);
 
+    
+    
 
     // initialize some messages things 
     
@@ -40,13 +42,23 @@ namespace robobrawl {
     // as in like for the port sttaus, might just not be used, cause listeners.... or this is gui in a wierd way
 
   } 
-
-  // ------------------------------------------------------- ( not a thing for control prob )
-  // bool
-  // Control::authorization_required( const tms::EnergyStartStopRequest& ess_request )
-  // {
-  // }
-
+  
+  // -------------------------------------------------------
+  void Lights::handle_clock_command(const robobrawl::ClockCommand& comm){
+    std::cout << "Clock Command Recieved, Not implemeted lol" << std::endl;
+  }
+  
+  // -------------------------------------------------------
+  void Lights::handle_claim_system(const robobrawl::ClaimSystem& claim){
+    std::cout << "Claim State Recieved, didnt do anything cause im lazy. sowwy" << std::endl;
+  }
+  
+  // -------------------------------------------------------
+  void Lights::handle_state_change(const robobrawl::StateChange& state){
+    // so a valid concern here is that I may want to do transition anims? if so ill have to call led driver functs from here. so uh function passing! yay!
+    // or I could just do a is state_curr = state_prev in the tree bit.
+    std::cout << "A state has changed, mabey its Wyoming now? who cares" << std::endl;
+  }
 
   // -------------------------------------------------------
   void Lights::do_continuous()

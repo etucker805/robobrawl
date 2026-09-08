@@ -4,6 +4,7 @@
 
 #include "robobrawl.hh"
 #include "robobrawl/components/robobrawl_context.hpp"
+#include "robobrawl/components/countdown_timer.hpp"
 #include "robobrawl/device/robobrawl_device.hpp"
 
 //include other messages here
@@ -16,7 +17,7 @@
 
 namespace robobrawl {
 
-  class Robobrawl_Clock : public Robobrawl_Device, public KnownDevices_Client, public ClockCommand_Client, public StateChange_Client  /* add any client classes to extend here */ {
+  class Robobrawl_Clock : public Robobrawl_Device, public KnownDevices_Client, public ClockCommand_Client, public StateChange_Client   {
     public:
       void init(RobobrawlContext& context, const robobrawl::Identity& dev_id) override;
 
@@ -39,11 +40,15 @@ namespace robobrawl {
 
       virtual void handle_new_device(const robobrawl::DeviceInfo& info)=0; 
 
+      virtual void handle_timer_expired(const CountdownTimer::Id& id)=0;
+
 
 
     protected:
       //write / listener / clients here... 
      robobrawl::ClockDataWriter cd_writer_;
+
+     CountdownTimer timer_;
 
      robobrawl::ClockCommandListener cc_listener_;
      robobrawl::StateChangeListener  sc_listener_;

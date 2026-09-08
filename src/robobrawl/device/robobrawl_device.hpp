@@ -29,12 +29,15 @@ namespace robobrawl {
     
       void set_active_controller(robobrawl::Identity active_controller) override;
       void publish_controller_state() override;
+      
+      States                      current_state;
   
     protected:
 
       ActiveControllerStateWriter ac_state_writer_;
       ClaimSystemListener         cs_reader_;
       Identity                    system_controller_;
+
   };
 
 };

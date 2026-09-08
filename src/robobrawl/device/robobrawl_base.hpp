@@ -33,16 +33,21 @@ namespace robobrawl {
       virtual void set_active_controller(robobrawl::Identity active_controller) {}
       virtual void publish_controller_state() {}
 
-    protected:
-
+      inline std::string get_state_string(robobrawl::States state) {return state_to_string_map[state]; } 
+      
+      protected:
+      
       robobrawl::Identity device_id_;
       robobrawl::DeviceInfo device_info_;
-
+      
       robobrawl::Identity controller_id_;
-
+      
       DeviceInfoWriter device_;
       HeartbeatWriter heartbeat_;
       ReplyWriter reply_;
+      
+      std::map<States, std::string> state_to_string_map; 
+
 
       // ActiveDiagnosticStateWriter diagnostics_;
   };

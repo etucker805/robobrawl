@@ -5,11 +5,16 @@ namespace robobrawl {
   {
     Robobrawl_Device::init(context, dev_id);
     //client and message inits 
+    timer_.set_handler([this](const CountdownTimer::Id &id) {
+      this->handle_timer_expired(id);
+        }
+     );
 
     cd_writer_.init(context, dev_id);
 
     cc_listener_.init(context, dev_id);
     sc_listener_.init(context, dev_id);
+
 
   }
 

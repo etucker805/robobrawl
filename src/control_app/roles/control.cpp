@@ -11,6 +11,9 @@ namespace robobrawl {
     
     Robobrawl_Control::init(context, dev_id);
     known_devices.add_client(this);
+    cd_listener_.add_client(this);
+    bd_listener_.add_client(this);
+    
     
 
 
@@ -132,23 +135,32 @@ namespace robobrawl {
   // -------------------------------------------------------
   void Control::handle_clock_data(const robobrawl::ClockData& data){
     // should just be the done flag...
+    // i dont... knwo if I care... 
     do{  
-    if(std::find(claimed_systems_.begin(), claimed_systems_.end(), data.sysName()) != claimed_systems_.end()){
-      if(data.done() != 1) { break; } // nothing happended?
-      switch (states_[data.sysName()])
-      {
-      case States::STATE_RUNNING_MATCH:
-        states_[data.sysName()] = States::STATE_MATCH_TIME_EXPIRE;
-        sc_writer_.send(device_id_, data.sysName(), states_[data.sysName()]); // time is 0 be def... but
-        break;
+    // if(std::find(claimed_systems_.begin(), claimed_systems_.end(), data.sysName()) != claimed_systems_.end()){
+    //   if(data.done() != 1) { break; } // nothing happended?
+    //   switch (states_[data.sysName()])
+    //   {
+    //   case States::STATE_RUNNING_MATCH:
+    //     states_[data.sysName()] = States::STATE_MATCH_TIME_EXPIRE;
+    //     sc_writer_.send(device_id_, data.sysName(), states_[data.sysName()]); // time is 0 be def... but
+    //     break;
       
-      default:
-        break;
+    //   default:
+    //     break;
+    //   }
+
+    // }
+
+
+      std::cout << "CLOCK" << std::endl;
+      if(data.time().has_value()){
+        std::cout << "Time from clock: " << data.time().value().seconds() << std::endl;
       }
 
 
 
-    }
+
     } while(0);
   }
 
@@ -171,7 +183,32 @@ namespace robobrawl {
 
   void Control::handle_timer_expired(const CountdownTimer::Id& id){
     // check system stuff, transition state, update system.   
-    std::cout << "TIMER EXPIRED! YOU SHOULD PROBABLY IMPLEMENT THIS BIT" << std::endl;
+    std::cout << "TIMER EXPIRED! on system: " << id <<  std::endl;
+
+    //id is system name.... btw
+    robobrawl::SystemId sys = id;
+    switch (states_[sys])
+    {
+    case robobrawl::States::STATE_RUNNING_MATCH:
+      // match over
+      states_[sys] = robobrawl::States::STATE_MATCH_TIME_EXPIRE;
+      send_state_change(sys, states_[sys], 0);
+      break;
+    case robobrawl::States::STATE_COUNTDOWN_3_2_1:
+      std::cout << "Set state to Run Match, from 3-2-1." << std::endl;
+      states_[sys] = robobrawl::States::STATE_RUNNING_MATCH;
+      timer_manager_.set_starting_time(id, std::chrono::seconds(system_match_times_[sys]));
+      timer_manager_.start(id);
+      send_state_change(sys, states_[sys], system_match_times_[sys]);
+
+      break;
+    default:
+      break;
+    }
+
+
+
+
 
   }
 

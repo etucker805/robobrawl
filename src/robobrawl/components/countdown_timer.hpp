@@ -114,12 +114,24 @@ class CountdownTimerManager {
 
         void set_starting_time(Id id, Duration starting_time){
             const Id timer_id = id;
-            timers_[id].set_starting_time(starting_time);
+            timers_[timer_id].set_starting_time(starting_time);
         }
 
         Duration get_starting_time(Id id){
             const Id timer_id = id;
-            return timers_[id].starting_time();
+            return timers_[timer_id].starting_time();
+        }
+
+        int get_remaining_time_sec(Id id){
+            const Id timer_id = id;
+            Duration rem = timers_[timer_id].remaining_time();
+            std::chrono::seconds sec = std::chrono::duration_cast<std::chrono::seconds>(rem);
+            return sec.count();
+        }
+
+        bool is_running(Id id){
+            const Id timer_id = id;
+            return timers_[timer_id].is_running();
         }
 
 		bool start(const Id& id)

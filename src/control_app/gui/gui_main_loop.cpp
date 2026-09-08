@@ -6,8 +6,12 @@ ImVec4 robobrawl::orange = ImVec4(255, 95, 5, 1);
 ImVec4 robobrawl::white  = ImVec4(255, 255, 255, 1);
 ImVec4 robobrawl::black  = ImVec4(0, 0, 0, 1);
 ImVec4 robobrawl::cyan   = ImVec4(60, 200, 250, 1 );
-ImVec4 robobrawl::grey   = ImVec4(100, 100, 100, 1);
+ImVec4 robobrawl::grey   = ImVec4(50, 50, 50, 1);
 ImVec4 robobrawl::green  = ImVec4(0, 200, 0, 1);
+ImVec4 robobrawl::red    = ImVec4(200, 0, 0, 1);
+ImVec4 robobrawl::blue    = ImVec4(0, 0, 200, 1);
+
+
 ImVec4 robobrawl::clear_color       = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 std::map<robobrawl::SystemId, bool> robobrawl::open_control_window_ = {};
 std::map<robobrawl::States, std::string> robobrawl::state_to_string_map;
@@ -126,9 +130,9 @@ int robobrawl::gui_draw_contol_menu(Robobrawl_Control* device)
             }
             if(ImGui::Button("Start", ImVec2(200, 100))){
                 // try to create a timer, if we alrasy have one no prob, just rejected. 
-                device->timer_manager_.create(current_system, std::chrono::seconds(device->system_match_times_[current_system]));
+                device->timer_manager_.create(current_system, std::chrono::seconds(3));
                 // now we are sure there is a timer, make it the right one. 
-                device->timer_manager_.set_starting_time(current_system, std::chrono::seconds(device->system_match_times_[current_system])); 
+                device->timer_manager_.set_starting_time(current_system, std::chrono::seconds(3)); 
                 current_state =  robobrawl::States::STATE_COUNTDOWN_3_2_1; 
                 device->states_[current_system] = robobrawl::States::STATE_COUNTDOWN_3_2_1;
                 device->send_state_change(current_system, current_state, device->system_match_times_[current_system] );
@@ -163,41 +167,135 @@ int robobrawl::gui_draw_contol_menu(Robobrawl_Control* device)
             }
             
             if(ImGui::Button("Pause", ImVec2(200, 100))){
-
-                current_state =  robobrawl::States::STATE_COUNTDOWN_3_2_1; 
-                device->states_[current_system] = robobrawl::States::STATE_COUNTDOWN_3_2_1;
-                device->send_state_change(current_system, current_state, device->system_match_times_[current_system] );
-                std::cout << "Started match on system " << current_system << " with " 
-                                << device->system_match_times_[current_system]/60 << ":"
-                                << ( device->system_match_times_[current_system]%60 )/10 
-                                << device->system_match_times_[current_system]%10 
-                                << " time" << std::endl;
+                // NOTE: I check here for if the timer is running for some reason, or if we think it should be.
+                if(device->timer_manager_.is_running(current_system) || device->states_[current_system] == robobrawl::States::STATE_RUNNING_MATCH){
+                    // running, so pause
+                    device->timer_manager_.pause(current_system);
+                    current_state =  robobrawl::States::STATE_PAUSED_MATCH; 
+                    device->states_[current_system] = robobrawl::States::STATE_PAUSED_MATCH;
+                    device->send_state_change(current_system, current_state, device->timer_manager_.get_remaining_time_sec(current_system) );
+                    std::cout << "Paused match on system " << current_system << " with " 
+                                    << device->timer_manager_.get_remaining_time_sec(current_system)/60 << ":"
+                                    << ( device->timer_manager_.get_remaining_time_sec(current_system)%60 )/10 
+                                    << device->timer_manager_.get_remaining_time_sec(current_system)%10 
+                                    << " time" << std::endl;
+                } else if ( device->states_[current_system] == robobrawl::States::STATE_PAUSED_MATCH || 
+                            device->states_[current_system] == robobrawl::States::STATE_MATCH_EMERGENCY_STOP){
+                    // running, so pause
+                    device->timer_manager_.resume(current_system);
+                    current_state =  robobrawl::States::STATE_RUNNING_MATCH; 
+                    device->states_[current_system] = robobrawl::States::STATE_RUNNING_MATCH;
+                    device->send_state_change(current_system, current_state, device->timer_manager_.get_remaining_time_sec(current_system) );
+                    std::cout << "Resume match on system " << current_system << " with " 
+                                    << device->timer_manager_.get_remaining_time_sec(current_system)/60 << ":"
+                                    << ( device->timer_manager_.get_remaining_time_sec(current_system)%60 )/10 
+                                    << device->timer_manager_.get_remaining_time_sec(current_system)%10 
+                                    << " time" << std::endl;
+                } else {
+                    std::cout << "tried to pause resume on not runnning or stoped timer states, invalid?" << std::endl;
+                }
 
             }
             ImGui::PopStyleColor(2);
             ImGui::SameLine();
             
             // we can kinda check state, but this will just state = FREAK OUT
-            ImGui::Button("STOP AH!", ImVec2(200, 100));
+
+            if(current_state == robobrawl::States::STATE_MATCH_EMERGENCY_STOP){
+                ImGui::PushStyleColor(ImGuiCol_Button, robobrawl::green);
+                ImGui::PushStyleColor(ImGuiCol_ButtonHovered, robobrawl::green);      
+            } else {
+                ImGui::PushStyleColor(ImGuiCol_Button, robobrawl::red);
+                ImGui::PushStyleColor(ImGuiCol_ButtonHovered, robobrawl::red);      
+            }
+
+            if(ImGui::Button("STOP AH!", ImVec2(200, 100))){
+                current_state =  robobrawl::States::STATE_MATCH_EMERGENCY_STOP; 
+                device->states_[current_system] = robobrawl::States::STATE_MATCH_EMERGENCY_STOP;
+                device->timer_manager_.pause(current_system); // just in case, cause why not.
+                device->send_state_change(current_system, current_state, device->system_match_times_[current_system] );
+                std::cout << "Stoped Match on system: " << current_system << std::endl;
+            }
+            ImGui::PopStyleColor(2);
+
 
             // make blue, only on timeout I think... ? or running to mabes
-            ImGui::Button("Win Blue", ImVec2(200, 100));
-
+            
+            if(current_state == robobrawl::States::STATE_MATCH_TIME_EXPIRE){
+                ImGui::PushStyleColor(ImGuiCol_Button, robobrawl::blue);
+                ImGui::PushStyleColor(ImGuiCol_ButtonHovered, robobrawl::blue);      
+            } else {
+                ImGui::PushStyleColor(ImGuiCol_Button, robobrawl::grey);
+                ImGui::PushStyleColor(ImGuiCol_ButtonHovered, robobrawl::grey);      
+            }
+            
+            if(ImGui::Button("Win Blue", ImVec2(200, 100))){
+                current_state =  robobrawl::States::STATE_BLUE_VICTOR;
+                device->states_[current_system] =  robobrawl::States::STATE_BLUE_VICTOR;
+                device->timer_manager_.pause(current_system);
+                device->send_state_change(current_system, current_state, device->timer_manager_.get_remaining_time_sec(current_system));
+            }
+            ImGui::PopStyleColor(2);
             ImGui::SameLine();
 
-            ImGui::Button("Win Orange", ImVec2(200, 100));
+
+            // Win orange button yayyayayay just blue biut its orange! yay.
+            if(current_state == robobrawl::States::STATE_MATCH_TIME_EXPIRE){
+                ImGui::PushStyleColor(ImGuiCol_Button, robobrawl::orange);
+                ImGui::PushStyleColor(ImGuiCol_ButtonHovered, robobrawl::orange);      
+            } else {
+                ImGui::PushStyleColor(ImGuiCol_Button, robobrawl::grey);
+                ImGui::PushStyleColor(ImGuiCol_ButtonHovered, robobrawl::grey);      
+            }
+            if(ImGui::Button("Win Orange", ImVec2(200, 100))){
+                current_state =  robobrawl::States::STATE_ORANGE_VICTOR;
+                device->states_[current_system] =  robobrawl::States::STATE_ORANGE_VICTOR;
+                device->timer_manager_.pause(current_system);
+                device->send_state_change(current_system, current_state, device->timer_manager_.get_remaining_time_sec(current_system));
+            }
+            ImGui::PopStyleColor(2);
             
             // should this be a popoup or a new fucntion with a begin? can I begin in begin?
-            ImGui::Button("Open Devices Screen", ImVec2(200, 100)); 
+            
+            if(ImGui::Button("Open Devices Screen", ImVec2(200, 100))){
+                ImGui::OpenPopup(current_system.c_str());
+            } 
+
+            if(ImGui::BeginPopup(current_system.c_str())){
+                // def do thios in another function... so I can branch easier
+                ImGui::Text("This is where I would put my device list / override controls IF I HAD ANY\n");
+                
+                ImGui::Separator();
+                if(ImGui::Button("Close"))
+                    ImGui::CloseCurrentPopup();
+                ImGui::EndPopup();
+            }
+
+
 
             ImGui::SameLine();
-
             // only green when we dont have it I guess.. 
-            ImGui::Button("Claim This System!", ImVec2(200, 100));
+            if(std::find(device->claimed_systems_.begin(), device->claimed_systems_.end(), current_system) == device->claimed_systems_.end()){
+                // dont have it, uh makes it green I guess.. 
+                ImGui::PushStyleColor(ImGuiCol_Button, robobrawl::green);
+                ImGui::PushStyleColor(ImGuiCol_ButtonHovered, robobrawl::green);   
+            } else {
+                ImGui::PushStyleColor(ImGuiCol_Button, robobrawl::grey);
+                ImGui::PushStyleColor(ImGuiCol_ButtonHovered, robobrawl::grey);   
+            }
+
+
+            if(ImGui::Button("Claim This System!", ImVec2(200, 100))){
+                // note: I dont think anything actualy cares about this at present... 
+                device->send_claim_system(current_system);
+            }
+
+            ImGui::PopStyleColor(2);
 
             //other data in text, we could push a new font size I guess.. 
+            ImGui::Separator();
 
-            ImGui::Text("state: %s", robobrawl::state_to_string_map[current_state].c_str());
+            ImGui::Text("state: %s", device->get_state_string(current_state).c_str());
 
 
 

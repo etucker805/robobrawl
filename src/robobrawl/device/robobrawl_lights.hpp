@@ -9,10 +9,11 @@
 //include other messages here
 #include "robobrawl/msg/state_change.hpp"
 #include "robobrawl/msg/claim_system.hpp"
+#include "robobrawl/msg/lights_command.hpp"
 
 namespace robobrawl {
 
-  class Robobrawl_Lights : public Robobrawl_Device /* add any client classes to extend here */ {
+  class Robobrawl_Lights : public Robobrawl_Device, public StateChange_Client, public LightsCommand_Client /* add any client classes to extend here */ {
     public:
       void init(RobobrawlContext& context, const robobrawl::Identity& dev_id) override;
 
@@ -27,16 +28,18 @@ namespace robobrawl {
       void do_slow() override;
 
       // -------------------------------------------------------
-      // virtual bool authorization_required(const robobrawl::EnergyStartStopRequest& ess) = 0; // left as tempolate 
+      virtual void handle_clock_command(const robobrawl::ClockCommand& comm)=0;
 
-
-      // -------------------------------------------------------
-      // void handle_ate_reply(const robobrawl::AuthorizationToEnergizeReply& reply) override; // template 
+      virtual void handle_claim_system(const robobrawl::ClaimSystem& claim)=0;
+      
+      virtual void handle_state_change(const robobrawl::StateChange& state)=0;
 
 
     protected:
       //write / listener / clients here... 
-     
+      StateChangeListener   sc_listener_;
+      ClaimSystemListener   cs_listener_;
+      LightsCommandListener lc_listener_;
 
 
 

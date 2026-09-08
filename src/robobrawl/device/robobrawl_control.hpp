@@ -39,6 +39,8 @@ namespace robobrawl {
       // -------------------------------------------------------
       void send_state_change(SystemId target, States state, int time_in_sec);
 
+      void send_claim_system(SystemId target);
+
 
       // -------------------------------------------------------
       virtual void handle_button_data(const robobrawl::ButtonData& data)=0; // template 
