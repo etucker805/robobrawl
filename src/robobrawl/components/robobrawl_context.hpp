@@ -14,8 +14,7 @@ namespace robobrawl {
       // ---------------------------------------------------------------
       void init(uint32_t domain_id,
         const std::string& qos_xml_uri,
-        const std::string& base_device_id,
-        const std::string& serial_number);
+        const std::string& base_device_id);
 
       // ---------------------------------------------------------------
       void clear();

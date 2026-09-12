@@ -14,7 +14,9 @@ static std::string baseDeviceId;
 // static std::string serialNum;
 static uint32_t    domain_id = 0;
 
-static robobrawl::Control control;
+static std::string system_name_base = "Test System";
+
+static robobrawl::Button button;
 
 // ---------------------------------------------------------------
 void handle_sig(int sig)
@@ -44,7 +46,7 @@ static void print_usage(int argc, char* argv[])
   fprintf(stderr, "   -p  <port>           : specify active load port ( ac / dc )\n");
   fprintf(stderr, "   -d <domain_id>       : specify the DDS DomainId to join [default: %d]\n", domain_id);
   fprintf(stderr, "   -q <url_to_qos_xml>  : specify the path to the QoS XML file [default: %s]\n", qos_file.c_str());
-  fprintf(stderr, "   -s <serial number>   : specify the serial number to use throughout\n");
+  fprintf(stderr, "   -s <System>          : specify the system to use at startup\n");
 }
 
 // ---------------------------------------------------------------
@@ -70,7 +72,7 @@ static int parse_args(int argc, char* argv[])
       break;
 
     case 's':
-      // serialNum = toc_optarg;
+      system_name_base = toc_optarg;
       break;
 
     case 'h':
@@ -101,18 +103,18 @@ void robobrawl::init(int argc, char* argv[])
       exit(1);
     }
 
-    baseDeviceId = "INTRACOM";     // todo: select a good value here
-    // if (serialNum.empty())
-    std::string serialNum = "SN-0001";       // todo: provide a good fallback, if not provided on command-line
+    baseDeviceId = "ROBOBRAWL";
+    if (system_name_base.empty())
+      system_name_base = "Test System";
 
-    robobrawl_context.init(domain_id, qos_file, baseDeviceId, serialNum);
+    robobrawl_context.init(domain_id, qos_file, baseDeviceId);
 
     active_mc.init(robobrawl_context);
     known_devices.init(robobrawl_context);
 
-    control.init(robobrawl_context, baseDeviceId + "-CONT-1" + "-" + serialNum);
+    button.init(robobrawl_context, baseDeviceId + "-BUTTON-1" + "-");
 
-    robobrawl_devices.push_back(&control);
+    robobrawl_devices.push_back(&button);
   
     // init all DDS entities:
     robobrawl_context.subscriber().enable();

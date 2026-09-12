@@ -28,7 +28,7 @@ namespace robobrawl {
       void do_slow() override;
 
       // -------------------------------------------------------
-      virtual void handle_clock_command(const robobrawl::ClockCommand& comm)=0;
+      virtual void handle_lights_command(const robobrawl::LightsCommand& comm)=0;
 
       virtual void handle_claim_system(const robobrawl::ClaimSystem& claim)=0;
       

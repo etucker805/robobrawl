@@ -72,25 +72,25 @@ namespace robobrawl {
       // these are only the things that have to happen on transition, play apuse resume, that kind of thing, the others will be in interface loop, as statics. 
     case robobrawl::States::STATE_RUNNING_MATCH:
     
-      if(!state.timerTime().has_value() || state.timerTime().value().seconds() == 0 ){
+      if(!state.timerTime().has_value() || state.timerTime().value().deadline_ns_since_epoc() <= std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::system_clock::now().time_since_epoch()).count() ){
         std::cout << "Attempt to start match with no time or 0 time!" << std::endl;
       } else if(current_state == robobrawl::States::STATE_PAUSED_MATCH){
         // should match times, but Ill check just to be sure.
-        if(std::chrono::duration_cast<std::chrono::seconds>(timer_.remaining_time()).count() == state.timerTime().value().seconds() ){
+        if( timer_.is_paused() ){
           timer_.resume(); // not nessisary at all but whatever,.
         } else {
-          timer_.set_starting_time(std::chrono::seconds(state.timerTime().value().seconds()));
+          timer_.set_expiration_time_ns(std::chrono::nanoseconds(state.timerTime().value().deadline_ns_since_epoc()).count());
           timer_.start();
         }
       } else{
-        timer_.set_starting_time(std::chrono::seconds(state.timerTime().value().seconds()));
+        timer_.set_expiration_time_ns(std::chrono::nanoseconds(state.timerTime().value().deadline_ns_since_epoc()).count());
         timer_.start();
         // then we chould be good. I assume
       }
       break;
     
     case robobrawl::States::STATE_COUNTDOWN_3_2_1:
-      timer_.set_starting_time(std::chrono::seconds(3));
+      timer_.set_starting_time(std::chrono::seconds(3)); // yeah idc I think.... 
       timer_.start();
       break;
       
@@ -130,7 +130,7 @@ namespace robobrawl {
   void Clock::do_medium()
   {
     Robobrawl_Clock::do_medium();   
-    std::cout << "Timer: " << std::chrono::duration_cast<std::chrono::seconds>(timer_.remaining_time()).count() << std::endl;
+    // std::cout << "Timer: " << std::chrono::duration_cast<std::chrono::seconds>(timer_.remaining_time()).count() << std::endl;
   }
 };
 

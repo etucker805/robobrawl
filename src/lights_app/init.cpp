@@ -11,10 +11,11 @@
 
 static std::string qos_file = "file:///mil-std-3071_qos_library.xml";
 static std::string baseDeviceId;
-// static std::string serialNum;
+static std::string system_name_base;
+static std::string host_cornerr_color;
 static uint32_t    domain_id = 0;
 
-static robobrawl::Control control;
+static robobrawl::Lights lights;
 
 // ---------------------------------------------------------------
 void handle_sig(int sig)
@@ -44,7 +45,9 @@ static void print_usage(int argc, char* argv[])
   fprintf(stderr, "   -p  <port>           : specify active load port ( ac / dc )\n");
   fprintf(stderr, "   -d <domain_id>       : specify the DDS DomainId to join [default: %d]\n", domain_id);
   fprintf(stderr, "   -q <url_to_qos_xml>  : specify the path to the QoS XML file [default: %s]\n", qos_file.c_str());
-  fprintf(stderr, "   -s <serial number>   : specify the serial number to use throughout\n");
+  fprintf(stderr, "   -s <system>          : specify the system to default to\n");
+  fprintf(stderr, "   -c <host_color>      : specify the color of the correner the compute is on (all CAPS pls)\n");
+
 }
 
 // ---------------------------------------------------------------
@@ -70,7 +73,11 @@ static int parse_args(int argc, char* argv[])
       break;
 
     case 's':
-      // serialNum = toc_optarg;
+      system_name_base = toc_optarg;
+      break;
+
+    case 'c':
+      host_cornerr_color = toc_optarg;
       break;
 
     case 'h':
@@ -101,18 +108,21 @@ void robobrawl::init(int argc, char* argv[])
       exit(1);
     }
 
-    baseDeviceId = "INTRACOM";     // todo: select a good value here
-    // if (serialNum.empty())
-    std::string serialNum = "SN-0001";       // todo: provide a good fallback, if not provided on command-line
+    baseDeviceId = "ROBOBRAWL";     // todo: select a good value here
+    if (system_name_base.empty())
+      system_name_base = "Test System";
+    
+    if(host_cornerr_color.empty())
+      host_cornerr_color = "BLUE";
 
-    robobrawl_context.init(domain_id, qos_file, baseDeviceId, serialNum);
+    robobrawl_context.init(domain_id, qos_file, baseDeviceId);
 
     active_mc.init(robobrawl_context);
     known_devices.init(robobrawl_context);
 
-    control.init(robobrawl_context, baseDeviceId + "-CONT-1" + "-" + serialNum);
+    lights.init(robobrawl_context, baseDeviceId + "-LIGHT-1");
 
-    robobrawl_devices.push_back(&control);
+    robobrawl_devices.push_back(&lights);
   
     // init all DDS entities:
     robobrawl_context.subscriber().enable();

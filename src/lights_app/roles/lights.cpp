@@ -44,8 +44,8 @@ namespace robobrawl {
   } 
   
   // -------------------------------------------------------
-  void Lights::handle_clock_command(const robobrawl::ClockCommand& comm){
-    std::cout << "Clock Command Recieved, Not implemeted lol" << std::endl;
+  void Lights::handle_lights_command(const robobrawl::LightsCommand& comm){
+    std::cout << "Lights Command Recieved, Not implemeted lol" << std::endl;
   }
   
   // -------------------------------------------------------
@@ -65,11 +65,7 @@ namespace robobrawl {
   {
     Robobrawl_Lights::do_continuous();
     
-    if ( transition_timer_.is_running() ) {
-      if ( transition_timer_.elapsed_msec() > 10.0f * 1000 ) {
-        // yeah like I could use this but ehhhh
-      }
-    }
+    
   }
   
 };

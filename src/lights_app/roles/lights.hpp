@@ -16,7 +16,7 @@ namespace robobrawl {
 
     void update_state() override;
 
-    void handle_clock_command(const robobrawl::ClockCommand& comm) override;
+    void handle_lights_command(const robobrawl::LightsCommand& comm) override;
 
     void handle_claim_system(const robobrawl::ClaimSystem& claim) override;
       

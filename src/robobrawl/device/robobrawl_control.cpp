@@ -13,6 +13,7 @@ namespace robobrawl {
 
     bc_writer_.init(context, dev_id);
     cc_writer_.init(context, dev_id);
+    lc_writer_.init(context, dev_id);
 
     bd_listener_.init(context, dev_id);
     cd_listener_.init(context, dev_id);
@@ -36,6 +37,7 @@ namespace robobrawl {
 
     bc_writer_.clear();
     cc_writer_.clear();
+    lc_writer_.clear();
 
     bd_listener_.clear();
     cd_listener_.clear();
@@ -79,20 +81,30 @@ namespace robobrawl {
   }
 
 
-  void Robobrawl_Control::send_state_change(SystemId target, States state, int time_in_sec=0){
-    if(time_in_sec!=0){
-      TimeData time_ ;
-      time_.seconds(time_in_sec);
-      sc_writer_.send(device_id_, target, state, time_);
+  void Robobrawl_Control::send_state_change(SystemId target, States state, TimeData time){
+    if(time.deadline_ns_since_epoc()!=0){
+      
+      sc_writer_.send(device_id_, target, state, time);
       return;
     }
-
     sc_writer_.send(device_id_, target, state);
   }
 
   // shoudl Add auth capability to this... 
   void Robobrawl_Control::send_claim_system(SystemId target){
     cs_writer_.send(device_id_, target);
+  }
+
+  void Robobrawl_Control::send_lights_command(Identity target, SystemId new_system){
+    lc_writer_.send(device_id_, target, new_system );
+  }
+
+  void Robobrawl_Control::send_button_command(Identity target, SystemId new_system, ButtonColor new_color){
+    bc_writer_.send(device_id_, target, new_color, new_system);
+  }
+
+  void Robobrawl_Control::send_clock_command(Identity target, SystemId new_system, Colors display_color, TimeData display_time){
+    cc_writer_.send(device_id_, target, display_color, display_time, new_system);
   }
 
 };

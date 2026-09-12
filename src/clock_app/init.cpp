@@ -102,10 +102,8 @@ void robobrawl::init(int argc, char* argv[])
     }
 
     baseDeviceId = "robobrawl";     // todo: select a good value here
-    // if (serialNum.empty())
-    std::string serialNum = "SN-0001";       // todo: provide a good fallback, if not provided on command-line
 
-    robobrawl_context.init(domain_id, qos_file, baseDeviceId, serialNum);
+    robobrawl_context.init(domain_id, qos_file, baseDeviceId);
 
     active_mc.init(robobrawl_context);
     known_devices.init(robobrawl_context);

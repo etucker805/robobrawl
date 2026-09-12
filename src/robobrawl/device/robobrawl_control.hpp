@@ -16,7 +16,7 @@
 #include "robobrawl/msg/clock_data.hpp"
 #include "robobrawl/msg/button_command.hpp"
 #include "robobrawl/msg/clock_command.hpp"
-
+#include "robobrawl/msg/lights_command.hpp"
 #include "robobrawl/msg/claim_system.hpp"
 
 
@@ -37,9 +37,21 @@ namespace robobrawl {
       void do_slow() override;
 
       // -------------------------------------------------------
-      void send_state_change(SystemId target, States state, int time_in_sec);
+      void send_state_change(SystemId target, States state, TimeData time);
 
       void send_claim_system(SystemId target);
+
+      void send_button_command(Identity target, SystemId new_system, ButtonColor new_color);
+
+      void send_lights_command(Identity target, SystemId new_system);
+
+      void send_clock_command(Identity target, SystemId new_system, Colors display_color, TimeData display_time);
+
+      inline void update_state_of_system(SystemId target, States new_state, TimeData time){
+        states_[target] = new_state;
+        send_state_change(target, new_state, time);
+      }
+
 
 
       // -------------------------------------------------------
@@ -57,7 +69,15 @@ namespace robobrawl {
       std::vector<robobrawl::SystemId> claimed_systems_;
 
       std::map<robobrawl::SystemId, robobrawl::States>        states_{};
-      std::map<robobrawl::SystemId, int>                      system_match_times_{};
+
+
+      struct min_sec_time{
+        int min;
+        int sec;
+      };
+
+
+      std::map<robobrawl::SystemId, min_sec_time>      system_match_times_{};
 
       CountdownTimerManager timer_manager_;
 
@@ -67,12 +87,14 @@ namespace robobrawl {
       StateChangeWriter sc_writer_;
       // overide state writers
       ClaimSystemWriter cs_writer_;
+
       // clock / button  data readers 
       ButtonDataListener bd_listener_;
       ClockDataListener  cd_listener_;
 
       ButtonCommandWriter bc_writer_;
       ClockCommandWriter  cc_writer_;
+      LightsCommandWriter lc_writer_;
       // sync time writer
       // 
 

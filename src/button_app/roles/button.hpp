@@ -16,11 +16,14 @@ namespace robobrawl {
 
     void update_state() override;
 
-    void handle_claim_system(const robobrawl::ClaimSystem& claim);
+    void handle_claim_system(const robobrawl::ClaimSystem& claim) override;
 
-    void handle_change_state(const robobrawl::StateChange& req);
+    void handle_state_change(const robobrawl::StateChange& req) override;
 
-    void handle_button_command(const robobrawl::ButtonCommand& comm);
+    void handle_button_command(const robobrawl::ButtonCommand& comm) override;
+
+    void handle_timer_expired(const CountdownTimer::Id& id) override;
+
 
     void send_data_message( SystemId system, 
                             ButtonColor color,
@@ -32,10 +35,7 @@ namespace robobrawl {
   protected:
     robobrawl::String32 serial_num_{};
 
-    
 
-    Timer   update_timer_;
-    Timer   transition_timer_;
   };
 
 };

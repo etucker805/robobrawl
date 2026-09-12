@@ -81,7 +81,7 @@ namespace robobrawl {
       void init(RobobrawlContext& context, const robobrawl::Identity& device_id)
       {
         const auto topic = dds::topic::Topic<robobrawl::ButtonCommand>(context.participant(),
-          robobrawl::topic::TOPIC_STATE_CHANGE);
+          robobrawl::topic::TOPIC_BUTTON_COMMAND);
         dr_ = dds::sub::DataReader<robobrawl::ButtonCommand>(context.subscriber(), topic);
 
         dds::sub::qos::DataReaderQos dr_qos = dr_.qos();

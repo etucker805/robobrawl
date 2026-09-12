@@ -7,7 +7,7 @@ project (robobrawl_lights)
 include( ../cmake/coredx.cmake )
 
 # build the TMS core libraries:
-add_subdirectory( ../robobrawl ./robobrawl )
+# add_subdirectory( ../robobrawl ./robobrawl )
 
 
 #######################################################################
@@ -24,7 +24,7 @@ target_sources(lights_app PUBLIC
   cleanup.cpp
   main_loop.cpp
   startup.cpp
-  roles/robobrawl_lights.cpp
+  roles/lights.cpp
   )
 
 target_include_directories(lights_app

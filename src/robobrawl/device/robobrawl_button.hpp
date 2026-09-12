@@ -4,6 +4,7 @@
 
 #include "robobrawl.hh"
 #include "robobrawl/components/robobrawl_context.hpp"
+#include "robobrawl/components/countdown_timer.hpp"
 #include "robobrawl/device/robobrawl_device.hpp"
 
 //include other messages here
@@ -31,13 +32,17 @@ namespace robobrawl {
 
       // -------------------------------------------------------
       // virtual bool authorization_required(const robobrawl::EnergyStartStopRequest& ess) = 0; // left as tempolate 
-      virtual void handle_change_state(const robobrawl::StateChange& req)=0;
+      virtual void handle_state_change(const robobrawl::StateChange& req)=0;
 
       virtual void handle_claim_system(const robobrawl::ClaimSystem& claim)=0;
 
       virtual void handle_button_command(const robobrawl::ButtonCommand& comm)=0;
 
+      virtual void handle_timer_expired(const CountdownTimer::Id& id)=0;
 
+
+
+      CountdownTimer timer_;
 
     protected:
       //write / listener / clients here... 
@@ -49,6 +54,8 @@ namespace robobrawl {
       // data writer
       ButtonDataWriter      bd_writer_;
 
+
+      // TImer
 
   };
 

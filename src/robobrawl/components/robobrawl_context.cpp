@@ -2,8 +2,7 @@
 #include <dds/coredx_udp_transport.h>
 
 namespace robobrawl {
-  void RobobrawlContext::init(uint32_t domain_id, const std::string& qos_xml_uri, const std::string& base_device_id,
-    const std::string& serial_number)
+  void RobobrawlContext::init(uint32_t domain_id, const std::string& qos_xml_uri, const std::string& base_device_id)
   {
     // make sure the DomainParticipant is not enabled initially
     // so we can install a specially configured UDP Transport
@@ -18,7 +17,6 @@ namespace robobrawl {
     dds::domain::DomainParticipant::default_participant_qos(dpqos);
 
     base_id_ = base_device_id;
-    serial_num_ = serial_number;
 
 
     participant_ = dds::domain::DomainParticipant(domain_id);

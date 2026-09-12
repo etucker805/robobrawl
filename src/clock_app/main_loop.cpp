@@ -48,15 +48,16 @@ robobrawl::main_loop()
       for (auto device: robobrawl_devices)
         device->do_medium();
 
-      // check if the 'active controller' should change
-      if (robobrawl::active_mc.check()) {
-        // active controller changed
-        // -- publish a Active Controller State (for each local device we have)
-        for (auto device: robobrawl_devices) {
-          device->set_active_controller(robobrawl::active_mc.get_active_controller());
-          device->publish_controller_state();
-        }
-      }
+      // ignoring this for now... cause claimed system is kinda te same thing but better for me. 
+      // // check if the 'active controller' should change
+      // if (robobrawl::active_mc.check()) {
+      //   // active controller changed
+      //   // -- publish a Active Controller State (for each local device we have)
+      //   for (auto device: robobrawl_devices) {
+      //     device->set_active_controller(robobrawl::active_mc.get_active_controller());
+      //     device->publish_controller_state();
+      //   }
+      // }
 
       std::clog << "Tick..." << std::endl;
     }

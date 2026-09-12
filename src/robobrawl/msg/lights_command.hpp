@@ -23,7 +23,7 @@ namespace robobrawl {
       // -------------------------------------------------------
       void init(RobobrawlContext& context, const robobrawl::Identity& deviceId)
       {
-        auto topic = dds::topic::Topic<robobrawl::LightsCommand>(context.participant(), robobrawl::topic::TOPIC_CLOCK_COMMAND);
+        auto topic = dds::topic::Topic<robobrawl::LightsCommand>(context.participant(), robobrawl::topic::TOPIC_LIGHTS_COMMAND);
         dw_ = dds::pub::DataWriter<robobrawl::LightsCommand>(context.publisher(), topic);
 
         dds::pub::qos::DataWriterQos dw_qos = dw_.qos();
@@ -60,7 +60,7 @@ namespace robobrawl {
     public:
       virtual ~LightsCommand_Client() = default;
 
-      virtual void handle_clock_command(const robobrawl::LightsCommand& comm) = 0;
+      virtual void handle_lights_command(const robobrawl::LightsCommand& comm) = 0;
   };
 
   // -------------------------------------------------------
@@ -78,7 +78,7 @@ namespace robobrawl {
       void init(RobobrawlContext& context, const robobrawl::Identity& device_id)
       {
         const auto topic = dds::topic::Topic<robobrawl::LightsCommand>(context.participant(),
-          robobrawl::topic::TOPIC_STATE_CHANGE);
+          robobrawl::topic::TOPIC_LIGHTS_COMMAND);
         dr_ = dds::sub::DataReader<robobrawl::LightsCommand>(context.subscriber(), topic);
 
         dds::sub::qos::DataReaderQos dr_qos = dr_.qos();
@@ -120,7 +120,7 @@ namespace robobrawl {
             const std::lock_guard<std::mutex> lock(mtx_);
             std::for_each( clients_.begin(), clients_.end(),
                            [sample](LightsCommand_Client * client)
-                           { client->handle_clock_command( sample.data() ); } );
+                           { client->handle_lights_command( sample.data() ); } );
           }
         }
       }

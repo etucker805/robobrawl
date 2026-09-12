@@ -11,6 +11,8 @@ namespace robobrawl {
     sc_listener_.init(context, dev_id);
     bc_listener_.init(context, dev_id);
 
+    timer_.set_handler([this](const CountdownTimer::Id &id) { this->handle_timer_expired(id); } );
+
   }
 
   
@@ -58,6 +60,7 @@ namespace robobrawl {
   void Robobrawl_Button::do_slow()
   {
     //slow messages (0.1hz?)
+    device_.publish(device_info_);
   }
 
 };
