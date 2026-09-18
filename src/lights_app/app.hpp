@@ -25,6 +25,7 @@
 #include "components/robobrawl_context.hpp"
 #include "components/active_mc.hpp"
 #include "device/known_devices.hpp"
+#include "lights_app/interface/lights_interface.hpp"
 
 #include "roles/lights.hpp"
 
@@ -40,11 +41,13 @@ namespace robobrawl {
 
   extern bool done;
 
+  extern std::string host_corner_color;
+
   extern RobobrawlContext   robobrawl_context;
   extern ActiveMC           active_mc;
   extern KnownDevices       known_devices;
 
   // components:
-  extern std::vector<Robobrawl_BaseDevice*> robobrawl_devices;
+  extern std::vector<Lights*> robobrawl_devices;
 
 };

@@ -12,7 +12,7 @@
 static std::string qos_file = "file:///mil-std-3071_qos_library.xml";
 static std::string baseDeviceId;
 static std::string system_name_base;
-static std::string host_cornerr_color;
+std::string robobrawl::host_corner_color;
 static uint32_t    domain_id = 0;
 
 static robobrawl::Lights lights;
@@ -77,7 +77,7 @@ static int parse_args(int argc, char* argv[])
       break;
 
     case 'c':
-      host_cornerr_color = toc_optarg;
+      robobrawl::host_corner_color = toc_optarg;
       break;
 
     case 'h':
@@ -112,8 +112,8 @@ void robobrawl::init(int argc, char* argv[])
     if (system_name_base.empty())
       system_name_base = "Test System";
     
-    if(host_cornerr_color.empty())
-      host_cornerr_color = "BLUE";
+    if(robobrawl::host_corner_color.empty())
+      robobrawl::host_corner_color = "BLUE";
 
     robobrawl_context.init(domain_id, qos_file, baseDeviceId);
 

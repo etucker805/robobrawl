@@ -10,7 +10,7 @@ robobrawl::RobobrawlContext robobrawl::robobrawl_context;
 robobrawl::KnownDevices     robobrawl::known_devices;
 robobrawl::ActiveMC         robobrawl::active_mc(robobrawl::known_devices);
 
-std::vector<robobrawl::Robobrawl_BaseDevice*>   robobrawl::robobrawl_devices;
+std::vector<robobrawl::Lights*>   robobrawl::robobrawl_devices;
 
 static Timer timer_01hz; //  0.1 Hz
 static Timer timer_1hz;  //  1   Hz
@@ -34,6 +34,7 @@ robobrawl::main_loop()
 
     // every 0.1 sec:
     if (timer_01hz.elapsed().count() >= 100) {
+      refresh_lights(robobrawl_devices[0]);
       timer_01hz.start();
       for (auto device: robobrawl_devices)
         device->do_continuous();
@@ -55,6 +56,8 @@ robobrawl::main_loop()
           device->publish_controller_state();
         }
       }
+
+      
 
       std::clog << "Tick..." << std::endl;
     }

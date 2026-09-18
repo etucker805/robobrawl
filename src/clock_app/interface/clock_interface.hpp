@@ -5,12 +5,32 @@
 #include <map>
 #include <string>
 
-#include "robobrawl/device/robobrawl_clock.hpp"
+#include "clock_app/roles/clock.hpp" 
+
+#include <ws281x/ws2811.h>
+
+#define TARGET_FREQ             WS2812_TARGET_FREQ // Default 800kHz
+#define DMA                     10
+#define GPIO_PIN                18
+#define LED_COUNT               96
+#define BRIGHTNESS              255 // 0-255
 
 
 namespace robobrawl{
 
     //Structures.... yayayyayyayy
+    ws2811_led_t led_data_vec[LED_COUNT]; // all off ? idk what this is for realy... ill have to look at how pi libs work.
+    ws2811_t ledstring = {
+        freq = TARGET_FREQ,
+        dmanum = DMA,
+        channel[0].gpionum = GPIO_PIN,
+        channel[0].count = LED_COUNT,
+        channel[0].strip_type = WS2811_STRIP_GRB,
+        channel[0].brightness = 255,
+        channel[0].leds = led_data_vec
+    };
+
+
     std::vector<std::string> mapNames = {"dig1", "dig2", "dig3", "dig4", "colonUp", "colonDown", "decimal", "gear1", "gear2"};
 
     std::map<std::string, std::vector<int>> TEST_MAP = {
@@ -51,13 +71,37 @@ namespace robobrawl{
 
     std::vector<Colors> leds(96, Colors::COLOR_BLACK);  // start off
 
-    std::vector<bool> led_on_vec(96, false); // all off ? idk what this is for realy... ill have to look at how pi libs work.
+
+    //------------------------------------------------------------------
+    // strip config 
+
+    ws2811_t ledstring = {
+        .freq = TARGET_FREQ,
+        .dmanum = DMA_CHANNEL,
+        .channel = {
+            [0] = {
+                .gpionum = GPIO_PIN,
+                .invert = 0,
+                .count = LED_COUNT,
+                .strip_type = WS2811_STRIP_GRB,         // WS2812 usually uses GRB order
+                .brightness = LED_BRIGHTNESS,
+            },
+            [1] = {
+                .gpionum = 0,                           // Channel 1 unused
+                .count = 0,
+            }
+        }
+    };
+
+
 
 
     // driver headders
+    int leds_init();
+
     std::vector<bool> getSevenSegmentDisplay(int digit);
 
-    void ledShow(); // display / update the whole thing
+    int ledShow(); // display / update the whole thing
 
     void changeNumLed(std::vector<bool> ledVec, std::string digit_name, float seconds, Colors mainColor);
 
@@ -70,5 +114,6 @@ namespace robobrawl{
     void writeTime(Colors color, int minuets, int seconds, int doColon);
 
     //tree thing, should I thread this bit.........................
+    void refresh_clock(Clock* device);
 
 }

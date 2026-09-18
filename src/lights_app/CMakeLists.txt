@@ -25,6 +25,8 @@ target_sources(lights_app PUBLIC
   main_loop.cpp
   startup.cpp
   roles/lights.cpp
+  interface/lights_driver.cpp
+  interface/lights_state_tree.cpp
   )
 
 target_include_directories(lights_app

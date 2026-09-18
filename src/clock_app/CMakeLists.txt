@@ -37,6 +37,7 @@ target_include_directories(clock_app
 
 target_link_libraries(clock_app
   PUBLIC  robobrawl_interface
+  PUBLIC  ws281x
   )
 
 # make a copy of the QoS XML file in the current output directory

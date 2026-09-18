@@ -43,12 +43,12 @@ namespace robobrawl {
       virtual void handle_timer_expired(const CountdownTimer::Id& id)=0;
 
 
+      CountdownTimer timer_;
 
     protected:
       //write / listener / clients here... 
      robobrawl::ClockDataWriter cd_writer_;
 
-     CountdownTimer timer_;
 
      robobrawl::ClockCommandListener cc_listener_;
      robobrawl::StateChangeListener  sc_listener_;

@@ -27,6 +27,7 @@
 #include "device/known_devices.hpp"
 
 #include "roles/clock.hpp"
+#include "interface/clock_interface.hpp"
 
 namespace robobrawl {
 
@@ -45,6 +46,6 @@ namespace robobrawl {
   extern KnownDevices       known_devices;
 
   // components:
-  extern std::vector<Robobrawl_BaseDevice*> robobrawl_devices;
+  extern std::vector<Clock*> robobrawl_devices;
 
 };
