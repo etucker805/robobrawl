@@ -5,6 +5,7 @@
 #include <cstdio>
 #include <csignal>
 #include <cstdlib>
+#include <algorithm>
 
 
 // ---------------------------------------------------------------
@@ -115,6 +116,11 @@ void robobrawl::init(int argc, char* argv[])
     if(robobrawl::host_corner_color.empty())
       robobrawl::host_corner_color = "BLUE";
 
+      // to a to upper case 
+    std::transform(robobrawl::host_corner_color.begin(), robobrawl::host_corner_color.end(), robobrawl::host_corner_color.begin(), [](unsigned char c){
+      return std::toupper(c);
+    });
+
     robobrawl_context.init(domain_id, qos_file, baseDeviceId);
 
     active_mc.init(robobrawl_context);
@@ -127,6 +133,8 @@ void robobrawl::init(int argc, char* argv[])
     // init all DDS entities:
     robobrawl_context.subscriber().enable();
     robobrawl_context.publisher().enable();
+
+    
 
   }
   catch (const std::exception& e) {

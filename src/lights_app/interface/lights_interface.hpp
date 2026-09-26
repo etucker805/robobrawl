@@ -23,6 +23,9 @@ namespace robobrawl{
     //      (56)            (28) (probably)
     extern std::string host_corner_color;
 
+    Timer anim_timer;
+
+
     ws2811_led_t diag_stort_strip_data[NUM_LED_PER_DIAG];
     ws2811_led_t long_strip_data[NUM_LED_PER_STRAIGHT + NUM_LED_PER_DIAG];
     ws2811_led_t straight_strip_data[NUM_LED_PER_STRAIGHT];
@@ -51,6 +54,8 @@ namespace robobrawl{
 
     // Im Makeing the rest of this not my problem 
     void render_leds();
+
+    void render_strip(int strip_index);
     
     void light_centered_circle(int rad, Colors color);
 
@@ -65,10 +70,6 @@ namespace robobrawl{
     void refresh_lights(Lights* device);
 
     // start() stop() resets it, std::chrono::ms elapsed(), uint64 elapsed_msec()... yeah
-    Timer anim_timer();
-
-
-
 
 
 

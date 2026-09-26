@@ -72,9 +72,43 @@ namespace robobrawl{
             ///call function that I dont know about right now... 
             light_solid(Colors::COLOR_BLACK);
             break;
+        case States::STATE_IDLE_ON:
+        case States::STATE_RUNNING_MATCH:
+            // just on states
+            light_solid(Colors::COLOR_WHITE);
+            break;
+
+        case States::STATE_MATCH_EMERGENCY_STOP:
+        case States::STATE_MATCH_TIME_EXPIRE:
+            //reds
+            light_solid(Colors::COLOR_RED);
+            break;
         
+        case States::STATE_PAUSED_MATCH:
+        case States::STATE_UNSTICK_BLUE:
+        case States::STATE_UNSTICK_ORANGE:
+            // yellow stops
+            light_solid(Colors::COLOR_YELLOW);
+            break;
+
+        case States::STATE_WIN_BLUE:
+        case States::STATE_TAPOUT_ORANGE:
+            // blue wins 
+            light_solid(Colors::COLOR_BLUE);
+            break;
+
+        case States::STATE_WIN_ORANGE:
+        case States::STATE_TAPOUT_BLUE:
+            //orange wins
+            light_solid(Colors::COLOR_ORANGE);
+            break;
+
+        // I kinda think the rest are anims that I dont quite have.....
+
         
         default:
+            // imma make this go off i guess
+            light_solid(Colors::COLOR_BLACK);
             break;
         }
 

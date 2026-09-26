@@ -94,7 +94,7 @@ namespace robobrawl{
 
             break;
                 
-             case States::STATE_INDIVIDUAL_OVERRIDE:
+        case States::STATE_INDIVIDUAL_OVERRIDE:
             // I gott figure out how to make this do htis thing right... haaaaa
             break;
         default:

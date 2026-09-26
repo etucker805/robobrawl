@@ -26,8 +26,24 @@ robobrawl::main_loop()
 
   while (!done) {
     // read status from hardware, and update apropriate values:
+
+
     for (auto device: robobrawl_devices)
       device->update_state();
+    // stips are now doning a thing 
+    
+    std::thread strip_one  (render_strip, 0);
+    std::thread strip_three(render_strip, 2);
+    std::thread strip_two  (render_strip, 1);
+
+    // this is chill for now 
+    // noo its not cause I have to wait for the thing to join before I delay....
+    // but honestly for the max of 50 whatever length It should be fineeeeee cause thats like 2 ms 
+    // if I tried to do this later I would have to mux up my light lists, witch might by problematic, so we just launch the writes im paralell
+    strip_one.join();
+    strip_three.join();
+    strip_two.join();
+
 
     // ------------------------------------------
     // publish to TMS infrastructure:
@@ -48,14 +64,14 @@ robobrawl::main_loop()
         device->do_medium();
 
       // check if the 'active controller' should change
-      if (robobrawl::active_mc.check()) {
-        // active controller changed
-        // -- publish a Active Controller State (for each local device we have)
-        for (auto device: robobrawl_devices) {
-          device->set_active_controller(robobrawl::active_mc.get_active_controller());
-          device->publish_controller_state();
-        }
-      }
+      // if (robobrawl::active_mc.check()) {
+      //   // active controller changed
+      //   // -- publish a Active Controller State (for each local device we have)
+      //   for (auto device: robobrawl_devices) {
+      //     device->set_active_controller(robobrawl::active_mc.get_active_controller());
+      //     device->publish_controller_state();
+      //   }
+      // }
 
       
 
@@ -69,6 +85,9 @@ robobrawl::main_loop()
       for (auto device: robobrawl_devices)
         device->do_slow();
     }
+    
+
+ 
 
     std::this_thread::sleep_for(std::chrono::milliseconds(10));
   }

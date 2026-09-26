@@ -8,7 +8,7 @@ namespace robobrawl {
     timer_.set_handler([this](const CountdownTimer::Id &id) {
       this->handle_timer_expired(id);
         }
-     );
+     ); 
 
     cd_writer_.init(context, dev_id);
 
@@ -29,12 +29,6 @@ namespace robobrawl {
     sc_listener_.clear();
   }
 
-  // // -------------------------------------------------------
-  // void Robobrawl_Control::handle_ate_reply(const robobrawl::AuthorizationToEnergizeReply& reply)
-  // {
-
-
-  // }
 
   void Robobrawl_Clock::do_startup()
   {

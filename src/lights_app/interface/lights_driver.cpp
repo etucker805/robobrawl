@@ -27,6 +27,8 @@ lights layoput:
 
 //56 straight, 28 diag, probably 
 
+// also, btw I should thread the calls to each strip, I think... itl take like 9ms per write to all of the strips......
+
 #include "lights_interface.hpp"
 
 #include <cmath>
@@ -77,6 +79,21 @@ namespace robobrawl{
 
    }
 
+
+   void render_strip(int strip_index){
+      auto strip = *list_of_strip_lists[strip_index];
+      auto data_strip = list_of_data_lists[strip_index];
+
+      for(int j = 0; j < strip.size(); j++){
+         auto led = strip[j];
+         uint32_t rgbw = (color_to_rgbw_map[led][0] << 24) +  // r?
+                           (color_to_rgbw_map[led][1] << 16) +  //g?
+                           (color_to_rgbw_map[led][2] << 8) +   //b?
+                           color_to_rgbw_map[led][3];          //w?
+         data_strip[j] = rgbw;
+      }
+   }
+
    void render_leds(){
       for(int i = 0; i < 3; i++){
          auto strip = *list_of_strip_lists[i];
@@ -90,18 +107,17 @@ namespace robobrawl{
                              color_to_rgbw_map[led][3];          //w?
             data_strip[j] = rgbw;
          }
-      }
-
-      // whtever the render call is. I could try to make this better, only call all this if I have a channge... but Im fast as fk boiiiii so who cares
-   
+      }   
    }
 
 
    void light_centered_circle(int rad, Colors color){
       for( int i = 0; i < 3; i++){
          auto strip_list = list_of_strip_lists[i];
-         for(auto led : list_of_strip_lists){
-
+         for(int j = 0; j < strip_list->size(); j++){
+            // if get pos.x.y.z**2 <= rad ig
+            std::pair<float, float> pos = get_pos_of_led(i, j);
+            (*strip_list)[j] = ((pos.first * pos.first + pos.second * pos.second) <= rad ? color : Colors::COLOR_BLACK);
          }
       }
    }
@@ -113,5 +129,46 @@ namespace robobrawl{
          }
       }
    }
+
+   //outside chase clockwise 
+   void outside_chase(int chaseres=1){
+      if(!anim_timer.is_running()){
+         anim_timer.start();
+      }
+
+      // now we know anim timer is running
+      // total outside size
+      int ring_size = 4 * NUM_LED_PER_STRAIGHT;
+
+      //sooo mod timer / some const by the size of the tings turn on those leds...
+      int this_num = anim_timer.elapsed_msec() % ring_size;
+      for(int i  = 0; i < chaseres; i++){
+         // so for every chaser
+         int myIndex = this_num + (ring_size/chaseres)*i; // the ring index, blue short end = 0, then go blue short -> blue long -> orange short -> orange long
+         if(host_corner_color == "BLUE"){
+            if(myIndex < NUM_LED_PER_STRAIGHT){
+               // write to short stright 
+
+            } else if (myIndex < NUM_LED_PER_STRAIGHT*2){
+               // wright to straight of the long bit
+            } 
+
+         } else {
+
+
+         }
+
+
+         //timer % ring_size -> whatever index to trun on that + ring / chasers gives the others 
+      
+      }
+
+   }
+
+
+   //some kinda corrnwers in tinng 
+   // ^ this but also explode
+
+
 
 }

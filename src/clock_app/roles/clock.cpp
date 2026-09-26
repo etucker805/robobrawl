@@ -104,6 +104,7 @@ namespace robobrawl {
 
     case robobrawl::States::STATE_MATCH_TIME_EXPIRE: // Im gonna rely on this one for the most part. 
       // nothing to do thogh, ill let the timer run if it is, if not we just go to the expired state. 
+      // ause timer is alrady stoped
       break;
 
     default:

@@ -5,12 +5,14 @@
 
 namespace robobrawl{
 
+
+
     int leds_init(){
         if (ws2811_init(&ledstring) != WS2811_SUCCESS){
             std::cerr << "LED init failed" << std::endl;
             return 1;
         }
-
+        return 0;
     }
 
 
@@ -20,7 +22,8 @@ namespace robobrawl{
     }
 
 
-    int ledShow(){
+
+    int ledShow(){ // render 
         // display / update the whole thing
         // idk how to do this yet... 
         if(ws2811_render(&ledstring) != WS2811_SUCCESS){
@@ -48,8 +51,6 @@ namespace robobrawl{
             }
             // either write a func to do the set _ pixel stuff or find a way to do it here? 
             ledShow();
-            // led_strip_refresh(led_strip);
-            //delay(1);
         }
            
     }
@@ -93,6 +94,8 @@ namespace robobrawl{
             }
         }
 
+        ledShow();
+
     }
 
     void writeGear(Colors color, bool leftGear){
@@ -112,6 +115,8 @@ namespace robobrawl{
 
         }
 
+        ledShow();
+
     }
 
     void writeTime(Colors color, int minuets, int seconds, int doColon){
@@ -130,6 +135,7 @@ namespace robobrawl{
         ledShow();
 
     }
+
 
 }
 
