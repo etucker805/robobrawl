@@ -6,11 +6,12 @@
 
 
 namespace robobrawl{
-
-
+    
     // some kninda update state, pass in device
     void refresh_clock(Clock* device){
-
+        
+        int64_t time_remaining;
+        int64_t time_remaining_ms;
         // what do I do on what states. 
         switch (device->current_state)
         {
@@ -55,7 +56,7 @@ namespace robobrawl{
         case States::STATE_WIN_ORANGE:
             // same display the time, just color changes, ill do that in here
             // we think that time is good, so poll the timer and display that. 
-            int64_t time_remaining = device->timer_.remaining_time_sec();
+            time_remaining = device->timer_.remaining_time_sec();
             if(time_remaining < 0) time_remaining = 0;
 
             Colors clock_color;
@@ -87,7 +88,7 @@ namespace robobrawl{
                 writeTime(Colors::COLOR_WHITE, time_remaining / 60, time_remaining % 60, true);
             }
             else{
-                int64_t time_remaining_ms = device->timer_.remaining_time_ms();
+                time_remaining_ms = device->timer_.remaining_time_ms();
                 if(time_remaining_ms < 0) time_remaining_ms = 0;
                 writeTime(Colors::COLOR_YELLOW, time_remaining_ms / 1000, time_remaining_ms/10, false);
             }

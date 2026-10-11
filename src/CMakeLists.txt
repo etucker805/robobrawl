@@ -8,8 +8,8 @@ set(CMAKE_CXX_STANDARD 23)
 include( ./cmake/coredx.cmake )
 
 
-set(COREDX_TOP "/home/ethan/dds/coredx-6.5.0-Evaluation")
-set(COREDX_HOST "Linux_2.6_x86_64_gcc11")
+# set(COREDX_TOP "/home/ethan/dds/coredx-6.5.0-Evaluation")
+# set(COREDX_HOST "Linux_2.6_x86_64_gcc11")
 
 option(CONTROL          "add the control target" OFF)
 option(BUTTON           "add the button_orange target" OFF)

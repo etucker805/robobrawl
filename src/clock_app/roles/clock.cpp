@@ -60,6 +60,7 @@ namespace robobrawl {
 
 
   void Clock::handle_state_change(const robobrawl::StateChange& state){
+    std::cout << "New State: " << get_state_string(state.newState()) << std::endl; 
 
     if(state.target() != device_info_.system())
       return;
