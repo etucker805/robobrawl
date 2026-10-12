@@ -100,7 +100,7 @@ void robobrawl::init(int argc, char* argv[])
       fprintf(stderr, "Failed to initialize CoreDX DDS: missing license?\n");
       exit(1);
     }
-    // leds_init();
+    leds_init();
 
     baseDeviceId = "robobrawl";     // todo: select a good value here
 

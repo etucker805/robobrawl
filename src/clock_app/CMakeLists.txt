@@ -28,8 +28,8 @@ target_sources(clock_app PUBLIC
   ${CMAKE_CURRENT_LIST_DIR}/cleanup.cpp
   ${CMAKE_CURRENT_LIST_DIR}/main_loop.cpp
   ${CMAKE_CURRENT_LIST_DIR}/startup.cpp
-  # ${CMAKE_CURRENT_LIST_DIR}/interface/clock_driver.cpp
-  # ${CMAKE_CURRENT_LIST_DIR}/interface/state_tree.cpp
+  ${CMAKE_CURRENT_LIST_DIR}/interface/clock_driver.cpp
+  ${CMAKE_CURRENT_LIST_DIR}/interface/state_tree.cpp
   ${CMAKE_CURRENT_LIST_DIR}/roles/clock.cpp
   )
 

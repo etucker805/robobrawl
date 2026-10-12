@@ -46,7 +46,7 @@ namespace robobrawl{
 
     int ledShow(); // display / update the whole thing
 
-    void changeNumLed(std::vector<bool> ledVec, std::string digit_name, float seconds, Colors mainColor);
+    void changeNumLed(const std::vector<bool>& ledVec, const std::string& digit_name, Colors mainColor);
 
     std::vector<int> formatTime(int sec, int min, int doColon);
     

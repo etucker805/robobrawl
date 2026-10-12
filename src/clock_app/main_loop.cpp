@@ -28,7 +28,7 @@ robobrawl::main_loop()
     // read status from hardware, and update apropriate values:
     for (auto device: robobrawl_devices){
       device->update_state();
-      // refresh_clock(device);
+      refresh_clock(device);
     }
 
     // ------------------------------------------

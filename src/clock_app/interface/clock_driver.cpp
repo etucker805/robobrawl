@@ -95,36 +95,30 @@ namespace robobrawl{
 
     } 
 
-    void changeNumLed(std::vector<bool> ledVec, std::string digit_name, float seconds, Colors mainColor){
-         for (int i = 0; i < 7; i++)
-        {
-            if (ledVec[i])
-            {
-            leds[TEST_MAP[digit_name][i] - 1] = mainColor;
-            leds[TEST_MAP[digit_name][i]] = mainColor;
-            leds[TEST_MAP[digit_name][i] + 1] = mainColor;
-            }
-            else
-            {
-            leds[TEST_MAP[digit_name][i] - 1] = Colors::COLOR_BLACK;
-            leds[TEST_MAP[digit_name][i]] = Colors::COLOR_BLACK;
-            leds[TEST_MAP[digit_name][i] + 1] = Colors::COLOR_BLACK;
-            }
-            // either write a func to do the set _ pixel stuff or find a way to do it here? 
+    static void setPixel(int idx, Colors c){
+        if (idx < 0 || idx >= LED_COUNT) return;
+        auto &v = color_to_rgb[c];
+        ledstring.channel[0].leds[idx] = (uint32_t(v[0]) << 16) | (uint32_t(v[1]) << 8) | uint32_t(v[2]);
+    }
+
+    void changeNumLed(const std::vector<bool>& ledVec, const std::string& digit_name, Colors mainColor){
+        const auto& segs = TEST_MAP[digit_name];
+        for (size_t i = 0; i < 7 && i < ledVec.size(); i++){
+            Colors c = ledVec[i] ? mainColor : Colors::COLOR_BLACK;
+            setPixel(segs[i] - 1, c);
+            setPixel(segs[i],     c);
+            setPixel(segs[i] + 1, c);
         }
-        
-        ledShow();
+        // no ledShow() here; writeTime calls it once at the end
     }
 
     std::vector<int> formatTime(int sec, int min, int doColon){
-        std::vector<int> ret(5, 0);
-        ret[0] = min/10;
-        ret[1] = min%10;
-        ret[2] = doColon ? 1 : 0;
-        ret[3] = sec/10;
-        ret[4] = sec%10;
-
-        return ret;
+        if (sec < 0) sec = 0;
+        if (min < 0) min = 0;
+        min += sec / 60;          // in case total seconds were passed in
+        sec %= 60;
+        if (min > 99) min = 99;
+        return { min / 10, min % 10, doColon ? 1 : 0, sec / 10, sec % 10 };
     }
 
     void writeSolid(Colors color){
@@ -181,6 +175,7 @@ namespace robobrawl{
     }
 
     void writeTime(Colors color, int minuets, int seconds, int doColon){
+
         std::vector<int> vecTime = formatTime(seconds, minuets, doColon); 
 
         std::vector<bool> num1leds = getSevenSegmentDisplay(vecTime[0]); 
@@ -189,10 +184,10 @@ namespace robobrawl{
         std::vector<bool> num4leds = getSevenSegmentDisplay(vecTime[4]); 
 
 
-        changeNumLed(num1leds, "dig4", seconds, color); //sec added for color
-        changeNumLed(num2leds, "dig3", seconds, color);
-        changeNumLed(num3leds, "dig2", seconds, color);
-        changeNumLed(num4leds, "dig1", seconds, color);
+        changeNumLed(num1leds, "dig4", color);
+        changeNumLed(num2leds, "dig3", color);
+        changeNumLed(num3leds, "dig2", color);
+        changeNumLed(num4leds, "dig1", color);
         ledShow();
 
     }

@@ -383,7 +383,11 @@ struct ClockRealtime {
 @nested
 @extensibility(APPENDABLE)
 struct TimeData{
+    @optional
     uint64 deadline_ns_since_epoc;
+
+    @optional
+    uint64 duration_msec;
 };
 
 
