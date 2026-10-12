@@ -98,10 +98,9 @@ namespace robobrawl {
         dr_ = dds::sub::DataReader<robobrawl::StateChange>(context.subscriber(), topic);
 
         dds::sub::qos::DataReaderQos dr_qos = dr_.qos();
-        dr_qos << dds::core::policy::Reliability(dds::core::policy::ReliabilityKind::RELIABLE);
+        dr_qos << dds::core::policy::Reliability(dds::core::policy::ReliabilityKind::BEST_EFFORT);
         dr_.qos(dr_qos);
-    
-
+        std::cout << "StateChange reader initialized" << std::endl;
 
         dr_.listener(this, dds::core::status::StatusMask::all());
       }
@@ -129,9 +128,12 @@ namespace robobrawl {
       // -------------------------------------------------------
       void on_data_available(dds::sub::DataReader<robobrawl::StateChange>& reader) override
       {
+        std::cout << "state Change but like the start yeah " << std::endl;
+
         const dds::sub::LoanedSamples<robobrawl::StateChange> samples = reader.take();
         for (const auto& sample: samples) {
           if (sample.info().valid()) {
+            std::cout << "state Change in here ya" << std::endl;
             const std::lock_guard<std::mutex> lock(mtx_);
             std::for_each( clients_.begin(), clients_.end(),
                            [sample](StateChange_Client * client)

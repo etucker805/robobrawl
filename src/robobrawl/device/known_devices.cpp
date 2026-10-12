@@ -5,6 +5,7 @@ namespace robobrawl {
 
   void KnownDevices::init(RobobrawlContext& context)
   {
+    std::cout << "init known devs" << std::endl;
     auto topic = dds::topic::Topic<robobrawl::DeviceInfo>(context.participant(), robobrawl::topic::TOPIC_DEVICE_INFO);
     dr_ = dds::sub::DataReader<robobrawl::DeviceInfo>(context.subscriber(), topic);
     
@@ -51,7 +52,7 @@ namespace robobrawl {
     const auto [it, added] = known_devices_.insert(std::make_pair(dev_info.deviceId(), dev_info));
 
     if (!added) {
-      // std::cout << "this thinfg skipers and stuff" << std::endl;
+      // std::cout << "this thinfg skipers and stuff" << dev_info.deviceId() << std::endl;
       it->second = dev_info;
 
     }

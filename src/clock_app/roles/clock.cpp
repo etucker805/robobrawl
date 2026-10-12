@@ -67,7 +67,6 @@ namespace robobrawl {
 
     //@TODO not yet checking if this is our claimed one, or for active mc cause thats a thing too IG.
 
-    std::cout << "New State: " << get_state_string(state.newState()) << std::endl; 
     switch (state.newState())
     {
       // these are only the things that have to happen on transition, play apuse resume, that kind of thing, the others will be in interface loop, as statics. 

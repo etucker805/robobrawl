@@ -35,6 +35,7 @@ namespace robobrawl {
   ActiveMC::handle_heartbeat(const robobrawl::Heartbeat& hb)
   {
     //  check if this 'hb' is from a device with 'controller' role
+    // std::cout << "hyb: " << hb.deviceId() << std::endl;
     robobrawl::DeviceRole role = known_devices_.get_device_role(hb.deviceId());
     if (role == robobrawl::DeviceRole::ROLE_CONTROL) {
       mtx_.lock();
