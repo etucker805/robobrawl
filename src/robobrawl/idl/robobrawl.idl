@@ -390,7 +390,8 @@ struct TimeData{
 // getrs sent on: 
 // startup, claim system, device join, or leave, state change, 
 
-@topic 
+@topic
+@extensibility(APPENDABLE)
 struct StateChange{
     Identity source;
 
@@ -406,6 +407,7 @@ struct StateChange{
 
 
 @topic
+@extensibility(APPENDABLE)
 struct ClaimSystem{
     Identity source;
 
@@ -416,6 +418,7 @@ struct ClaimSystem{
 };
 
 @topic
+@extensibility(APPENDABLE)
 struct ButtonData{
     @key
     Identity deviceId;
@@ -435,6 +438,7 @@ struct ButtonData{
 
 
 @topic
+@extensibility(APPENDABLE)
 struct ClockData{
     @key
     Identity deviceId;
@@ -448,7 +452,8 @@ struct ClockData{
 };
 
 
-@topic 
+@topic
+@extensibility(APPENDABLE)
 struct ButtonCommand{
     @key
     Identity target;
@@ -462,7 +467,8 @@ struct ButtonCommand{
     SystemId newSystem;
 };
 
-@topic 
+@topic
+@extensibility(APPENDABLE)
 struct ClockCommand{
     @key 
     Identity target;
@@ -480,6 +486,7 @@ struct ClockCommand{
 };
 
 @topic
+@extensibility(APPENDABLE)
 struct LightsCommand{
     @key
     Identity target;
