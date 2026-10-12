@@ -141,7 +141,41 @@ namespace robobrawl {
           }
         }
       }
-    
+
+      // -------------------------------------------------------
+      // debug: fires when a StateChange writer pairs / unpairs with this reader
+      void on_subscription_matched(dds::sub::DataReader<robobrawl::StateChange>& reader,
+        const dds::core::status::SubscriptionMatchedStatus& status) override
+      {
+        std::cout << "StateChange reader matched: current " << status.current_count()
+                  << " (change " << status.current_count_change() << ")"
+                  << ", total " << status.total_count() << std::endl;
+      }
+
+      // -------------------------------------------------------
+      // debug: fires when a writer was found but its QoS is incompatible with ours
+      void on_requested_incompatible_qos(dds::sub::DataReader<robobrawl::StateChange>& reader,
+        const dds::core::status::RequestedIncompatibleQosStatus& status) override
+      {
+        std::cout << "StateChange reader incompatible QoS: total " << status.total_count()
+                  << ", last policy id " << status.last_policy_id() << std::endl;
+      }
+
+      // -------------------------------------------------------
+      // debug: fires when samples arrived but were dropped
+      void on_sample_lost(dds::sub::DataReader<robobrawl::StateChange>& reader,
+        const dds::core::status::SampleLostStatus& status) override
+      {
+        std::cout << "StateChange reader sample lost: total " << status.total_count() << std::endl;
+      }
+
+      // -------------------------------------------------------
+      void on_sample_rejected(dds::sub::DataReader<robobrawl::StateChange>& reader,
+        const dds::core::status::SampleRejectedStatus& status) override
+      {
+        std::cout << "StateChange reader sample rejected: total " << status.total_count() << std::endl;
+      }
+
     protected:
       std::mutex mtx_{};
       dds::sub::DataReader<robobrawl::StateChange> dr_;
