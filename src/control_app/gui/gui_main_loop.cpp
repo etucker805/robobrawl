@@ -159,7 +159,7 @@ int robobrawl::gui_draw_contol_menu(Robobrawl_Control* device)
                 |                                       |
                 -----------------------------------------
             */
-            
+            TimeData t;
 
             // is it started ? is it in a good state to start? then colors~~~~
             if(current_state == robobrawl::States::STATE_BOTH_READY || current_state == robobrawl::States::STATE_COUNTDOWN_3_2_1){
@@ -179,7 +179,8 @@ int robobrawl::gui_draw_contol_menu(Robobrawl_Control* device)
                 device->timer_manager_.set_expiration_time_ns(current_system, std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::seconds(3)).count() + std::chrono::system_clock::now().time_since_epoch().count()); 
                 current_state =  robobrawl::States::STATE_COUNTDOWN_3_2_1; 
                 device->states_[current_system] = robobrawl::States::STATE_COUNTDOWN_3_2_1;
-                device->send_state_change(current_system, current_state, TimeData(std::chrono::system_clock::now().time_since_epoch().count() + convert_time_to_nsec(device->system_match_times_[current_system])));
+                t.deadline_ns_since_epoc(std::chrono::system_clock::now().time_since_epoch().count() + convert_time_to_nsec(device->system_match_times_[current_system])));
+                device->send_state_change(current_system, current_state, t);
 
                 //start that timer!!!!
                 device->timer_manager_.start(current_system);

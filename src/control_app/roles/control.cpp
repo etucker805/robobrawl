@@ -174,7 +174,7 @@ namespace robobrawl {
      );
 
     if(std::find(claimed_systems_.begin(), claimed_systems_.end(), dev_info.system()) != claimed_systems_.end()){
-      send_state_change(dev_info.system(), states_[dev_info.system()], 0 );
+      send_state_change(dev_info.system(), states_[dev_info.system()], TimeData() );
     }
 
 
@@ -188,12 +188,13 @@ namespace robobrawl {
     //id is system name.... btw
     robobrawl::SystemId sys = id;
     uint64_t stop_time = 0;
+    TimeData t;
     switch (states_[sys])
     {
     case robobrawl::States::STATE_RUNNING_MATCH:
       // match over
       states_[sys] = robobrawl::States::STATE_MATCH_TIME_EXPIRE;
-      send_state_change(sys, states_[sys], 0);
+      send_state_change(sys, states_[sys], TimeData());
       break;
     case robobrawl::States::STATE_COUNTDOWN_3_2_1:
       std::cout << "Set state to Run Match, from 3-2-1." << std::endl;
@@ -201,7 +202,8 @@ namespace robobrawl {
       stop_time = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::seconds(system_match_times_[sys].min * 60 + system_match_times_[sys].sec )).count() + std::chrono::system_clock::now().time_since_epoch().count();
       timer_manager_.set_expiration_time_ns(id, stop_time);
       timer_manager_.start(id);
-      send_state_change(sys, states_[sys], stop_time);
+      t.deadline_ns_since_epoc(stop_time);
+      send_state_change(sys, states_[sys], t );
 
       break;
 
