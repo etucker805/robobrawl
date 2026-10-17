@@ -179,7 +179,7 @@ int robobrawl::gui_draw_contol_menu(Robobrawl_Control* device)
                 device->timer_manager_.set_expiration_time_ns(current_system, std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::seconds(3)).count() + std::chrono::system_clock::now().time_since_epoch().count()); 
                 current_state =  robobrawl::States::STATE_COUNTDOWN_3_2_1; 
                 device->states_[current_system] = robobrawl::States::STATE_COUNTDOWN_3_2_1;
-                t.deadline_ns_since_epoc(std::chrono::system_clock::now().time_since_epoch().count() + convert_time_to_nsec(device->system_match_times_[current_system])));
+                t.deadline_ns_since_epoc(std::chrono::system_clock::now().time_since_epoch().count() + convert_time_to_nsec(device->system_match_times_[current_system]));
                 device->send_state_change(current_system, current_state, t);
 
                 //start that timer!!!!
@@ -222,7 +222,8 @@ int robobrawl::gui_draw_contol_menu(Robobrawl_Control* device)
                     device->timer_manager_.pause(current_system);
                     current_state =  robobrawl::States::STATE_PAUSED_MATCH; 
                     device->states_[current_system] = robobrawl::States::STATE_PAUSED_MATCH;
-                    device->send_state_change(current_system, current_state, device->timer_manager_.get_remaining_time_sec(current_system) );
+                    t.duration_msec(device->timer_manager_.get_remaining_time_ms(current_system));
+                    device->send_state_change(current_system, current_state, t );
                     std::cout << "Paused match on system " << current_system << " with " 
                                     << device->timer_manager_.get_remaining_time_sec(current_system)/60 << ":"
                                     << ( device->timer_manager_.get_remaining_time_sec(current_system)%60 )/10 
@@ -234,7 +235,8 @@ int robobrawl::gui_draw_contol_menu(Robobrawl_Control* device)
                     device->timer_manager_.resume(current_system);
                     current_state =  robobrawl::States::STATE_RUNNING_MATCH; 
                     device->states_[current_system] = robobrawl::States::STATE_RUNNING_MATCH;
-                    device->send_state_change(current_system, current_state, device->timer_manager_.get_remaining_time_sec(current_system) );
+                    t.duration_msec(device->timer_manager_.get_remaining_time_ms(current_system));
+                    device->send_state_change(current_system, current_state, t );
                     std::cout << "Resume match on system " << current_system << " with " 
                                     << device->timer_manager_.get_remaining_time_sec(current_system)/60 << ":"
                                     << ( device->timer_manager_.get_remaining_time_sec(current_system)%60 )/10 
@@ -260,7 +262,8 @@ int robobrawl::gui_draw_contol_menu(Robobrawl_Control* device)
                 current_state =  robobrawl::States::STATE_MATCH_EMERGENCY_STOP; 
                 device->states_[current_system] = robobrawl::States::STATE_MATCH_EMERGENCY_STOP;
                 device->timer_manager_.pause(current_system); // just in case, cause why not.
-                device->send_state_change(current_system, current_state, convert_time_to_nsec(device->system_match_times_[current_system]) );
+                t.deadline_ns_since_epoc(convert_time_to_nsec(device->system_match_times_[current_system]));
+                device->send_state_change(current_system, current_state, t );
                 std::cout << "Stoped Match on system: " << current_system << std::endl;
             }
             ImGui::PopStyleColor(1);
@@ -278,7 +281,8 @@ int robobrawl::gui_draw_contol_menu(Robobrawl_Control* device)
                 current_state =  robobrawl::States::STATE_WIN_BLUE;
                 device->states_[current_system] =  robobrawl::States::STATE_WIN_BLUE;
                 device->timer_manager_.pause(current_system);
-                device->send_state_change(current_system, current_state, device->timer_manager_.get_remaining_time_sec(current_system));
+                t.duration_msec(device->timer_manager_.get_remaining_time_ms(current_system));
+                device->send_state_change(current_system, current_state, t);
             }
             ImGui::PopStyleColor(1);
             ImGui::SameLine();
@@ -294,7 +298,8 @@ int robobrawl::gui_draw_contol_menu(Robobrawl_Control* device)
                 current_state =  robobrawl::States::STATE_WIN_ORANGE;
                 device->states_[current_system] =  robobrawl::States::STATE_WIN_ORANGE;
                 device->timer_manager_.pause(current_system);
-                device->send_state_change(current_system, current_state, device->timer_manager_.get_remaining_time_sec(current_system));
+                t.duration_msec(device->timer_manager_.get_remaining_time_ms(current_system));
+                device->send_state_change(current_system, current_state, t);
             }
             ImGui::PopStyleColor(1);
             
@@ -311,17 +316,17 @@ int robobrawl::gui_draw_contol_menu(Robobrawl_Control* device)
 
                 if(ImGui::Button("Idle Off")){
                     current_state = States::STATE_IDLE_OFF;
-                    device->update_state_of_system(current_system, current_state, 0);
+                    device->update_state_of_system(current_system, current_state, TimeData());
                 }
                  
                 if(ImGui::Button("Idle On")){
                     current_state = States::STATE_IDLE_ON;
-                    device->update_state_of_system(current_system, current_state, 0);
+                    device->update_state_of_system(current_system, current_state, TimeData());
                 }
 
                 if(ImGui::Button("Wait For Ready")){
                     current_state = States::STATE_READY_WAIT;
-                    device->update_state_of_system(current_system, current_state, 0);
+                    device->update_state_of_system(current_system, current_state, TimeData());
                 }
 
                 //others I want to allow this transition too...
