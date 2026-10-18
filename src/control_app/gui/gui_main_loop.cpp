@@ -282,7 +282,7 @@ int robobrawl::gui_draw_contol_menu(Robobrawl_Control* device)
                 device->states_[current_system] =  robobrawl::States::STATE_WIN_BLUE;
                 device->timer_manager_.pause(current_system);
                 t.duration_msec(device->timer_manager_.get_remaining_time_ms(current_system));
-                device->send_state_change(current_system, current_state, t);
+                device->send_state_change(current_system, current_state, TimeData());
             }
             ImGui::PopStyleColor(1);
             ImGui::SameLine();
@@ -299,7 +299,7 @@ int robobrawl::gui_draw_contol_menu(Robobrawl_Control* device)
                 device->states_[current_system] =  robobrawl::States::STATE_WIN_ORANGE;
                 device->timer_manager_.pause(current_system);
                 t.duration_msec(device->timer_manager_.get_remaining_time_ms(current_system));
-                device->send_state_change(current_system, current_state, t);
+                device->send_state_change(current_system, current_state, TimeData());
             }
             ImGui::PopStyleColor(1);
             
