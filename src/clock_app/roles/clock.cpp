@@ -1,5 +1,6 @@
 
 #include "clock.hpp"
+#include "robobrawl.hh"
 
 namespace robobrawl {
 
@@ -95,12 +96,15 @@ namespace robobrawl {
       break;
       
     case robobrawl::States::STATE_PAUSED_MATCH:
+    case robobrawl::States::STATE_MATCH_EMERGENCY_STOP:
+    case robobrawl::States::STATE_WIN_BLUE:
+    case robobrawl::States::STATE_WIN_ORANGE:
+
       timer_.pause();
+
       break;
 
-    case robobrawl::States::STATE_MATCH_EMERGENCY_STOP:
-      timer_.pause();
-      break;
+    
 
     case robobrawl::States::STATE_MATCH_TIME_EXPIRE: // Im gonna rely on this one for the most part. 
       // nothing to do thogh, ill let the timer run if it is, if not we just go to the expired state. 

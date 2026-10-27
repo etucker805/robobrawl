@@ -16,6 +16,8 @@ option(BUTTON           "add the button_orange target" OFF)
 option(CLOCK            "add the clock target" OFF)
 option(LIGHTS           "add the lights target" OFF)
 
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
 add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/robobrawl ./robobrawl)
 
 if(CONTROL)
