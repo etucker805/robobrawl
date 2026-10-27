@@ -52,7 +52,7 @@ namespace robobrawl{
          if(led_index <= NUM_LED_PER_STRAIGHT){
             // just a stright
             pos.first = 0;
-            pos.second = (float)led_index * (NUM_LED_PER_STRAIGHT / 100);
+            pos.second = (float)led_index * ((float)NUM_LED_PER_STRAIGHT / 100);
          
          } else {
             //
@@ -63,7 +63,7 @@ namespace robobrawl{
          break;
 
       case 2:
-         pos.first = (NUM_LED_PER_STRAIGHT / 100 ) * (float)led_index;
+         pos.first = ((float)NUM_LED_PER_STRAIGHT / 100 ) * (float)led_index;
          break;
       
       default:

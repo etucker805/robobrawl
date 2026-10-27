@@ -48,15 +48,16 @@ enum States{ // may need to add transition sttas, but I dotn think so atm
 
 namespace robobrawl{
 
-    std::vector<Colors> diag_stort_strip( NUM_LED_PER_DIAG, Colors::COLOR_BLACK);
-    std::vector<Colors> long_strip( NUM_LED_PER_DIAG + NUM_LED_PER_STRAIGHT, Colors::COLOR_BLACK);
-    std::vector<Colors> straight_strip( NUM_LED_PER_STRAIGHT, Colors::COLOR_BLACK);
+    std::vector<Colors> diag_short_strip_leds( NUM_LED_PER_DIAG, Colors::COLOR_BLACK);
+    std::vector<Colors> long_strip_leds( NUM_LED_PER_DIAG + NUM_LED_PER_STRAIGHT, Colors::COLOR_BLACK);
+    std::vector<Colors> straight_strip_leds( NUM_LED_PER_STRAIGHT, Colors::COLOR_BLACK);
 
     std::unordered_map<Colors, std::vector<int>> color_to_rgbw_map = {
         {Colors::COLOR_BLACK, {0, 0, 0, 0}} //ect....
     };
 
-    std::vector<std::vector<Colors>*> list_of_strip_lists = {&diag_stort_strip, &long_strip, &straight_strip};
+    std::vector<std::vector<Colors>*> list_of_strip_lists = {&diag_short_strip_leds, &long_strip_leds, &straight_strip_leds};
+    std::vector<ws2811_led_t*> list_of_data_lists = {diag_short_strip_data, long_strip_data, straight_strip_data};
 
     // also std::pair<float, float> get_pos_of_led(int strip_index, int led_index);
     // strip index id the list_of_strip_lists index, returns pair of [0,100] vals, x,y

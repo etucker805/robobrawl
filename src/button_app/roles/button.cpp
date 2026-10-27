@@ -1,5 +1,8 @@
 
 #include "button.hpp"
+#include <chrono>
+#include <iostream>
+#include <ostream>
 
 namespace robobrawl {
 
@@ -74,7 +77,19 @@ namespace robobrawl {
           std::wcout << "Tried To Start Match Without StateChange.TImerTime, panic" << std::endl;
           return;
         } else {
-          timer_.set_expiration_time_ns(req.timerTime().value().deadline_ns_since_epoc());
+          if(!req.timerTime().value().deadline_ns_since_epoc().has_value() && !req.timerTime().value().duration_msec().has_value() ){
+            std::wcout << "no Time Data under TimerTime object" << std::endl;
+          } else if(req.timerTime().value().deadline_ns_since_epoc().has_value()){
+            // ns given
+            timer_.set_expiration_time_ns(req.timerTime().value().deadline_ns_since_epoc().value());
+
+          } else if(req.timerTime().value().duration_msec().has_value()){
+            // ms given 
+            timer_.set_starting_time(std::chrono::duration_cast<std::chrono::seconds>(std::chrono::milliseconds(req.timerTime().value().duration_msec().value())));
+          } else {
+            //wut
+            std::wcout << "wut? in button state change, set running" << std::endl;
+          }
           timer_.start();
         }
 
@@ -83,28 +98,18 @@ namespace robobrawl {
 
         // ADD: pause, halt, expire, tapouts/wins
       case States::STATE_PAUSED_MATCH:
-        timer_.pause();
-        current_state = States::STATE_PAUSED_MATCH;
-        break;
-      
       case States::STATE_MATCH_EMERGENCY_STOP:
-        timer_.pause();
-        current_state = States::STATE_MATCH_EMERGENCY_STOP;
-        break;
-      
       case States::STATE_TAPOUT_BLUE:
       case States::STATE_TAPOUT_ORANGE:
       case States::STATE_WIN_BLUE:
       case States::STATE_WIN_ORANGE:
         timer_.pause();
-        current_state = req.newState();
-        
         break;
 
       default:
-        current_state = req.newState();
         break;
       }
+    current_state = req.newState();
 
 
   }

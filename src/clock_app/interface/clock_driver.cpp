@@ -134,14 +134,14 @@ namespace robobrawl{
                 // ESP_ERROR_CHECK(led_strip_set_pixel(led_strip, num - 1, colorVals[0], colorVals[1], colorVals[2]));
                 // ESP_ERROR_CHECK(led_strip_set_pixel(led_strip, num, colorVals[0], colorVals[1], colorVals[2]));
                 // ESP_ERROR_CHECK(led_strip_set_pixel(led_strip, num + 1, colorVals[0], colorVals[1], colorVals[2]));
-                ledstring.channel[0].leds[num-1] = ((uint32_t)colorVals[1]) << 16 +
-                                                   ((uint32_t)colorVals[0]) << 8 + 
+                ledstring.channel[0].leds[num-1] = (((uint32_t)colorVals[1]) << 16) +
+                                                   (((uint32_t)colorVals[0]) << 8) + 
                                                    ((uint32_t)colorVals[2]);
-                ledstring.channel[0].leds[num] =   ((uint32_t)colorVals[1]) << 16 +
-                                                   ((uint32_t)colorVals[0]) << 8 + 
+                ledstring.channel[0].leds[num] =   (((uint32_t)colorVals[1]) << 16) +
+                                                   (((uint32_t)colorVals[0]) << 8) + 
                                                    ((uint32_t)colorVals[2]);
-                ledstring.channel[0].leds[num+1] = ((uint32_t)colorVals[1]) << 16 +
-                                                   ((uint32_t)colorVals[0]) << 8 + 
+                ledstring.channel[0].leds[num+1] = (((uint32_t)colorVals[1]) << 16) +
+                                                   (((uint32_t)colorVals[0]) << 8) + 
                                                    ((uint32_t)colorVals[2]);
                 
 
@@ -164,8 +164,8 @@ namespace robobrawl{
         {
             
             // led_strip_set_pixel(led_strip, num, colorVals[0], colorVals[1], colorVals[2]);
-            ledstring.channel[0].leds[num] = ((uint32_t)colorVals[1]) << 16 +
-                                             ((uint32_t)colorVals[0]) << 8 + 
+            ledstring.channel[0].leds[num] = (((uint32_t)colorVals[1]) << 16) +
+                                             (((uint32_t)colorVals[0]) << 8) + 
                                              ((uint32_t)colorVals[2]);
 
         }
