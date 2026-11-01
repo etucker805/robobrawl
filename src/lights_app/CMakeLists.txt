@@ -16,7 +16,7 @@ include( ../cmake/coredx.cmake )
 # and utilizes the tms_interface library for the TMS implementation.
 #
 
-
+set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -no-pie")
 add_executable(lights_app
   )
 

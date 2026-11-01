@@ -10,7 +10,7 @@ namespace robobrawl {
 
   class Lights : public Robobrawl_Lights {
   public:
-    void init(RobobrawlContext& context, const robobrawl::Identity& dev_id);
+    void init(RobobrawlContext& context, const robobrawl::Identity& dev_id) override;
 
     void init_device_info() override;  // called by init() to configure device specific DeviceInfo
 

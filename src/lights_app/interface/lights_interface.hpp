@@ -23,7 +23,7 @@ namespace robobrawl{
     //      (56)            (28) (probably)
     extern std::string host_corner_color;
 
-    Timer anim_timer;
+    extern Timer anim_timer;
 
 
     extern ws2811_led_t diag_short_strip_data[NUM_LED_PER_DIAG];

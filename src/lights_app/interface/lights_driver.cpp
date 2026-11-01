@@ -34,6 +34,8 @@ lights layoput:
 #include <cmath>
 
 namespace robobrawl{
+
+   Timer anim_timer;
    
    // diag only, long, striaght
    std::pair<float, float> get_pos_of_led(int strip_index, int led_index){

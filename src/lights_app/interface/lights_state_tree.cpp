@@ -52,6 +52,11 @@ namespace robobrawl{
     std::vector<Colors> long_strip_leds( NUM_LED_PER_DIAG + NUM_LED_PER_STRAIGHT, Colors::COLOR_BLACK);
     std::vector<Colors> straight_strip_leds( NUM_LED_PER_STRAIGHT, Colors::COLOR_BLACK);
 
+    ws2811_led_t diag_short_strip_data[NUM_LED_PER_DIAG];
+    ws2811_led_t long_strip_data[NUM_LED_PER_STRAIGHT + NUM_LED_PER_DIAG];
+    ws2811_led_t straight_strip_data[NUM_LED_PER_STRAIGHT];
+
+
     std::unordered_map<Colors, std::vector<int>> color_to_rgbw_map = {
         {Colors::COLOR_BLACK, {0, 0, 0, 0}} //ect....
     };
