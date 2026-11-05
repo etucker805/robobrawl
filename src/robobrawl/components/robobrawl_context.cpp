@@ -1,4 +1,6 @@
 #include "robobrawl_context.hpp"
+#include <dds/core/Duration.hpp>
+#include <dds/core/policy/CorePolicy.hpp>
 #include <dds/coredx_udp_transport.h>
 
 namespace robobrawl {
@@ -8,12 +10,14 @@ namespace robobrawl {
     // so we can install a specially configured UDP Transport
     dds::domain::qos::DomainParticipantFactoryQos dpfqos;
     dpfqos << dds::core::policy::EntityFactory::ManuallyEnable();
+
     dds::domain::DomainParticipant::participant_factory_qos(dpfqos);
 
     // make sure the DomainParticipant doesn't enable entities that
     // it creates, so we can get everything created and configued first
     dds::domain::qos::DomainParticipantQos dpqos = dds::domain::DomainParticipant::default_participant_qos();
     dpqos << dds::core::policy::EntityFactory::ManuallyEnable();
+    dpqos << dds::core::policy::Liveliness::ManualByParticipant(dds::core::Duration::from_secs(1));
     dds::domain::DomainParticipant::default_participant_qos(dpqos);
 
     base_id_ = base_device_id;
@@ -40,6 +44,7 @@ namespace robobrawl {
 
   void RobobrawlContext::clear()
   {
+    participant_->close();
     subscriber_ = dds::core::null;
     publisher_ = dds::core::null;
     participant_ = dds::core::null;
