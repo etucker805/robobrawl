@@ -31,6 +31,8 @@ std::map<robobrawl::DeviceRole, std::string> robobrawl::role_to_string_map = {
     {robobrawl::DeviceRole::ROLE_UNKNOWN, "Unknown"}
 }; 
 int robobrawl::current_selected_button_color_index = 0;
+int robobrawl::current_selected_clock_color_index = 0;
+
 
 std::map< robobrawl::ButtonColor, std::string> robobrawl::button_color_list = {
     {robobrawl::ButtonColor::BUTTON_BLUE, "BUTTON_BLUE" },
@@ -447,13 +449,15 @@ int robobrawl::gui_draw_device_list(Robobrawl_Control* device){
                 command_new_display_time.duration_msec(command_new_display_time_sec_int * 1000);
 
                 // the idea is that this is reuseable for all of them, and is not dependent on the llist being in order, probably. 
-                if(ImGui::BeginCombo("New main Color", button_color_list.at((robobrawl::ButtonColor)current_selected_button_color_index).c_str())){
+                ss.str("");
+                ss << (robobrawl::Colors)current_selected_clock_color_index;
+                if(ImGui::BeginCombo("New main Color", (ss).str().c_str())){
                     for(int i = 0; i < (int)Colors::ITER_END_FLAG; i++){
-                        const bool is_selected = i == current_selected_button_color_index;
-                        ss.clear();
+                        const bool is_selected = i == current_selected_clock_color_index;
+                        ss.str("");
                         (ss << ((robobrawl::Colors)i));
                         if(ImGui::Selectable(ss.str().c_str())){
-                            current_selected_button_color_index = i;
+                            current_selected_clock_color_index = i;
                         }
                         if(is_selected){
                             ImGui::SetItemDefaultFocus();
