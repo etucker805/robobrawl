@@ -52,6 +52,7 @@ namespace robobrawl{
     extern std::map<States, std::string> state_to_string_map; 
     extern std::map<DeviceRole, std::string> role_to_string_map;
     extern int current_selected_button_color_index;
+    extern int current_selected_clock_color_index;
     extern std::map<robobrawl::ButtonColor, std::string> button_color_list;
     extern bool done;
     extern KnownDevices known_devices;
