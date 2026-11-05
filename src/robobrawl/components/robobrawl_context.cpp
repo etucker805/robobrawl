@@ -17,7 +17,14 @@ namespace robobrawl {
     // it creates, so we can get everything created and configued first
     dds::domain::qos::DomainParticipantQos dpqos = dds::domain::DomainParticipant::default_participant_qos();
     dpqos << dds::core::policy::EntityFactory::ManuallyEnable();
-    dpqos << dds::core::policy::Liveliness::ManualByParticipant(dds::core::Duration::from_secs(1));
+
+    // CoreDX discovery tuning: default lease is 120s, so a dead/restarted node
+    // would linger (and block re-discovery) for 2 minutes.
+    org::toc::coredx::core::policy::Discovery disc =
+        dpqos.policy<org::toc::coredx::core::policy::Discovery>();   // keep other defaults
+    disc.dpd_push_period(dds::core::Duration::from_secs(1));
+    disc.dpd_lease_duration(dds::core::Duration::from_secs(5));
+    dpqos << disc;
     dds::domain::DomainParticipant::default_participant_qos(dpqos);
 
     base_id_ = base_device_id;
