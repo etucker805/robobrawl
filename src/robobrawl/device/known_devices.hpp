@@ -63,6 +63,26 @@ namespace robobrawl {
       // -------------------------------------------------------
       void on_data_available(dds::sub::DataReader<robobrawl::DeviceInfo>& reader) override;
 
+      // -------------------------------------------------------
+      void on_subscription_matched(
+        dds::sub::DataReader<robobrawl::DeviceInfo>& reader,
+        const dds::core::status::SubscriptionMatchedStatus& status) override;
+
+      // -------------------------------------------------------
+      void on_requested_incompatible_qos(
+        dds::sub::DataReader<robobrawl::DeviceInfo>& reader,
+        const dds::core::status::RequestedIncompatibleQosStatus& status) override;
+
+      // -------------------------------------------------------
+      void on_sample_lost(
+        dds::sub::DataReader<robobrawl::DeviceInfo>& reader,
+        const dds::core::status::SampleLostStatus& status) override;
+
+      // -------------------------------------------------------
+      void on_sample_rejected(
+        dds::sub::DataReader<robobrawl::DeviceInfo>& reader,
+        const dds::core::status::SampleRejectedStatus& status) override;
+
     protected:
       dds::sub::DataReader<robobrawl::DeviceInfo> dr_ = dds::core::null;
       std::map<robobrawl::Identity, robobrawl::DeviceInfo> known_devices_{};
@@ -76,4 +96,3 @@ namespace robobrawl {
   };
 
 };
-

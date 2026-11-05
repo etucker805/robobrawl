@@ -91,8 +91,8 @@ namespace robobrawl {
   void KnownDevices::on_data_available(dds::sub::DataReader<robobrawl::DeviceInfo>& reader)
   {
 
-    // std::cout << "Got a DevInfo from known devices." << std::endl;
     dds::sub::LoanedSamples<robobrawl::DeviceInfo> samples = reader.take();
+    std::clog << "DeviceInfo data available: " << samples.length() << " sample(s)" << std::endl;
     for (const auto& sample: samples) {
       if (sample.info().valid()) {
         handle_device_info(sample.data());
@@ -101,6 +101,44 @@ namespace robobrawl {
         remove_device_info(sample.data()); // key is valid, but no other fields
       }
     }
+  }
+
+  void KnownDevices::on_subscription_matched(
+    dds::sub::DataReader<robobrawl::DeviceInfo>&,
+    const dds::core::status::SubscriptionMatchedStatus& status)
+  {
+    std::clog << "DeviceInfo subscription matched: current="
+              << status.current_count()
+              << " change=" << status.current_count_change()
+              << " total=" << status.total_count() << std::endl;
+  }
+
+  void KnownDevices::on_requested_incompatible_qos(
+    dds::sub::DataReader<robobrawl::DeviceInfo>&,
+    const dds::core::status::RequestedIncompatibleQosStatus& status)
+  {
+    std::clog << "DeviceInfo incompatible QoS: total="
+              << status.total_count()
+              << " change=" << status.total_count_change()
+              << " last_policy_id=" << status.last_policy_id() << std::endl;
+  }
+
+  void KnownDevices::on_sample_lost(
+    dds::sub::DataReader<robobrawl::DeviceInfo>&,
+    const dds::core::status::SampleLostStatus& status)
+  {
+    std::clog << "DeviceInfo sample lost: total="
+              << status.total_count()
+              << " change=" << status.total_count_change() << std::endl;
+  }
+
+  void KnownDevices::on_sample_rejected(
+    dds::sub::DataReader<robobrawl::DeviceInfo>&,
+    const dds::core::status::SampleRejectedStatus& status)
+  {
+    std::clog << "DeviceInfo sample rejected: total="
+              << status.total_count()
+              << " change=" << status.total_count_change() << std::endl;
   }
 
 

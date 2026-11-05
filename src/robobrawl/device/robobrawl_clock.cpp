@@ -50,6 +50,7 @@ namespace robobrawl {
 
   void Robobrawl_Clock::do_medium()
   {
+    publish_device_info();
     heartbeat_.publish();            // write every time
     // medium messages (1 hz?)
   }
