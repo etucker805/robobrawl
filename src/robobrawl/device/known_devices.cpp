@@ -24,6 +24,21 @@ namespace robobrawl {
     dr_ = dds::core::null;
   }
 
+  void KnownDevices::log_status()
+  {
+    const auto matched = dr_.subscription_matched_status();
+    const auto incompatible = dr_.requested_incompatible_qos_status();
+    const auto lost = dr_.sample_lost_status();
+    const auto rejected = dr_.sample_rejected_status();
+
+    std::clog << "DeviceInfo status: matched current=" << matched.current_count()
+              << " total=" << matched.total_count()
+              << ", incompatible_qos total=" << incompatible.total_count()
+              << " last_policy=" << incompatible.last_policy_id()
+              << ", lost total=" << lost.total_count()
+              << ", rejected total=" << rejected.total_count() << std::endl;
+  }
+
   std::vector<std::string> KnownDevices::known_device_ids()
   {
     std::vector<std::string> ids;

@@ -62,6 +62,7 @@ robobrawl::main_loop()
       // }
 
       std::clog << "Tick..." << std::endl;
+      known_devices.log_status();
     }
 
     // every 10 sec:

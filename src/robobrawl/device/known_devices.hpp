@@ -26,6 +26,9 @@ namespace robobrawl {
       void clear();
 
       // -------------------------------------------------------
+      void log_status();
+
+      // -------------------------------------------------------
       std::vector<std::string> known_device_ids();
 
       std::vector<robobrawl::SystemId> known_systems_;
