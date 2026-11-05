@@ -1,6 +1,8 @@
 #include "gui.hpp"
 #include "imgui.h"
 #include "robobrawl.hh"
+#include <ostream>
+#include <sstream>
 
 ImVec4 robobrawl::purple = ImVec4(0.5, 0, 0.5, 1);
 ImVec4 robobrawl::yellow = ImVec4(0.98, 0.98, 0.5, 1);
@@ -399,6 +401,7 @@ int robobrawl::gui_draw_device_list(Robobrawl_Control* device){
         }
         if(ImGui::BeginPopup(current_device_id.c_str())){
             ImGui::PushStyleColor(ImGuiCol_FrameBg, grey);
+            std::ostringstream ss;
             switch (known_devices.get_device_role(current_device_id))
             {
             case robobrawl::DeviceRole::ROLE_LIGHTS:
@@ -444,10 +447,12 @@ int robobrawl::gui_draw_device_list(Robobrawl_Control* device){
                 command_new_display_time.duration_msec(command_new_display_time_sec_int * 1000);
 
                 // the idea is that this is reuseable for all of them, and is not dependent on the llist being in order, probably. 
-                if(ImGui::BeginCombo("New Button Color", button_color_list.at((robobrawl::ButtonColor)current_selected_button_color_index).c_str())){
-                    for(int i = 0; i < button_color_list.size(); i++){
-                        const bool is_selected = i == current_selected_button_color_index; 
-                        if(ImGui::Selectable(button_color_list[(robobrawl::ButtonColor)i].c_str())){
+                if(ImGui::BeginCombo("New main Color", button_color_list.at((robobrawl::ButtonColor)current_selected_button_color_index).c_str())){
+                    for(int i = 0; i < (int)Colors::ITER_END_FLAG; i++){
+                        const bool is_selected = i == current_selected_button_color_index;
+                        ss.clear();
+                        (ss << ((robobrawl::Colors)i));
+                        if(ImGui::Selectable(ss.str().c_str())){
                             current_selected_button_color_index = i;
                         }
                         if(is_selected){

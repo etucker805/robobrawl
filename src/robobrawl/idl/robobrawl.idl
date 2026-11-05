@@ -183,6 +183,7 @@ enum Colors{
     COLOR_RED,
     COLOR_BLACK, // off
     COLOR_WHITE,
+    ITER_END_FLAG
 };
 
 
