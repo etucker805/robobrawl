@@ -2,6 +2,7 @@
 #include <dds/core/Duration.hpp>
 #include <dds/core/policy/CorePolicy.hpp>
 #include <dds/coredx_udp_transport.h>
+#include <unistd.h>
 
 namespace robobrawl {
   void RobobrawlContext::init(uint32_t domain_id, const std::string& qos_xml_uri, const std::string& base_device_id)
@@ -22,6 +23,7 @@ namespace robobrawl {
     // would linger (and block re-discovery) for 2 minutes.
     org::toc::coredx::core::policy::Discovery disc =
         dpqos.policy<org::toc::coredx::core::policy::Discovery>();   // keep other defaults
+    disc.guid_pid(static_cast<int>(getpid()));
     disc.dpd_push_period(dds::core::Duration::from_secs(1));
     disc.dpd_lease_duration(dds::core::Duration::from_secs(5));
     dpqos << disc;
