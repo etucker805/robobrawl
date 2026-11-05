@@ -33,6 +33,8 @@ namespace robobrawl {
         // turn on reliability.. 
         dds::pub::qos::DataWriterQos dw_qos = dw_.qos();
         dw_qos << dds::core::policy::Reliability(dds::core::policy::ReliabilityKind::RELIABLE);
+        dw_qos << dds::core::policy::Durability(dds::core::policy::DurabilityKind::TRANSIENT_LOCAL);
+        dw_qos << dds::core::policy::History(dds::core::policy::HistoryKind::KEEP_LAST, 1);
         dw_.qos(dw_qos);
       }
 
@@ -79,7 +81,10 @@ namespace robobrawl {
         
         dds::sub::qos::DataReaderQos dr_qos = dr_.qos();
         dr_qos << dds::core::policy::Reliability(dds::core::policy::ReliabilityKind::RELIABLE);
+        dr_qos << dds::core::policy::Durability(dds::core::policy::DurabilityKind::TRANSIENT_LOCAL);
+        dr_qos << dds::core::policy::History(dds::core::policy::HistoryKind::KEEP_LAST, 1);
         dr_.qos(dr_qos);
+        dr_.listener(this, dds::core::status::StatusMask::all());
     
 
 
@@ -88,6 +93,7 @@ namespace robobrawl {
       // -------------------------------------------------------
       void clear()
       {
+        dr_.listener(nullptr, dds::core::status::StatusMask::all());
         dr_ = dds::core::null;
       }
 
