@@ -52,7 +52,7 @@ namespace robobrawl {
     const auto [it, added] = known_devices_.insert(std::make_pair(dev_info.deviceId(), dev_info));
 
     if (!added) {
-      // std::cout << "this thinfg skipers and stuff" << dev_info.deviceId() << std::endl;
+      std::cout << "Recieved Duplicate Device Info: " << dev_info.deviceId() << std::endl;
       it->second = dev_info;
 
     }
@@ -83,6 +83,7 @@ namespace robobrawl {
   {
     std::clog << "DEAD DEVICE: '" << dev_info.deviceId() << "'" << std::endl;
     known_devices_.erase(dev_info.deviceId());
+    device_to_system_.erase(dev_info.deviceId());
   }
 
   void KnownDevices::on_data_available(dds::sub::DataReader<robobrawl::DeviceInfo>& reader)
