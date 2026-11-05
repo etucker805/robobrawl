@@ -1,4 +1,6 @@
 #include "gui.hpp"
+#include "imgui.h"
+#include "robobrawl.hh"
 
 ImVec4 robobrawl::purple = ImVec4(0.5, 0, 0.5, 1);
 ImVec4 robobrawl::yellow = ImVec4(0.98, 0.98, 0.5, 1);
@@ -44,6 +46,7 @@ robobrawl::ButtonColor robobrawl::command_new_button_color;
     //clock
 robobrawl::Colors robobrawl::command_new_display_color;
 robobrawl::TimeData robobrawl::command_new_display_time;
+int             robobrawl::command_new_display_time_sec_int;
 
 
 
@@ -435,6 +438,25 @@ int robobrawl::gui_draw_device_list(Robobrawl_Control* device){
 
                 // time is int input
                 // color is a thing again, oh boy. 
+                ImGui::InputText("New SystemId", &command_new_system);
+                ImGui::InputInt("New Time", &command_new_display_time_sec_int);
+                command_new_display_time = TimeData();
+                command_new_display_time.duration_msec(command_new_display_time_sec_int * 1000);
+
+                // the idea is that this is reuseable for all of them, and is not dependent on the llist being in order, probably. 
+                if(ImGui::BeginCombo("New Button Color", button_color_list.at((robobrawl::ButtonColor)current_selected_button_color_index).c_str())){
+                    for(int i = 0; i < button_color_list.size(); i++){
+                        const bool is_selected = i == current_selected_button_color_index; 
+                        if(ImGui::Selectable(button_color_list[(robobrawl::ButtonColor)i].c_str())){
+                            current_selected_button_color_index = i;
+                        }
+                        if(is_selected){
+                            ImGui::SetItemDefaultFocus();
+                        }
+                    }
+                    ImGui::EndCombo();
+                }
+
 
 
                 break;

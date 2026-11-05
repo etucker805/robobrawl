@@ -61,6 +61,7 @@ namespace robobrawl{
     extern ButtonColor command_new_button_color;
     extern Colors      command_new_display_color;
     extern TimeData    command_new_display_time;
+    extern int         command_new_display_time_sec_int;
 
 
     // figure out how to setup... pu into gui_setup.cpp 
