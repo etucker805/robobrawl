@@ -32,7 +32,12 @@ namespace robobrawl {
     base_id_ = base_device_id;
 
 
-    participant_ = dds::domain::DomainParticipant(domain_id);
+    participant_ = dds::domain::DomainParticipant(domain_id, dpqos);
+    auto d = participant_.qos().policy<org::toc::coredx::core::policy::Discovery>();
+    std::cout << "DDS lease=" << d.dpd_lease_duration().sec()
+              << "s push=" << d.dpd_push_period().sec() 
+              << "s guid_pid=" << d.guid_pid() << std::endl;
+
     // configure CoreDX DDS's udp transport:
     //   - enable IPv6 (not enabled by default)
 //    {
@@ -49,6 +54,11 @@ namespace robobrawl {
 
     publisher_ = dds::pub::Publisher(this->participant_);
     subscriber_ = dds::sub::Subscriber(this->participant_);
+
+
+    // participant_ = dds::domain::DomainParticipant(domain_id, dpqos);
+
+
   }
 
   void RobobrawlContext::clear()
