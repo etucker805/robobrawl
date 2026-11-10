@@ -49,8 +49,9 @@ namespace robobrawl {
 
 
 
-  void Clock::handle_clock_command(const robobrawl::ClockCommand& comm){
+  void Clock::handle_clock_config(const robobrawl::ClockConfig& comm){
     std::cout << "Recieved clock command! not gonna do anything abut it tho " << std::endl;
+    // need to do some parseing here Ig, whoudl have a default one and use that instead of some random things (system)
   }
 
 

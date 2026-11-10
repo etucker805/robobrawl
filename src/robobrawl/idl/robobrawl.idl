@@ -101,9 +101,6 @@ module topic {
 
     const string TOPIC_LIGHTS_COMMAND = "LightsCommand";
 
-
-    
-
    };  //end module topic
 
 
@@ -187,7 +184,6 @@ enum Colors{
 };
 
 
-
 enum States{ // may need to add transition sttas, but I dotn think so atm
     STATE_IDLE_ON, // just white lights, buttons doing something, ect 
     STATE_IDLE_OFF, // everything off
@@ -212,9 +208,6 @@ enum States{ // may need to add transition sttas, but I dotn think so atm
     CONTROL_FLAG_LAST
 };
 
-struct StateToStringMapEntry{
-
-}; 
 
 /** 
 * Indicate the type of success or failure of a request.
@@ -334,7 +327,6 @@ struct DeviceInfo{
     @optional
     string displayName; // ill keep, may replace with the nickname thing 
 };
-
 
 
 /** 
@@ -457,8 +449,15 @@ struct ClockData{
 };
 
 
-@topic
 @extensibility(APPENDABLE)
+struct LedConfig{
+    // birhgtness. I got nothing else atm 
+    short brightness;
+};
+
+
+@topic
+@extensibility(APPENDABLE) // legacy 
 struct ButtonCommand{
     @key
     Identity target;
@@ -466,14 +465,30 @@ struct ButtonCommand{
     Identity source;
 
     @optional
-    ButtonColor newColor;
+    SystemId newSystem;
 
     @optional
-    SystemId newSystem;
+    ButtonColor newColor;
 };
 
 @topic
 @extensibility(APPENDABLE)
+struct ButtonConfig{
+    @key
+    Identity target;
+
+    Identity source;
+
+    @optional
+    SystemId newSystem;
+
+    @optional 
+    ButtonColor newButtonColor;
+};
+
+
+@topic
+@extensibility(APPENDABLE) // legacy
 struct ClockCommand{
     @key 
     Identity target;
@@ -491,8 +506,32 @@ struct ClockCommand{
 };
 
 @topic
+@extensibility(APPENDABLE) 
+struct ClockConfig{
+    @key 
+    Identity target;
+
+    Identity source;
+
+    @optional
+    SystemId newSystem;
+
+    @optional 
+    LedConfig ledConfig;
+
+    @optional 
+    short ledSegPerDigitSeg;
+
+    @optional
+    short hasArenaLights; // if == 0, do red clock and stuff for winner and end match, whatever. 
+
+    // and other feature implementiaonts that I can has? 
+};
+
+
+@topic
 @extensibility(APPENDABLE)
-struct LightsCommand{
+struct LightsConfig{
     @key
     Identity target;
 
@@ -500,6 +539,11 @@ struct LightsCommand{
 
     @optional 
     SystemId newSystem;
+
+    @optional
+    LedConfig ledConfig;
+
+    //hmmm
 };
 
 

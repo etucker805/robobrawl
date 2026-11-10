@@ -9,22 +9,22 @@ namespace robobrawl {
 
   // -------------------------------------------------------
   
-  class ClockCommandWriter {
+  class ButtonConfigWriter {
     public:
       // -------------------------------------------------------
-      ClockCommandWriter()
+      ButtonConfigWriter()
         : dw_(dds::core::null)
       {
       }
 
       // -------------------------------------------------------
-      virtual ~ClockCommandWriter() = default;
+      virtual ~ButtonConfigWriter() = default;
 
       // -------------------------------------------------------
       void init(RobobrawlContext& context, const robobrawl::Identity& deviceId)
       {
-        auto topic = dds::topic::Topic<robobrawl::ClockCommand>(context.participant(), robobrawl::topic::TOPIC_CLOCK_COMMAND);
-        dw_ = dds::pub::DataWriter<robobrawl::ClockCommand>(context.publisher(), topic);
+        auto topic = dds::topic::Topic<robobrawl::ButtonConfig>(context.participant(), robobrawl::topic::TOPIC_BUTTON_COMMAND);
+        dw_ = dds::pub::DataWriter<robobrawl::ButtonConfig>(context.publisher(), topic);
 
         dds::pub::qos::DataWriterQos dw_qos = dw_.qos();
         dw_qos << dds::core::policy::Reliability(dds::core::policy::ReliabilityKind::RELIABLE);
@@ -38,52 +38,41 @@ namespace robobrawl {
       }
 
       // ------------------------------------------------------- ( CHange ) 
-      void send(const robobrawl::Identity& reqDevId,
-        const robobrawl::Identity& tgtId,
-        const robobrawl::Colors dis_color,
-        const robobrawl::TimeData dis_time,
-        const robobrawl::SystemId new_sys
-        )
+      void send(const robobrawl::ButtonConfig& msg)
       {
-        robobrawl::ClockCommand msg;
-        msg.source(reqDevId);
-        msg.target(tgtId);
-        msg.displayColor(dis_color);
-        msg.displayTIme(dis_time);
-        msg.newSystem(new_sys);
         this->dw_.write(msg);
       }
 
     protected:
-      dds::pub::DataWriter<robobrawl::ClockCommand> dw_;
+      dds::pub::DataWriter<robobrawl::ButtonConfig> dw_;
   };
 
   // -------------------------------------------------------
   
-  class ClockCommand_Client {
+  class ButtonConfig_Client {
     public:
-      virtual ~ClockCommand_Client() = default;
+      virtual ~ButtonConfig_Client() = default;
 
-      virtual void handle_clock_command(const robobrawl::ClockCommand& comm) = 0;
+      virtual void handle_button_config(const robobrawl::ButtonConfig& comm) = 0;
   };
 
   // -------------------------------------------------------
   
-  class ClockCommandListener :
-      public dds::sub::NoOpDataReaderListener<robobrawl::ClockCommand> {
+  class ButtonConfigListener :
+      public dds::sub::NoOpDataReaderListener<robobrawl::ButtonConfig> {
     public:
       // -------------------------------------------------------
-      ClockCommandListener() : dr_(dds::core::null) {}
+      ButtonConfigListener() : dr_(dds::core::null) {}
 
       // -------------------------------------------------------
-      virtual ~ClockCommandListener() = default;
+      virtual ~ButtonConfigListener() = default;
     
       // -------------------------------------------------------
       void init(RobobrawlContext& context, const robobrawl::Identity& device_id)
       {
-        const auto topic = dds::topic::Topic<robobrawl::ClockCommand>(context.participant(),
-          robobrawl::topic::TOPIC_CLOCK_COMMAND);
-        dr_ = dds::sub::DataReader<robobrawl::ClockCommand>(context.subscriber(), topic);
+        const auto topic = dds::topic::Topic<robobrawl::ButtonConfig>(context.participant(),
+          robobrawl::topic::TOPIC_BUTTON_COMMAND);
+        dr_ = dds::sub::DataReader<robobrawl::ButtonConfig>(context.subscriber(), topic);
 
         dds::sub::qos::DataReaderQos dr_qos = dr_.qos();
         dr_qos << dds::core::policy::Reliability(dds::core::policy::ReliabilityKind::RELIABLE);
@@ -101,38 +90,38 @@ namespace robobrawl {
       }
 
       // -------------------------------------------------------
-      void add_client( ClockCommand_Client * client )
+      void add_client( ButtonConfig_Client * client )
       {
         const std::lock_guard<std::mutex> lock(mtx_);
         clients_.push_back( client );
       }
 
       // -------------------------------------------------------
-      void rem_client( ClockCommand_Client* client )
+      void rem_client( ButtonConfig_Client * client )
       { 
         const std::lock_guard<std::mutex> lock(mtx_);
         clients_.erase( std::find(clients_.begin(), clients_.end(), client ) );
       }
 
       // -------------------------------------------------------
-      void on_data_available(dds::sub::DataReader<robobrawl::ClockCommand>& reader) override
+      void on_data_available(dds::sub::DataReader<robobrawl::ButtonConfig>& reader) override
       {
-        const dds::sub::LoanedSamples<robobrawl::ClockCommand> samples = reader.take();
+        const dds::sub::LoanedSamples<robobrawl::ButtonConfig> samples = reader.take();
         for (const auto& sample: samples) {
           if (sample.info().valid()) {
 
             const std::lock_guard<std::mutex> lock(mtx_);
             std::for_each( clients_.begin(), clients_.end(),
-                           [sample](ClockCommand_Client * client)
-                           { client->handle_clock_command( sample.data() ); } );
+                           [sample](ButtonConfig_Client * client)
+                           { client->handle_button_config( sample.data() ); } );
           }
         }
       }
     
     protected:
       std::mutex mtx_{};
-      dds::sub::DataReader<robobrawl::ClockCommand> dr_;
-      std::vector<ClockCommand_Client*> clients_;
+      dds::sub::DataReader<robobrawl::ButtonConfig> dr_;
+      std::vector<ButtonConfig_Client*> clients_;
   };
   
 }

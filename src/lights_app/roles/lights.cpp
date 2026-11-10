@@ -44,7 +44,7 @@ namespace robobrawl {
   } 
   
   // -------------------------------------------------------
-  void Lights::handle_lights_command(const robobrawl::LightsCommand& comm){
+  void Lights::handle_lights_config(const robobrawl::LightsConfig& comm){
     std::cout << "Lights Command Recieved, Not implemeted lol" << std::endl;
   }
   

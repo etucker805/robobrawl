@@ -11,13 +11,13 @@
 #include "known_devices.hpp"
 #include "robobrawl/msg/state_change.hpp"
 #include "robobrawl/msg/claim_system.hpp"
-#include "robobrawl/msg/clock_command.hpp"
+#include "robobrawl/msg/clock_config.hpp"
 #include "robobrawl/msg/clock_data.hpp"
 
 
 namespace robobrawl {
 
-  class Robobrawl_Clock : public Robobrawl_Device, public KnownDevices_Client, public ClockCommand_Client, public StateChange_Client   {
+  class Robobrawl_Clock : public Robobrawl_Device, public KnownDevices_Client, public ClockConfig_Client, public StateChange_Client   {
     public:
       void init(RobobrawlContext& context, const robobrawl::Identity& dev_id) override;
 
@@ -29,32 +29,34 @@ namespace robobrawl {
 
       void do_medium() override;
 
-      void do_slow() override;
+      void do_slow() override; 
 
       // -------------------------------------------------------
-      virtual void handle_clock_command(const robobrawl::ClockCommand& comm)=0;
+      virtual void handle_clock_config(const robobrawl::ClockConfig& comm) override =0;
 
-      virtual void handle_claim_system(const robobrawl::ClaimSystem& claim)=0;
+      virtual void handle_claim_system(const robobrawl::ClaimSystem& claim) override =0;
       
-      virtual void handle_state_change(const robobrawl::StateChange& state)=0;
+      virtual void handle_state_change(const robobrawl::StateChange& state) override =0;
 
-      virtual void handle_new_device(const robobrawl::DeviceInfo& info)=0; 
+      virtual void handle_new_device(const robobrawl::DeviceInfo& info) override =0; 
 
       virtual void handle_timer_expired(const CountdownTimer::Id& id)=0;
 
 
       CountdownTimer timer_;
 
+      ClockConfig conf;
+
     protected:
       //write / listener / clients here... 
      robobrawl::ClockDataWriter cd_writer_;
 
 
-     robobrawl::ClockCommandListener cc_listener_;
+     robobrawl::ClockConfigListener  cc_listener_;
      robobrawl::StateChangeListener  sc_listener_;
 
 
-
+   
   };
 
 };

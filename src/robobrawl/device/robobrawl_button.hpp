@@ -11,12 +11,12 @@
 #include "robobrawl/msg/state_change.hpp"
 #include "robobrawl/msg/claim_system.hpp"
 #include "robobrawl/msg/button_data.hpp"
-#include "robobrawl/msg/button_command.hpp"
+#include "robobrawl/msg/button_config.hpp"
 
 
 namespace robobrawl {
 
-  class Robobrawl_Button : public Robobrawl_Device, public ButtonCommand_Client, public StateChange_Client {
+  class Robobrawl_Button : public Robobrawl_Device, public ButtonConfig_Client, public StateChange_Client {
     public:
       void init(RobobrawlContext& context, const robobrawl::Identity& dev_id) override;
 
@@ -32,11 +32,11 @@ namespace robobrawl {
 
       // -------------------------------------------------------
       // virtual bool authorization_required(const robobrawl::EnergyStartStopRequest& ess) = 0; // left as tempolate 
-      virtual void handle_state_change(const robobrawl::StateChange& req)=0;
+      virtual void handle_state_change(const robobrawl::StateChange& req) override =0;
 
-      virtual void handle_claim_system(const robobrawl::ClaimSystem& claim)=0;
+      virtual void handle_claim_system(const robobrawl::ClaimSystem& claim) override =0;
 
-      virtual void handle_button_command(const robobrawl::ButtonCommand& comm)=0;
+      virtual void handle_button_config(const robobrawl::ButtonConfig& comm) override =0;
 
       virtual void handle_timer_expired(const CountdownTimer::Id& id)=0;
 
@@ -44,13 +44,15 @@ namespace robobrawl {
 
       CountdownTimer timer_;
 
+      ButtonConfig conf;
+
     protected:
       //write / listener / clients here... 
       // claim reader
       // state change reader
       StateChangeListener   sc_listener_;
       // button override reader 
-      ButtonCommandListener bc_listener_;
+      ButtonConfigListener bc_listener_;
       // data writer
       ButtonDataWriter      bd_writer_;
 

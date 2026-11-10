@@ -38,15 +38,8 @@ namespace robobrawl {
       }
 
       // ------------------------------------------------------- ( CHange ) 
-      void send(const robobrawl::Identity& reqDevId,
-        const robobrawl::SystemId& tgtId,
-
-        const robobrawl::States state, 
-        const robobrawl::ClockRealtime time)
+      void send(const robobrawl::ButtonData& msg)
       {
-        robobrawl::ButtonData msg;
-        msg.deviceId(reqDevId);
-
         this->dw_.write(msg);
       }
 

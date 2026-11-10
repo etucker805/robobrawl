@@ -7,13 +7,14 @@
 #include "robobrawl/device/robobrawl_device.hpp"
 
 //include other messages here
+#include "robobrawl/msg/lights_config.hpp"
 #include "robobrawl/msg/state_change.hpp"
 #include "robobrawl/msg/claim_system.hpp"
-#include "robobrawl/msg/lights_command.hpp"
+#include "robobrawl/msg/lights_config.hpp"
 
 namespace robobrawl {
 
-  class Robobrawl_Lights : public Robobrawl_Device, public StateChange_Client, public LightsCommand_Client /* add any client classes to extend here */ {
+  class Robobrawl_Lights : public Robobrawl_Device, public StateChange_Client, public LightsConfig_Client /* add any client classes to extend here */ {
     public:
       void init(RobobrawlContext& context, const robobrawl::Identity& dev_id) override;
 
@@ -28,18 +29,20 @@ namespace robobrawl {
       void do_slow() override;
 
       // -------------------------------------------------------
-      virtual void handle_lights_command(const robobrawl::LightsCommand& comm)=0;
+      virtual void handle_lights_config(const robobrawl::LightsConfig& comm) override =0;
 
-      virtual void handle_claim_system(const robobrawl::ClaimSystem& claim)=0;
+      virtual void handle_claim_system(const robobrawl::ClaimSystem& claim) override =0;
       
-      virtual void handle_state_change(const robobrawl::StateChange& state)=0;
+      virtual void handle_state_change(const robobrawl::StateChange& state) override =0;
+
+      LightsConfig conf;
 
 
     protected:
       //write / listener / clients here... 
       StateChangeListener   sc_listener_;
       ClaimSystemListener   cs_listener_;
-      LightsCommandListener lc_listener_;
+      LightsConfigListener  lc_listener_;
 
 
 

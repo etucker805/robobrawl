@@ -38,37 +38,13 @@ namespace robobrawl {
       }
 
       // ------------------------------------------------------- ( CHange ) 
-      void send(const robobrawl::Identity& devId,
-                const robobrawl::SystemId& sysId,
-                const long done 
-                )
+      void send(const robobrawl::ClockData& msg )
 
       {
-        robobrawl::ClockData msg;
-        msg.deviceId(devId);
-        msg.sysName(sysId);
-        msg.done(done);
-
         this->dw_.write(msg);
       }
 
-      // ------------------------------------------------------- ( CHange ) 
-      void send(const robobrawl::Identity& devId,
-                const robobrawl::SystemId& sysId,
-                const long done ,
-                const robobrawl::TimeData& t
-                )
-
-      {
-        robobrawl::ClockData msg;
-        msg.deviceId(devId);
-        msg.sysName(sysId);
-        msg.done(done);
-        msg.time(t);
-
-        this->dw_.write(msg);
-      }
-
+      
     protected:
       dds::pub::DataWriter<robobrawl::ClockData> dw_;
   };

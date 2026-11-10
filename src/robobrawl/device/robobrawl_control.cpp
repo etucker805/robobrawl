@@ -1,4 +1,6 @@
 #include "robobrawl_control.hpp"
+#include "robobrawl.hh"
+#include <cstdint>
 
 namespace robobrawl {
   void Robobrawl_Control::init(RobobrawlContext& context, const robobrawl::Identity& dev_id)
@@ -83,29 +85,72 @@ namespace robobrawl {
 
 
   void Robobrawl_Control::send_state_change(SystemId target, States state, TimeData time){
-    if(time.deadline_ns_since_epoc()!=0){
-      
-      sc_writer_.send(device_id_, target, state, time);
-      return;
+
+    robobrawl::StateChange sc;
+    sc.source(device_id_);
+    sc.target(target);
+    sc.newState(state);
+
+    if(!time.deadline_ns_since_epoc().has_value() && !time.duration_msec().has_value()){
+      // have nothing, dont put itme in 
+    } else {
+      //have somthing
+      sc.timerTime(time); 
     }
-    sc_writer_.send(device_id_, target, state);
+
+
+    sc_writer_.send(sc);
   }
 
   // shoudl Add auth capability to this... 
   void Robobrawl_Control::send_claim_system(SystemId target){
-    cs_writer_.send(device_id_, target);
+    robobrawl::ClaimSystem cs;
+    cs.target(target);
+    cs.source(device_id_);
+    cs_writer_.send(cs);
   }
 
-  void Robobrawl_Control::send_lights_command(Identity target, SystemId new_system){
-    lc_writer_.send(device_id_, target, new_system );
+  void Robobrawl_Control::send_lights_config(Identity target, SystemId new_system){
+    robobrawl::LightsConfig lc;
+    lc.source(device_id_);
+    lc.target(target);
+    if(!new_system.empty())
+      lc.newSystem(new_system);
+
+
+    lc_writer_.send(lc);
   }
 
-  void Robobrawl_Control::send_button_command(Identity target, SystemId new_system, ButtonColor new_color){
-    bc_writer_.send(device_id_, target, new_color, new_system);
+  void Robobrawl_Control::send_button_config(Identity target, SystemId new_system, ButtonColor new_color){
+    robobrawl::ButtonConfig bc;
+    bc.source(device_id_);
+    bc.target(target);
+    if(!new_system.empty())
+      bc.newSystem(new_system);
+
+    if(new_color != robobrawl::ButtonColor::BUTTON_UNKNOWN)
+      bc.newButtonColor(new_color);
+
+    bc_writer_.send(bc);
   }
 
-  void Robobrawl_Control::send_clock_command(Identity target, SystemId new_system, Colors display_color, TimeData display_time){
-    cc_writer_.send(device_id_, target, display_color, display_time, new_system);
+  void Robobrawl_Control::send_clock_config(Identity target, SystemId new_system, uint16_t new_ledSegPerDigitSeg, uint16_t new_hasArenaLights, const std::optional<LedConfig>& led_conf){
+    robobrawl::ClockConfig cc;
+    cc.source(device_id_);
+    cc.target(target);
+    if(!new_system.empty())
+      cc.newSystem(new_system);
+  
+    if(led_conf.has_value())
+      cc.ledConfig(led_conf.value());
+  
+    if(new_ledSegPerDigitSeg > 0)
+      cc.ledSegPerDigitSeg(new_ledSegPerDigitSeg);
+  
+    if(new_hasArenaLights >= 0)
+      cc.hasArenaLights(new_hasArenaLights);
+
+    cc_writer_.send(cc);
   }
 
 };

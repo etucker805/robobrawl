@@ -20,7 +20,7 @@ namespace robobrawl {
 
     void handle_state_change(const robobrawl::StateChange& req) override;
 
-    void handle_button_command(const robobrawl::ButtonCommand& comm) override;
+    void handle_button_config(const robobrawl::ButtonConfig& comm) override;
 
     void handle_timer_expired(const CountdownTimer::Id& id) override;
 

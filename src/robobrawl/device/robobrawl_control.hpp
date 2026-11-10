@@ -14,9 +14,9 @@
 #include "robobrawl/msg/state_change.hpp"
 #include "robobrawl/msg/button_data.hpp"
 #include "robobrawl/msg/clock_data.hpp"
-#include "robobrawl/msg/button_command.hpp"
-#include "robobrawl/msg/clock_command.hpp"
-#include "robobrawl/msg/lights_command.hpp"
+#include "robobrawl/msg/button_config.hpp"
+#include "robobrawl/msg/clock_config.hpp"
+#include "robobrawl/msg/lights_config.hpp"
 #include "robobrawl/msg/claim_system.hpp"
 
 
@@ -41,11 +41,11 @@ namespace robobrawl {
 
       void send_claim_system(SystemId target);
 
-      void send_button_command(Identity target, SystemId new_system, ButtonColor new_color);
+      void send_button_config(Identity target, SystemId new_system, ButtonColor new_color);
 
-      void send_lights_command(Identity target, SystemId new_system);
+      void send_lights_config(Identity target, SystemId new_system);
 
-      void send_clock_command(Identity target, SystemId new_system, Colors display_color, TimeData display_time);
+      void send_clock_config(Identity target, SystemId new_system, uint16_t new_ledSegPerDigitSeg, uint16_t new_hasArenaLights, const std::optional<LedConfig>& led_conf );
 
       inline void update_state_of_system(SystemId target, States new_state, TimeData time){
         states_[target] = new_state;
@@ -55,11 +55,11 @@ namespace robobrawl {
 
 
       // -------------------------------------------------------
-      virtual void handle_button_data(const robobrawl::ButtonData& data)=0; // template 
+      virtual void handle_button_data(const robobrawl::ButtonData& data) override =0; // template 
 
-      virtual void handle_clock_data(const robobrawl::ClockData& data)=0;
+      virtual void handle_clock_data(const robobrawl::ClockData& data) override =0;
 
-      virtual void handle_new_device(const robobrawl::DeviceInfo& dev_info)=0;
+      virtual void handle_new_device(const robobrawl::DeviceInfo& dev_info) override =0;
 
       virtual void handle_timer_expired(const  CountdownTimer::Id& id)=0;
 
@@ -92,9 +92,9 @@ namespace robobrawl {
       ButtonDataListener bd_listener_;
       ClockDataListener  cd_listener_;
 
-      ButtonCommandWriter bc_writer_;
-      ClockCommandWriter  cc_writer_;
-      LightsCommandWriter lc_writer_;
+      ButtonConfigWriter bc_writer_;
+      ClockConfigWriter  cc_writer_;
+      LightsConfigWriter lc_writer_;
       // sync time writer
       // 
 

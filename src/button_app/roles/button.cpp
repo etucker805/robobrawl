@@ -114,9 +114,9 @@ namespace robobrawl {
 
   }
 
-  void Button::handle_button_command(const robobrawl::ButtonCommand& comm){
+  void Button::handle_button_config(const robobrawl::ButtonConfig& comm){
     std::cout << "someone tried to tell me wha to do but im not fond of that" << std::endl;
-    std::cout << "for: " << comm.target() << " new color: " << (int)comm.newColor().value() << " new sys: " << comm.newSystem().value() << std::endl;
+    std::cout << "for: " << comm.target() << " new color: " << (int)comm.newButtonColor().value() << " new sys: " << comm.newSystem().value() << std::endl;
 
   }
 

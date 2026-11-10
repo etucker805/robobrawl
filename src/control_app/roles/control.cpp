@@ -1,5 +1,6 @@
 
 #include "control.hpp"
+#include "robobrawl.hh"
 
 namespace robobrawl {
 
@@ -57,14 +58,19 @@ namespace robobrawl {
     // do a check for it being at this system name... 
     if(std::find(claimed_systems_.begin(), claimed_systems_.end(), data.sysName()) != claimed_systems_.end()){
       //out button
+      robobrawl::StateChange sc;
+      sc.source(device_id_);
+      sc.target(data.sysName());
       switch(states_[data.sysName()]){
         case robobrawl::States::STATE_READY_WAIT:
           if(data.color() == robobrawl::ButtonColor::BUTTON_BLUE && data.mainPressed()){
             states_[data.sysName()] = robobrawl::States::STATE_BLUE_READY;
-            sc_writer_.send(device_id_, data.sysName(), states_[data.sysName()]);
+            sc.newState(robobrawl::States::STATE_BLUE_READY);
+            sc_writer_.send(sc);
           } else if (data.color() == robobrawl::ButtonColor::BUTTON_ORANGE && data.mainPressed()){
             states_[data.sysName()] = robobrawl::States::STATE_ORANGE_READY;
-            sc_writer_.send(device_id_, data.sysName(), states_[data.sysName()]);
+            sc.newState(robobrawl::States::STATE_ORANGE_READY);
+            sc_writer_.send(sc);
           }
           // otehr things that might happen I guesss.... 
           break;
@@ -73,14 +79,16 @@ namespace robobrawl {
           // check orange
           if (data.color() == robobrawl::ButtonColor::BUTTON_ORANGE && data.mainPressed()){
             states_[data.sysName()] = robobrawl::States::STATE_BOTH_READY;
-            sc_writer_.send(device_id_, data.sysName(), states_[data.sysName()]);
+            sc.newState(robobrawl::States::STATE_BOTH_READY);
+            sc_writer_.send(sc);
           }
           break;
         case robobrawl::States::STATE_ORANGE_READY:
           // check bllue, Im not gonna allow tapouts at this states.
           if( data.color() == robobrawl::ButtonColor::BUTTON_ORANGE && data.mainPressed()){
             states_[data.sysName()] = robobrawl::States::STATE_BOTH_READY;
-            sc_writer_.send(device_id_, data.sysName(), states_[data.sysName()]);
+            sc.newState(robobrawl::States::STATE_BOTH_READY);
+            sc_writer_.send(sc);
           }  
           break;
 
@@ -91,20 +99,24 @@ namespace robobrawl {
           if(data.tapoutPressed()) {
             if(data.color() == robobrawl::ButtonColor::BUTTON_BLUE){
               states_[data.sysName()] = robobrawl::States::STATE_TAPOUT_BLUE;
-              sc_writer_.send(device_id_, data.sysName(), states_[data.sysName()] /* TODO: add teh tie state cvalues here, ill need the timer form before.... :(*/);
+              sc.newState(robobrawl::States::STATE_TAPOUT_BLUE);
+              sc_writer_.send(sc); /* TODO: add teh tie state cvalues here, ill need the timer form before.... :(*/
             } else if( data.color() == robobrawl::ButtonColor::BUTTON_ORANGE){
               states_[data.sysName()] = robobrawl::States::STATE_TAPOUT_ORANGE;
-              sc_writer_.send(device_id_, data.sysName(), states_[data.sysName()]);
+              sc.newState(robobrawl::States::STATE_TAPOUT_ORANGE);
+              sc_writer_.send(sc);
             }
           }
 
           if(data.unstickPressed()){
             if(data.color() == robobrawl::ButtonColor::BUTTON_BLUE){
               states_[data.sysName()] = robobrawl::States::STATE_UNSTICK_BLUE;
-              sc_writer_.send(device_id_, data.sysName(), states_[data.sysName()]);
+              sc.newState(robobrawl::States::STATE_UNSTICK_BLUE);
+              sc_writer_.send(sc);
             } else if( data.color() == robobrawl::ButtonColor::BUTTON_ORANGE){
               states_[data.sysName()] = robobrawl::States::STATE_UNSTICK_ORANGE;
-              sc_writer_.send(device_id_, data.sysName(), states_[data.sysName()]);
+              sc.newState(robobrawl::States::STATE_UNSTICK_ORANGE);
+              sc_writer_.send(sc);
             }
           }
 

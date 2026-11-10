@@ -9,22 +9,22 @@ namespace robobrawl {
 
   // -------------------------------------------------------
   
-  class ButtonCommandWriter {
+  class LightsConfigWriter {
     public:
       // -------------------------------------------------------
-      ButtonCommandWriter()
+      LightsConfigWriter()
         : dw_(dds::core::null)
       {
       }
 
       // -------------------------------------------------------
-      virtual ~ButtonCommandWriter() = default;
+      virtual ~LightsConfigWriter() = default;
 
       // -------------------------------------------------------
       void init(RobobrawlContext& context, const robobrawl::Identity& deviceId)
       {
-        auto topic = dds::topic::Topic<robobrawl::ButtonCommand>(context.participant(), robobrawl::topic::TOPIC_BUTTON_COMMAND);
-        dw_ = dds::pub::DataWriter<robobrawl::ButtonCommand>(context.publisher(), topic);
+        auto topic = dds::topic::Topic<robobrawl::LightsConfig>(context.participant(), robobrawl::topic::TOPIC_LIGHTS_COMMAND);
+        dw_ = dds::pub::DataWriter<robobrawl::LightsConfig>(context.publisher(), topic);
 
         dds::pub::qos::DataWriterQos dw_qos = dw_.qos();
         dw_qos << dds::core::policy::Reliability(dds::core::policy::ReliabilityKind::RELIABLE);
@@ -38,51 +38,41 @@ namespace robobrawl {
       }
 
       // ------------------------------------------------------- ( CHange ) 
-      void send(const robobrawl::Identity& reqDevId,
-        const robobrawl::Identity& tgtId,
-        const robobrawl::ButtonColor color,
-        const robobrawl::SystemId new_sys
-        )
+      void send(const robobrawl::LightsConfig& msg )
       {
-        robobrawl::ButtonCommand msg;
-        msg.source(reqDevId);
-        msg.target(tgtId);
-        msg.newColor(color);
-        msg.newSystem(new_sys);
-
         this->dw_.write(msg);
       }
 
     protected:
-      dds::pub::DataWriter<robobrawl::ButtonCommand> dw_;
+      dds::pub::DataWriter<robobrawl::LightsConfig> dw_;
   };
 
   // -------------------------------------------------------
   
-  class ButtonCommand_Client {
+  class LightsConfig_Client {
     public:
-      virtual ~ButtonCommand_Client() = default;
+      virtual ~LightsConfig_Client() = default;
 
-      virtual void handle_button_command(const robobrawl::ButtonCommand& comm) = 0;
+      virtual void handle_lights_config(const robobrawl::LightsConfig& comm) = 0;
   };
 
   // -------------------------------------------------------
   
-  class ButtonCommandListener :
-      public dds::sub::NoOpDataReaderListener<robobrawl::ButtonCommand> {
+  class LightsConfigListener :
+      public dds::sub::NoOpDataReaderListener<robobrawl::LightsConfig> {
     public:
       // -------------------------------------------------------
-      ButtonCommandListener() : dr_(dds::core::null) {}
+      LightsConfigListener() : dr_(dds::core::null) {}
 
       // -------------------------------------------------------
-      virtual ~ButtonCommandListener() = default;
+      virtual ~LightsConfigListener() = default;
     
       // -------------------------------------------------------
       void init(RobobrawlContext& context, const robobrawl::Identity& device_id)
       {
-        const auto topic = dds::topic::Topic<robobrawl::ButtonCommand>(context.participant(),
-          robobrawl::topic::TOPIC_BUTTON_COMMAND);
-        dr_ = dds::sub::DataReader<robobrawl::ButtonCommand>(context.subscriber(), topic);
+        const auto topic = dds::topic::Topic<robobrawl::LightsConfig>(context.participant(),
+          robobrawl::topic::TOPIC_LIGHTS_COMMAND);
+        dr_ = dds::sub::DataReader<robobrawl::LightsConfig>(context.subscriber(), topic);
 
         dds::sub::qos::DataReaderQos dr_qos = dr_.qos();
         dr_qos << dds::core::policy::Reliability(dds::core::policy::ReliabilityKind::RELIABLE);
@@ -100,38 +90,38 @@ namespace robobrawl {
       }
 
       // -------------------------------------------------------
-      void add_client( ButtonCommand_Client * client )
+      void add_client( LightsConfig_Client * client )
       {
         const std::lock_guard<std::mutex> lock(mtx_);
         clients_.push_back( client );
       }
 
       // -------------------------------------------------------
-      void rem_client( ButtonCommand_Client * client )
+      void rem_client( LightsConfig_Client* client )
       { 
         const std::lock_guard<std::mutex> lock(mtx_);
         clients_.erase( std::find(clients_.begin(), clients_.end(), client ) );
       }
 
       // -------------------------------------------------------
-      void on_data_available(dds::sub::DataReader<robobrawl::ButtonCommand>& reader) override
+      void on_data_available(dds::sub::DataReader<robobrawl::LightsConfig>& reader) override
       {
-        const dds::sub::LoanedSamples<robobrawl::ButtonCommand> samples = reader.take();
+        const dds::sub::LoanedSamples<robobrawl::LightsConfig> samples = reader.take();
         for (const auto& sample: samples) {
           if (sample.info().valid()) {
 
             const std::lock_guard<std::mutex> lock(mtx_);
             std::for_each( clients_.begin(), clients_.end(),
-                           [sample](ButtonCommand_Client * client)
-                           { client->handle_button_command( sample.data() ); } );
+                           [sample](LightsConfig_Client * client)
+                           { client->handle_lights_config( sample.data() ); } );
           }
         }
       }
     
     protected:
       std::mutex mtx_{};
-      dds::sub::DataReader<robobrawl::ButtonCommand> dr_;
-      std::vector<ButtonCommand_Client*> clients_;
+      dds::sub::DataReader<robobrawl::LightsConfig> dr_;
+      std::vector<LightsConfig_Client*> clients_;
   };
   
 }

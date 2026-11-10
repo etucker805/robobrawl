@@ -13,6 +13,7 @@
 .env
 *.env
 .env.*
+.clangd
 
 # Local configuration that shouldn't be shared
 *.local
